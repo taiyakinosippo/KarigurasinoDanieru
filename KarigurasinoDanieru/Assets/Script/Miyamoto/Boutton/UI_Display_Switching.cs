@@ -1,20 +1,21 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+
 
 
 public class UI_Display_Switching : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public GameObject image;
+    public GameObject _image;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        image.SetActive(true);
+        _image.SetActive(true);
+       AudioSourceManager.instance.PlaySE(SEType.indicatorSE);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        image.SetActive(false);
+        _image.SetActive(false);
     }
 
 }
