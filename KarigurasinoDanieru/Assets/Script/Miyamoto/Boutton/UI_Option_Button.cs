@@ -1,12 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections;
 
-public class UI_Option_Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class UI_Option_Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     private Image _button;
-    public GameObject _option;
+    public  Canvas _option;
     private Color _defaultColor;
     [SerializeField]public Color _highlightColor = new Color(1.2f, 1.2f, 1.2f, 1f);
 
@@ -19,7 +18,6 @@ public class UI_Option_Button : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     public void OnPointerDown(PointerEventData eventData)
     {
         _button.color = _highlightColor;
-        StartCoroutine(CloseOption());
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -27,9 +25,9 @@ public class UI_Option_Button : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         _button.color = _defaultColor;
     }
 
-    IEnumerator CloseOption()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        yield return new WaitForSeconds(0.1f); 
-        _option.SetActive(true);
+        AudioSourceManager.instance.PlaySE(SEType.clickSE);
+        _option.enabled = true;
     }
 }
