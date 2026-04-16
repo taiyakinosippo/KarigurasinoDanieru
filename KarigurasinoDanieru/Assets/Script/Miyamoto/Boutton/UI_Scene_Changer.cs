@@ -2,24 +2,36 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
-public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler
+public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler ,IPointerDownHandler
 {
     public string sceneName;
-    private Image image;
+    private Image _button;
+    private Color _defaultColor;
     [SerializeField]public Color highlightColor = new Color(1.2f, 1.2f, 1.2f, 1f);
 
 
     public void Start()
     {
-        image = GetComponent<Image>();
+        _button = GetComponent<Image>();
+        _defaultColor = _button.color;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        _button.color = highlightColor;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        image.color = highlightColor;
-        SceneManager.LoadScene(sceneName);
+       StartCoroutine(LoadSceneAfterSE());
     }
 
-
+    public IEnumerator LoadSceneAfterSE()
+    {
+        AudioSourceManager.instance.PlaySE(SEType.clickSE);
+        yield return new WaitForSeconds(1.0f); 
+        SceneManager.LoadScene(sceneName);
+    }
 }
