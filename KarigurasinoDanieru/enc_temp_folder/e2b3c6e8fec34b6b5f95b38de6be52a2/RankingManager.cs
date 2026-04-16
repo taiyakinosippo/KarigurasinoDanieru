@@ -87,4 +87,11 @@ public class RankingManager : MonoBehaviour
         Rank_text.text = result;
     }
 
+    public void SendWinnerToWeb(string name, int score)
+    {
+        WebRankingManager web =
+            FindObjectOfType<WebRankingManager>();
+
+      
+    }
 }
