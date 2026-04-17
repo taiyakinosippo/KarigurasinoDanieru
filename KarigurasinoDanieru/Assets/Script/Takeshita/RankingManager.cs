@@ -6,31 +6,46 @@ public class RankingInputManager : MonoBehaviour
     public InputField nameInput;
     public InputField scoreInput;
 
-    localRankingManager localRanking;
+    LocalRankingManager localRanking;
     ScoreSender scoreSender;
 
     void Start()
     {
-        localRanking = FindObjectOfType<localRankingManager>();
+        localRanking = FindObjectOfType<LocalRankingManager>();
         scoreSender = FindObjectOfType<ScoreSender>();
     }
 
-    // ボタンから呼ぶ
-    public void OnClickSend()
+    // ノーマルモード用ボタン
+    public void OnClickSendNormal()
+    {
+        Send("normal");
+    }
+
+    // ハードモード用ボタン
+    public void OnClickSendHard()
+    {
+        Send("hard");
+    }
+
+    void Send(string mode)
     {
         string name = nameInput.text;
         int score;
 
+        if (string.IsNullOrEmpty(name))
+            return;
+
         if (!int.TryParse(scoreInput.text, out score))
             return;
 
-        // ✅ Unity内ランキングに追加
-        localRanking.AddOrUpdateScore(name, score);
+        //Unity内ランキング（必要なら mode 別にもできる）
+        localRanking.AddOrUpdateScore(name, score,mode);
 
-        // ✅ Webへ送信（保存用）
-        scoreSender.SendScore(name, score);
+        //Webへ送信（mode付き）
+        scoreSender.SendScore(name, score, mode);
 
-        // ✅ 入力欄クリア
+
+        //入力欄クリア
         nameInput.text = "";
         scoreInput.text = "";
     }

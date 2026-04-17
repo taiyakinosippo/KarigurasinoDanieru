@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class localRankingManager : MonoBehaviour
+public class LocalRankingManager : MonoBehaviour
 {
     [System.Serializable]
     public class ScoreData
@@ -16,22 +16,17 @@ public class localRankingManager : MonoBehaviour
     List<ScoreData> scoreList = new List<ScoreData>();
 
     // スコア追加 or 上書き
-    public void AddOrUpdateScore(string name, int score)
+    public void AddOrUpdateScore(string name, int score, string mode)
     {
-        // 同名を探す
         ScoreData existing = scoreList.Find(x => x.name == name);
 
         if (existing != null)
         {
-            // 高いスコアなら上書き
             if (score > existing.score)
-            {
                 existing.score = score;
-            }
         }
         else
         {
-            // 新規追加
             scoreList.Add(new ScoreData
             {
                 name = name,
@@ -39,32 +34,41 @@ public class localRankingManager : MonoBehaviour
             });
         }
 
-        UpdateRankingView();
+        UpdateResultView(name, mode);
     }
 
-    void UpdateRankingView()
+    //演出用表示
+    void UpdateResultView(string playerName, string mode)
     {
-        // スコア降順
+        // スコア降順ソート
         scoreList.Sort((a, b) => b.score.CompareTo(a.score));
 
-        rankText.text = "";
+        int rank = -1;
 
-        int currentRank = 0;
-        int prevScore = int.MinValue;
-
-        // 上位10位まで
-        for (int i = 0; i < scoreList.Count && i < 10; i++)
+        for (int i = 0; i < scoreList.Count; i++)
         {
-            if (scoreList[i].score != prevScore)
+            if (scoreList[i].name == playerName)
             {
-                currentRank = i + 1;
-                prevScore = scoreList[i].score;
+                rank = i + 1;
+                break;
             }
+        }
 
-            rankText.text +=
-                currentRank + "位  " +
-                scoreList[i].name + "  " +
-                scoreList[i].score + "\n";
+        // 表示テキスト構築
+        if (rank > 0 && rank <= 10)
+        {
+            rankText.text =
+                $"{mode.ToUpper()} MODE\n" +
+                $"{playerName}\n" +
+                $"No.{rank}\n" +
+                "Rankin!";
+        }
+        else
+        {
+            rankText.text =
+                $"{mode.ToUpper()} MODE\n" +
+                $"{playerName}\n" +
+                "Out of ranking...";
         }
     }
 }

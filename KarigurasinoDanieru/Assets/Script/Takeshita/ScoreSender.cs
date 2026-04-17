@@ -6,20 +6,21 @@ public class ScoreSender : MonoBehaviour
 {
     public string saveUrl;
 
-    public void SendScore(string name, int score)
+    //mode を受け取る
+    public void SendScore(string name, int score, string mode)
     {
-        Debug.Log($"送信しようとしている: {name}, {score}");
-        StartCoroutine(PostScore(name, score));
+        Debug.Log($"送信: {name}, {score}, mode={mode}");
+        StartCoroutine(PostScore(name, score, mode));
     }
 
-    IEnumerator PostScore(string name, int score)
+    IEnumerator PostScore(string name, int score, string mode)
     {
         WWWForm form = new WWWForm();
         form.AddField("name", name);
         form.AddField("score", score);
+        form.AddField("mode", mode); 
 
-        UnityWebRequest req =
-            UnityWebRequest.Post(saveUrl, form);
+        UnityWebRequest req = UnityWebRequest.Post(saveUrl, form);
 
         yield return req.SendWebRequest();
 
@@ -33,4 +34,5 @@ public class ScoreSender : MonoBehaviour
             Debug.LogError("❌ 通信失敗: " + req.error);
         }
     }
-}
+} 
+
