@@ -10,6 +10,7 @@ public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler ,IPointerDow
     private Image _button;
     private Color _defaultColor;
     [SerializeField]public Color highlightColor = new Color(1.2f, 1.2f, 1.2f, 1f);
+    [SerializeField] Fade fade;
 
 
     public void Start()
@@ -25,13 +26,12 @@ public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler ,IPointerDow
 
     public void OnPointerClick(PointerEventData eventData)
     {
-       StartCoroutine(LoadSceneAfterSE());
+        AudioSourceManager.instance.PlaySE(SEType.clickSE);
+        _button.color = _defaultColor; 
+        fade.FadeIn(1f, () =>
+        {
+            SceneManager.LoadScene(sceneName);
+        });
     }
 
-    public IEnumerator LoadSceneAfterSE()
-    {
-        AudioSourceManager.instance.PlaySE(SEType.clickSE);
-        yield return new WaitForSeconds(1.0f); 
-        SceneManager.LoadScene(sceneName);
-    }
 }
