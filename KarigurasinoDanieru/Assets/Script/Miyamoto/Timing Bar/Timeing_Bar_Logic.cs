@@ -32,7 +32,6 @@ public class Timeing_Bar_Logic : MonoBehaviour
     private bool is_playing = true;
     [SerializeField]private float reset_time = 0.3f;  //ƒŠƒZƒbƒg‚·‚é‚Ü‚Å‚ÌŽžŠÔ
 
-
     void Start()
     {
         timingBarSystem = new Timing_Bar_System(
