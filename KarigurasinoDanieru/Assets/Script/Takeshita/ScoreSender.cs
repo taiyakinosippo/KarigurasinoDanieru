@@ -9,6 +9,11 @@ public class ScoreSender : MonoBehaviour
     //mode を受け取る
     public void SendScore(string name, int score, string mode)
     {
+        if (ModeManager.IsMultiMode)
+        {
+            return;
+        }
+
         Debug.Log($"送信: {name}, {score}, mode={mode}");
         StartCoroutine(PostScore(name, score, mode));
     }

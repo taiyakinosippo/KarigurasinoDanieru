@@ -29,6 +29,10 @@ public class RankingInputManager : MonoBehaviour
 
     void Send(string mode)
     {
+        if (ModeManager.IsMultiMode)
+        {
+            return;
+        }
         string name = nameInput.text;
         int score;
 
