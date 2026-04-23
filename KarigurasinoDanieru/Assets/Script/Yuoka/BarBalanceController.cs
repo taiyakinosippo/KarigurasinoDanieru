@@ -113,6 +113,11 @@ public class BarBalanceController : MonoBehaviour
         
         //UIに反映
         MeterImage.fillAmount = meter / maxMeter;
+
+        //色の変更
+        float t = meter / maxMeter;
+        Color color = Color.Lerp(Color.yellow, Color.red, t);
+        MeterImage.color = color;
     }
 
     //バーがエリア内にあるか判定
