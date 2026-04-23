@@ -4,7 +4,7 @@ using System.Collections;
 
 public class ScoreSender : MonoBehaviour
 {
-    public string saveUrl;
+    public string saveUrl="../save_score.php";
 
     //mode を受け取る
     public void SendScore(string name, int score, string mode)
@@ -23,21 +23,30 @@ public class ScoreSender : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("name", name);
         form.AddField("score", score);
-        form.AddField("mode", mode); 
+        form.AddField("mode", mode);
 
-        UnityWebRequest req = UnityWebRequest.Post(saveUrl, form);
+        string url;
 
+#if UNITY_EDITOR
+    // ✅ Editorでは絶対URIを使う（HTTP可）
+    url = "http://localhost/KarigurashinoDaniel_Unity/save_score.php";
+#else
+        // ✅ WebGLでは相対パス（SSL問題回避）
+        url = "../save_score.php";
+#endif
+
+        UnityWebRequest req = UnityWebRequest.Post(url, form);
         yield return req.SendWebRequest();
 
         if (req.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log("✅ PHP に届いた");
-            Debug.Log("レスポンス: " + req.downloadHandler.text);
+            Debug.Log("✅ PHP に届いた: " + req.downloadHandler.text);
         }
         else
         {
             Debug.LogError("❌ 通信失敗: " + req.error);
         }
     }
+
 } 
 

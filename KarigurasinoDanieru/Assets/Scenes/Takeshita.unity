@@ -1236,8 +1236,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc30b9bbf92b90942b156a2ded574a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MultiSyncManager
-  updateUrl: mp_update.php
-  fetchUrl: mp_fetch.php
+  updateUrl: ../mp_update.php
+  fetchUrl: ../mp_fetch.php
   playerName: 
   currentScore: 0
 --- !u!4 &855817518
@@ -2355,7 +2355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd7bd83124bcea84790569954c1e3931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreSender
-  saveUrl: http://10.219.32.66/KarigurashinoDaniel_Unity/save_score.php
+  saveUrl: ../save_score.php
 --- !u!4 &1455198749
 Transform:
   m_ObjectHideFlags: 0

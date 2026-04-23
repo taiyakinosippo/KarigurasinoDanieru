@@ -5,9 +5,10 @@ using System.Collections.Generic;
 
 public class MultiSyncManager : MonoBehaviour
 {
+
     [Header("Server URLs")]
-    public string updateUrl="mp_update.php";   // mp_update.php
-    public string fetchUrl="mp_fetch.php";    // mp_fetch.php
+    public string updateUrl = "../mp_update.php";
+    public string fetchUrl = "../mp_fetch.php";
 
     [Header("Player Info")]
     public string playerName;
