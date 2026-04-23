@@ -1,7 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections;
+
 
 public class UI_Button_visual_Anim : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -37,19 +38,21 @@ public class UI_Button_visual_Anim : MonoBehaviour, IPointerClickHandler, IPoint
         }
         else
         {
-            UI_Manager.instance.ShowUI(target);
+            StartCoroutine(PlayShowAnimation());
         }
     }
 
     private IEnumerator PlayCloseAnimation()
     {
-        animator.Play("Difficulty_Select_Window_Close", 0, 0f);
-
-        float length = animator.GetCurrentAnimatorStateInfo(0).length;
-
-        yield return new WaitForSeconds(length);
-
+        animator.CrossFade("Close", 0f, 0, 0f);
+        yield return new WaitForSeconds(1.0f);
         UI_Manager.instance.CloseUI(target);
     }
 
+    private IEnumerator PlayShowAnimation()
+    {
+        UI_Manager.instance.ShowUI(target);
+        animator.CrossFade("Show", 0f, 0, 0f);
+        yield return new WaitForSeconds(1.0f);
+    }
 }

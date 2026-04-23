@@ -43,7 +43,7 @@ public class UI_GameLevel_View : MonoBehaviour,IPointerClickHandler, IPointerDow
                 UI_Manager.instance.CloseUI(target);
                 break;
         }
-        animator.CrossFade("Lsat_Confime_Window", 0f, 0, 0f);
+        animator.CrossFade("Show", 0f, 0, 0f);
     }
 }
 

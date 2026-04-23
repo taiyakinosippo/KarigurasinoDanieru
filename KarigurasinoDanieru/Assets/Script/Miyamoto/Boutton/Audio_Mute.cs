@@ -1,14 +1,11 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class UI_GameModa_View : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+public class Audio_Mute : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
+    public AudioSource audioSource;
     private Image _button;
-    public Canvas target;
     private Color _defaultColor;
-    [SerializeField] private GameMode gameMode;
-    [SerializeField] private UIAction action;
-    [SerializeField] private Animator animator;
     [SerializeField] Color _selectedColor = new Color(1.2f, 1.2f, 1.2f, 1f);
 
     void Start()
@@ -29,18 +26,11 @@ public class UI_GameModa_View : MonoBehaviour, IPointerClickHandler, IPointerDow
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameManager.instance.GameModeSelect(gameMode);
+        audioSource.mute = !audioSource.mute;
+        if (audioSource.mute == true) return;
         AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
-        switch (action)
-        {
-            case UIAction.Show:
-                UI_Manager.instance.ShowUI(target);
-                break;
-
-            case UIAction.Close:
-                UI_Manager.instance.CloseUI(target);
-                break;
-        }
-        animator.CrossFade("Show", 0f, 0, 0f);
+        
     }
+
+
 }
