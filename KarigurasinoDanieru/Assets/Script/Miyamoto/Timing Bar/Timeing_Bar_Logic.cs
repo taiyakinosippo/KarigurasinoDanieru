@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class Timeing_Bar_Logic : MonoBehaviour
 {
     [Header("Timing Bar 設定")]
-    [SerializeField] private GameMode gameMode = GameMode.Normal;     // ゲームモードの設定
+    [SerializeField] private GameLevel gameLevel = GameLevel.Normal;     // ゲームレベルの設定
     [SerializeField] private float duration = 1f;                     // タイミングバーが移動する時間（秒）
     [SerializeField] private float maxwindth = 400f;                  // タイミングバーの最大幅
     [SerializeField] private float reset_time = 1f;                   //リセットするまでの時間
@@ -30,7 +30,7 @@ public class Timeing_Bar_Logic : MonoBehaviour
     [SerializeField] private int perfect_score = 300;                 //パーフェクトの点数
     [SerializeField] private UI_Barview barView;     //タイミングバーのUIを管理するクラス
     [SerializeField] private UI_Judge barText;        //タイミングバーのテキストを管理するクラス
-    [SerializeField] private Timing_Bar_System timingBarSystem;　　　//タイミングバーのシステムを管理するクラ
+    private Timing_Bar_System timingBarSystem;　　　//タイミングバーのシステムを管理するクラ
     public int MissScore => miss_score;             //外部からミスの点数を取得できるプロパティ
     public int GoodScore => good_score;             //外部からグッドの点数を取得できるプロパティ
     public int GreatScore => great_score;           //外部からグレートの点数を取得できるプロパティ
@@ -39,7 +39,7 @@ public class Timeing_Bar_Logic : MonoBehaviour
     private bool is_playing = true;
     void Start()
     {
-        if(gameMode == GameMode.Hard)
+        if(gameLevel == GameLevel.Hard)
         {
             duration *= 0.5f; 
             reset_time *= 0.5f;

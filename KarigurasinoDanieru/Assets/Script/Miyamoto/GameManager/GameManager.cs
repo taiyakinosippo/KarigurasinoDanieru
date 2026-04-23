@@ -1,27 +1,40 @@
 using UnityEngine;
-using TMPro;
+using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
-    
+    public static GameManager instance;
+    public GameMode currentMode;
+    public GameLevel currentLevel;
 
-    private IGameState currentState;
-
-    void Start()
+    public void Awake()
     {
-        ChangeState(new Opening_State());
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    /// <summary>
+    /// ゲームモード選択のメソッド。引数でソロかマルチかを受け取る。
+    /// </summary>
+    public void GameModeSelect(GameMode mode)
+    {
+        currentMode = mode;
     }
 
-    void Update()
-    {
-        currentState?.Update(this);
-    }
 
-    public void ChangeState(IGameState newState)
+    /// <summary>
+    /// ゲームレベル選択のメソッド。引数でノーマルかハードかを受け取る。
+    /// </summary>
+    public void GameLevelSelect(GameLevel level)
     {
-        currentState?.Exit(this);
-        currentState = newState;
-        currentState.Enter(this);
+       currentLevel = level;
     }
 
 }
