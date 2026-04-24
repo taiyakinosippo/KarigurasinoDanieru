@@ -43,7 +43,6 @@ public class Timeing_Bar_Logic : MonoBehaviour
         if (gameLevel == GameLevel.Hard)
         {
             duration *= 0.5f; 
-            reset_time *= 0.5f;
             slowdown_factor *= 2f;
             miss_score = (int)(miss_score * 0.5f);          
             good_score = (int)(good_score * 0.5f);                   
