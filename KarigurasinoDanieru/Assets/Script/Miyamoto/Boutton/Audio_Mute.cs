@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
-public class UI_Back_Button : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+using UnityEngine.UI;
+public class Audio_Mute : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
+    public AudioSource audioSource;
     private Image _button;
-    public  Canvas _option;
     private Color _defaultColor;
     [SerializeField] Color _selectedColor = new Color(1.2f, 1.2f, 1.2f, 1f);
 
@@ -27,8 +26,11 @@ public class UI_Back_Button : MonoBehaviour, IPointerClickHandler, IPointerDownH
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        AudioSourceManager.instance.PlaySE(SEType.backbuttonSE);
-        _option.enabled = false;
+        audioSource.mute = !audioSource.mute;
+        if (audioSource.mute == true) return;
+        AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
+        
     }
+
 
 }
