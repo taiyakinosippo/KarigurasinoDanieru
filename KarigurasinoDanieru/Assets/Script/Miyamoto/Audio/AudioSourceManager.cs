@@ -1,18 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AudioSourceManager : MonoBehaviour
 {
-   public static AudioSourceManager instance;
-   private AudioSource _audioSource;
+    public static AudioSourceManager instance;
+    private AudioSource _audioSource;
 
-   [Header("SEàÍóó")]
-   [SerializeField]public AudioClip _indSE;
-   [SerializeField]public AudioClip _SelectSE;
-   [SerializeField]public AudioClip _clickSE;
-   [SerializeField]public AudioClip _missSE;
-   [SerializeField]public AudioClip _goodSE;
-   [SerializeField]public AudioClip _greatSE;
-   [SerializeField]public AudioClip _perfectSE;
+    [Header("SEàÍóó")]
+    [SerializeField] private List<SEData> seList;
+    private Dictionary<SEType, AudioClip> seDictionary;
 
     void Awake()
     {
@@ -25,32 +23,27 @@ public class AudioSourceManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        seDictionary = new Dictionary<SEType, AudioClip>();
+
+        foreach (var se in seList)
+        {
+            if (!seDictionary.ContainsKey(se.seType))
+            {
+                seDictionary.Add(se.seType, se.audioClip);
+            }
+            else
+            {
+                Debug.LogWarning($"SETypeÇ™èdï°ÇµÇƒÇÈ: {se.seType}");
+            }
+        }
     }
     public void PlaySE(SEType seType)
     {
-        switch (seType)
+        if (seDictionary.TryGetValue(seType, out AudioClip clip))
         {
-            case SEType.indicatorSE:
-                _audioSource.PlayOneShot(_indSE);
-                break;
-            case SEType.SelectbuttonSE:
-                _audioSource.PlayOneShot(_SelectSE);
-                break;
-            case SEType.clickSE:
-                _audioSource.PlayOneShot(_clickSE);
-                break;
-            case SEType.missSE:
-                _audioSource.PlayOneShot(_missSE);
-                break;
-            case SEType.goodSE: 
-                _audioSource.PlayOneShot(_goodSE);
-                break;
-            case SEType.greatSE: 
-                _audioSource.PlayOneShot(_greatSE);
-                break;
-            case SEType.perfectSE:
-                _audioSource.PlayOneShot(_perfectSE);
-                break;
+            _audioSource.PlayOneShot(clip);
         }
     }
+
 }

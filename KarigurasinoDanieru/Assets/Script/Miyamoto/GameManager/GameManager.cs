@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     /// <summary>
     /// ゲームモード選択のメソッド。引数でソロかマルチかを受け取る。
     /// </summary>

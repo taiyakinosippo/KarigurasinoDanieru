@@ -39,7 +39,8 @@ public class Timeing_Bar_Logic : MonoBehaviour
     private bool is_playing = true;
     void Start()
     {
-        if(gameLevel == GameLevel.Hard)
+        gameLevel = GameManager.instance.currentLevel;
+        if (gameLevel == GameLevel.Hard)
         {
             duration *= 0.5f; 
             reset_time *= 0.5f;

@@ -3513,7 +3513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9678cedc81c19ee41829ce3acf18fd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Scene_Changer
-  sceneName: Main
+  sceneName: Miyamoto
   highlightColor: {r: 1.2, g: 1.2, b: 1.2, a: 1}
   fade: {fileID: 779262766}
 --- !u!1 &1465079704
@@ -3617,7 +3617,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1482198146}
   - component: {fileID: 1482198145}
-  - component: {fileID: 1482198144}
+  - component: {fileID: 1482198147}
   m_Layer: 0
   m_Name: SE
   m_TagString: Untagged
@@ -3625,25 +3625,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1482198144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482198143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aada2e940a3222948bd73ecc0f4f678b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AudioSourceManager
-  _indSE: {fileID: 8300000, guid: d65546a174402334e8dcd03cde59fe9d, type: 3}
-  _SelectSE: {fileID: 8300000, guid: 3484fe6a3b2b7c14a9592aec1ed2451b, type: 3}
-  _clickSE: {fileID: 8300000, guid: 4e89a73d5558f7041811c4a4d41e2361, type: 3}
-  _missSE: {fileID: 0}
-  _goodSE: {fileID: 0}
-  _greatSE: {fileID: 0}
-  _perfectSE: {fileID: 0}
 --- !u!82 &1482198145
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3756,6 +3737,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1482198147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482198143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aada2e940a3222948bd73ecc0f4f678b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSourceManager
+  seList: []
 --- !u!1 &1534728388
 GameObject:
   m_ObjectHideFlags: 0
@@ -5218,7 +5212,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823646944}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
