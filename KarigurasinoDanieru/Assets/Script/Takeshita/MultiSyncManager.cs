@@ -1,157 +1,239 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
-using System.Collections.Generic;
 
 public class MultiSyncManager : MonoBehaviour
 {
-
     [Header("Server URLs")]
-    public string updateUrl = "../mp_update.php";
-    public string fetchUrl = "../mp_fetch.php";
+    private string updateUrl;
+    private string fetchUrl;
+    private string joinUrl;
 
     [Header("Player Info")]
     public string playerName;
     public int currentScore;
 
-    // 内部用
+    // 内部状態
     private string roomId;
+    private bool matched;
+    private bool joined;
+    private bool isFetching;
+    private bool isSending;
 
-    private bool matched = false;
+    private ModeManager modeManager;
+
+    void Awake()
+    {
+        updateUrl = ServerConfig.BaseUrl + "mp_update.php";
+        fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
+        joinUrl = ServerConfig.BaseUrl + "mp_join.php";
+
+        modeManager = FindObjectOfType<ModeManager>();
+    }
 
     void Start()
     {
-        // ソロなら何もしない
-        if (!ModeManager.IsMultiMode)
-        {
-            enabled = false;
-            return;
-        }
+        // 明示的に停止状態で開始
+        StopAllSync();
+    }
 
-        if (string.IsNullOrEmpty(ModeManager.CurrentRoomId))
+    /* ======================
+       マルチ開始
+    ====================== */
+    public void BeginMultiSync()
+    {
+        if (enabled)
         {
-            Debug.LogError("RoomID が未設定！");
-            enabled = false;
+            Debug.LogWarning("[MultiSync] Already running");
             return;
-        }
-
-        if (string.IsNullOrEmpty(playerName))
-        {
-            playerName = System.Guid.NewGuid().ToString();
         }
 
         roomId = ModeManager.CurrentRoomId;
+        playerName = ModeManager.MultiPlayerName;
 
-        // 0.5秒ごとに同期
-        InvokeRepeating(nameof(SendState), 0f, 0.5f);
-        InvokeRepeating(nameof(FetchState), 0.25f, 0.5f);
+        if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogWarning("[MultiSync] roomId or playerName empty");
+            return;
+        }
+
+        matched = false;
+        joined = false;
+        isFetching = false;
+        isSending = false;
+
+        enabled = true;
+
+        SendJoinOnce();
+        InvokeRepeating(nameof(FetchState), 0.3f, 0.6f);
+
+        Debug.Log("[MultiSync] Started");
+    }
+
+    /* ======================
+       完全停止
+    ====================== */
+    private void StopAllSync()
+    {
+        CancelInvoke();
+        StopAllCoroutines();
+        enabled = false;
     }
 
     /* ======================
        状態送信
     ====================== */
-    void SendState()
+    private void SendStateOnce()
     {
+        if (isSending) return;
         StartCoroutine(SendStateCoroutine());
     }
 
     IEnumerator SendStateCoroutine()
     {
+        isSending = true;
+
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
         form.AddField("score", currentScore);
 
-        UnityWebRequest req = UnityWebRequest.Post(updateUrl, form);
-        yield return req.SendWebRequest();
-
-        if (req.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest req = UnityWebRequest.Post(updateUrl, form))
         {
-            Debug.LogError("SendState error: " + req.error);
+            req.timeout = 10;
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("[MultiSync] Send error: " + req.error);
+            }
         }
+
+        isSending = false;
     }
 
     /* ======================
        状態取得
     ====================== */
-    void FetchState()
+    private void FetchState()
     {
+        if (isFetching) return;
         StartCoroutine(FetchStateCoroutine());
     }
 
     IEnumerator FetchStateCoroutine()
     {
-        UnityWebRequest req =
-            UnityWebRequest.Get(fetchUrl + "?room_id=" + roomId);
+        isFetching = true;
 
-        yield return req.SendWebRequest();
+        string url = $"{fetchUrl}?room_id={roomId}";
+        Debug.Log("[MultiSync] Fetch: " + url);
 
-        if (req.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
-            Debug.LogError(req.error);
-            yield break;   // ← これが無いと無限ループ
+            req.timeout = 10;
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("[MultiSync] Fetch error: " + req.error);
+                isFetching = false;
+                yield break;
+            }
+
+            if (string.IsNullOrEmpty(req.downloadHandler.text))
+            {
+                isFetching = false;
+                yield break;
+            }
+
+            PlayerState[] states =
+                JsonHelper.FromJson<PlayerState>(req.downloadHandler.text);
+
+            UpdateRemoteUI(states);
+            CheckMatchSuccess(states);
         }
 
-        if (string.IsNullOrEmpty(req.downloadHandler.text))
-            yield break;
-
-        PlayerState[] states =
-            JsonHelper.FromJson<PlayerState>(req.downloadHandler.text);
-
-        if (states == null || states.Length == 0)
-            yield break;
-
-        UpdateRemoteUI(states);
-        CheckMatchSuccess(states);
+        isFetching = false;
     }
 
-
     /* ======================
-       UI更新
+       UI更新（仮）
     ====================== */
     void UpdateRemoteUI(PlayerState[] states)
     {
-        foreach (PlayerState ps in states)
+        if (states == null) return;
+
+        foreach (var ps in states)
         {
-            // 自分は無視（必要なら表示も可）
             if (ps.player_name == playerName)
                 continue;
 
             Debug.Log($"[ROOM:{roomId}] {ps.player_name} SCORE:{ps.score}");
-
-            // ここで
-            // ・相手スコア表示
-            // ・順位表示
-            // ・ゲージ更新
-            // などを行う
         }
     }
 
+    /* ======================
+       マッチ成立判定
+    ====================== */
     void CheckMatchSuccess(PlayerState[] states)
     {
-        if (matched) return;
+        if (matched || states == null) return;
 
-        foreach (PlayerState ps in states)
+        foreach (var ps in states)
         {
             if (ps.player_name != playerName)
             {
                 matched = true;
 
-                CancelInvoke();
-                enabled = false;
+                SendStateOnce();
+                StopAllSync();
 
-                FindObjectOfType<ModeManager>()
-                    .OnMatchSuccess(ps.player_name);
+                if (modeManager != null)
+                {
+                    modeManager.OnMatchSuccess(ps.player_name);
+                }
 
+                Debug.Log("[MultiSync] Match Success!");
                 break;
             }
         }
     }
 
+    /* ======================
+       Join
+    ====================== */
+    public void SendJoinOnce()
+    {
+        if (joined) return;
+        joined = true;
+        StartCoroutine(SendJoinCoroutine());
+    }
+
+    IEnumerator SendJoinCoroutine()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("room_id", roomId);
+        form.AddField("player_name", playerName);
+
+        using (UnityWebRequest req = UnityWebRequest.Post(joinUrl, form))
+        {
+            req.timeout = 10;
+            yield return req.SendWebRequest();
+
+            if (req.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("[MultiSync] Joined room");
+            }
+            else
+            {
+                Debug.LogError("[MultiSync] Join failed: " + req.error);
+            }
+        }
+    }
 }
 
 /* ======================
-   送受信用データ構造
+   通信用データ
 ====================== */
 [System.Serializable]
 public class PlayerState

@@ -4,49 +4,47 @@ using System.Collections;
 
 public class ScoreSender : MonoBehaviour
 {
-    public string saveUrl="../save_score.php";
-
-    //mode を受け取る
+    /// <summary>
+    /// スコア送信（外部から呼ぶ用）
+    /// </summary>
     public void SendScore(string name, int score, string mode)
     {
-        if (ModeManager.IsMultiMode)
-        {
-            return;
-        }
-
-        Debug.Log($"送信: {name}, {score}, mode={mode}");
-        StartCoroutine(PostScore(name, score, mode));
+        Debug.Log($"[ScoreSender] SendScore name={name}, score={score}, mode={mode}");
+        StartCoroutine(PostScoreCoroutine(name, score, mode));
     }
 
-    IEnumerator PostScore(string name, int score, string mode)
+    /// <summary>
+    /// PHPへPOST送信
+    /// </summary>
+    private IEnumerator PostScoreCoroutine(string name, int score, string mode)
     {
         WWWForm form = new WWWForm();
         form.AddField("name", name);
         form.AddField("score", score);
         form.AddField("mode", mode);
 
-        string url;
+        string url = ServerConfig.BaseUrl + "save_score.php";
 
-#if UNITY_EDITOR
-    // ✅ Editorでは絶対URIを使う（HTTP可）
-    url = "http://localhost/KarigurashinoDaniel_Unity/save_score.php";
-#else
-        // ✅ WebGLでは相対パス（SSL問題回避）
-        url = "../save_score.php";
-#endif
-
-        UnityWebRequest req = UnityWebRequest.Post(url, form);
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
+        using (UnityWebRequest req = UnityWebRequest.Post(url, form))
         {
-            Debug.Log("✅ PHP に届いた: " + req.downloadHandler.text);
-        }
-        else
-        {
-            Debug.LogError("❌ 通信失敗: " + req.error);
+            // タイムアウト（秒）
+            req.timeout = 10;
+
+            yield return req.SendWebRequest();
+
+            if (req.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("✅ スコア送信成功: " + req.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError(
+                    $"❌ スコア送信失敗\n" +
+                    $"URL: {url}\n" +
+                    $"Error: {req.error}\n" +
+                    $"Response: {req.downloadHandler.text}"
+                );
+            }
         }
     }
-
-} 
-
+}

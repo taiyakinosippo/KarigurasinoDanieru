@@ -4,75 +4,159 @@ using System.Collections;
 
 public class ModeManager : MonoBehaviour
 {
-    public GameObject GamePlay;
-    public GameObject PlayMode;
-    public GameObject Matching;
+    [Header("Panels")]
+    [SerializeField] private GameObject gamePlay;
+    [SerializeField] private GameObject playMode;
+    [SerializeField] private GameObject matching;
 
-    public InputField MultiRoomInput;
-    public Button MatchingButton;
-    public GameObject MultiRoomInputField;
-    public GameObject MatchingButton_obj;
+    [Header("Multi UI")]
+    [SerializeField] private InputField multiRoomInput;
+    [SerializeField] private InputField multiPlayerNameInput;
+    [SerializeField] private Button matchingButton;
+    [SerializeField] private GameObject matchingButtonObj;
+    [SerializeField] private GameObject multiRoomInputField;
+    [SerializeField] private GameObject gamePlayNameInput;
 
-    public Text MatchStatusText; 
+    [Header("Text")]
+    [SerializeField] private Text matchStatusText;
+    [SerializeField] private Text modeText;
 
-    [HideInInspector]
+    [Header("Managers")]
+    [SerializeField] private MultiSyncManager multiSync;
+    [SerializeField] private ScoreSender scoreSender;
+
+    [Header("Runtime State")]
     public static string CurrentRoomId;
-
+    public static string MultiPlayerName = "";
     public static bool IsMultiMode = false;
-    public bool matchHandled = false;
+
+    private bool matchHandled = false;
+    private int lastScore;
 
     void Start()
     {
-        GamePlay.SetActive(false);
-        Matching.SetActive(false);
-        PlayMode.SetActive(true);
+        // 初期状態
+        IsMultiMode = false;
+        CurrentRoomId = "";
+        MultiPlayerName = "";
+        matchHandled = false;
 
-        MatchStatusText.gameObject.SetActive(false);
-        MatchingButton.interactable = false;
+        gamePlay.SetActive(false);
+        matching.SetActive(false);
+        playMode.SetActive(true);
 
-        MultiRoomInput.onValueChanged.AddListener(OnNameChanged);
-        MultiRoomInput.onEndEdit.AddListener(OnNameChanged);
+        if (matchStatusText != null)
+            matchStatusText.gameObject.SetActive(false);
+
+        if (matchingButton != null)
+            matchingButton.interactable = false;
+
+        if (multiRoomInput != null)
+        {
+            multiRoomInput.onValueChanged.AddListener(OnRoomIdChanged);
+            multiRoomInput.onEndEdit.AddListener(OnRoomIdChanged);
+        }
+
+        UpdateModeText();
     }
 
-    void OnNameChanged(string input)
+    void OnRoomIdChanged(string input)
     {
-        MatchingButton.interactable = !string.IsNullOrWhiteSpace(input);
+        if (matchingButton != null)
+            matchingButton.interactable = !string.IsNullOrWhiteSpace(input);
     }
 
+    // =====================
+    // SINGLE MODE
+    // =====================
     public void InputSingle()
     {
+        Debug.Log("[MODE] SINGLE START");
+
         IsMultiMode = false;
-        PlayMode.SetActive(false);
-        Matching.SetActive(false);
-        GamePlay.SetActive(true);
+        CurrentRoomId = "";
+        MultiPlayerName = "";
+        matchHandled = false;
+
+        if (multiSync != null)
+            multiSync.enabled = false;
+
+        playMode.SetActive(false);
+        matching.SetActive(false);
+        gamePlay.SetActive(true);
+
+        if (gamePlayNameInput != null)
+            gamePlayNameInput.SetActive(true);
+
+        UpdateModeText();
     }
 
+    // =====================
+    // MULTI MODE
+    // =====================
     public void InputMulti()
     {
+        Debug.Log("[MODE] MULTI SELECT");
         IsMultiMode = true;
 
-        PlayMode.SetActive(false);
-        Matching.SetActive(true);
-        GamePlay.SetActive(false);
+        playMode.SetActive(false);
+        matching.SetActive(true);
+        gamePlay.SetActive(false);
 
-        MultiRoomInputField.SetActive(true);
-        MatchingButton_obj.SetActive(true);
-        // 待機中表示
-        MatchStatusText.gameObject.SetActive(true);
-        MatchStatusText.text = "Waiting...";
+        multiRoomInputField.SetActive(true);
+        multiPlayerNameInput.gameObject.SetActive(true);
+        matchingButtonObj.SetActive(true);
+
+        if (matchStatusText != null)
+        {
+            matchStatusText.gameObject.SetActive(true);
+            matchStatusText.text = "Input Name & Room ID";
+        }
+
+        if (gamePlayNameInput != null)
+            gamePlayNameInput.SetActive(false);
+
+        UpdateModeText();
     }
 
     public void InputMatching()
     {
-        MultiRoomInputField.SetActive(false);
-        MatchingButton_obj.SetActive(false);
+        if (multiRoomInput == null || multiPlayerNameInput == null || multiSync == null)
+        {
+            Debug.LogError("[MATCH] Missing reference");
+            return;
+        }
 
-        CurrentRoomId = MultiRoomInput.text.Trim();
+        string roomId = multiRoomInput.text.Trim();
+        string playerName = multiPlayerNameInput.text.Trim();
+
+        if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogWarning("[MATCH] Name or RoomID empty");
+            return;
+        }
+
+        CurrentRoomId = roomId;
+        MultiPlayerName = playerName;
+
+        Debug.Log($"[MATCH] name={MultiPlayerName}, room={CurrentRoomId}");
+
+        multiRoomInputField.SetActive(false);
+        multiPlayerNameInput.gameObject.SetActive(false);
+        matchingButtonObj.SetActive(false);
+
+        if (matchStatusText != null)
+            matchStatusText.text = "Waiting...";
+
+        UpdateModeText();
+
+        // ✅ マッチング開始
+        multiSync.BeginMultiSync();
     }
 
-    /// <summary>
-    /// マッチ成功を通知される
-    /// </summary>
+    // =====================
+    // MATCH SUCCESS
+    // =====================
     public void OnMatchSuccess(string opponentName)
     {
         if (matchHandled) return;
@@ -81,24 +165,71 @@ public class ModeManager : MonoBehaviour
         StartCoroutine(MatchSuccessSequence(opponentName));
     }
 
-
-    IEnumerator MatchSuccessSequence(string opponentName)
+    private IEnumerator MatchSuccessSequence(string opponentName)
     {
-        // マッチ成功表示
-        MatchStatusText.text =opponentName+" Matching!";
+        if (matchStatusText != null)
+            matchStatusText.text = opponentName + " Matching!";
 
-        // 2秒待機
         yield return new WaitForSeconds(2f);
 
-        MatchStatusText.gameObject.SetActive(false);
-        Matching.SetActive(false);
-        GamePlay.SetActive(true);
+        if (matchStatusText != null)
+            matchStatusText.gameObject.SetActive(false);
+
+        matching.SetActive(false);
+        gamePlay.SetActive(true);
+
+        if (gamePlayNameInput != null)
+            gamePlayNameInput.SetActive(false);
     }
 
+    // =====================
+    // BACK
+    // =====================
     public void InputBack()
     {
-        PlayMode.SetActive(true);
-        Matching.SetActive(false);
-        GamePlay.SetActive(false);
+        IsMultiMode = false;
+        CurrentRoomId = "";
+        MultiPlayerName = "";
+        matchHandled = false;
+
+        playMode.SetActive(true);
+        matching.SetActive(false);
+        gamePlay.SetActive(false);
+
+        UpdateModeText();
+    }
+
+    // =====================
+    // UI
+    // =====================
+    private void UpdateModeText()
+    {
+        if (modeText == null) return;
+
+        modeText.text =
+            $"MODE:{(IsMultiMode ? "MULTI" : "SINGLE")}\n" +
+            $"ROOM:{(string.IsNullOrEmpty(CurrentRoomId) ? "-" : CurrentRoomId)}\n" +
+            $"NAME:{(IsMultiMode ? MultiPlayerName : "-")}";
+    }
+
+    // =====================
+    // GAME END
+    // =====================
+    public void OnGameEnd(int score)
+    {
+        lastScore = score;
+
+        if (scoreSender == null)
+        {
+            Debug.LogError("[MODE] ScoreSender not found");
+            return;
+        }
+
+        string mode = IsMultiMode ? "multi" : "normal";
+        string name = IsMultiMode ? MultiPlayerName : "";
+
+        Debug.Log($"[MODE] GameEnd score={score}, mode={mode}");
+
+        scoreSender.SendScore(name, lastScore, mode);
     }
 }

@@ -3,53 +3,101 @@ using UnityEngine.UI;
 
 public class RankingInputManager : MonoBehaviour
 {
+    [Header("UI")]
     public InputField nameInput;
     public InputField scoreInput;
 
-    LocalRankingManager localRanking;
-    ScoreSender scoreSender;
+    private LocalRankingManager localRanking;
+    private ScoreSender scoreSender;
 
-    void Start()
+    void Awake()
     {
         localRanking = FindObjectOfType<LocalRankingManager>();
         scoreSender = FindObjectOfType<ScoreSender>();
+
+        if (localRanking == null)
+        {
+            Debug.LogError("[RankingInputManager] LocalRankingManager not found");
+        }
+
+        if (scoreSender == null)
+        {
+            Debug.LogError("[RankingInputManager] ScoreSender not found");
+        }
+    }
+
+    void OnEnable()
+    {
+        UpdateUI();
+    }
+
+    /// <summary>
+    /// モードに応じてUI切り替え
+    /// </summary>
+    void UpdateUI()
+    {
+        if (nameInput != null)
+        {
+            // マルチモードでは名前入力を非表示
+            nameInput.gameObject.SetActive(!ModeManager.IsMultiMode);
+        }
     }
 
     // ノーマルモード用ボタン
     public void OnClickSendNormal()
     {
-        Send("normal");
+        SendScoreInternal("normal");
     }
 
     // ハードモード用ボタン
     public void OnClickSendHard()
     {
-        Send("hard");
+        SendScoreInternal("hard");
     }
 
-    void Send(string mode)
+    /// <summary>
+    /// スコア送信共通処理
+    /// </summary>
+    private void SendScoreInternal(string mode)
     {
         if (ModeManager.IsMultiMode)
         {
+            Debug.Log("[RANKING] Skip send (Multi Mode)");
             return;
         }
+
+        if (nameInput == null || scoreInput == null)
+        {
+            Debug.LogError("[RANKING] InputField is missing");
+            return;
+        }
+
         string name = nameInput.text;
-        int score;
-
         if (string.IsNullOrEmpty(name))
+        {
+            Debug.LogWarning("[RANKING] Name is empty");
             return;
+        }
 
-        if (!int.TryParse(scoreInput.text, out score))
+        if (!int.TryParse(scoreInput.text, out int score))
+        {
+            Debug.LogWarning("[RANKING] Score parse failed");
             return;
+        }
 
-        //Unity内ランキング（必要なら mode 別にもできる）
-        localRanking.AddOrUpdateScore(name, score,mode);
+        if (localRanking == null || scoreSender == null)
+        {
+            Debug.LogError("[RANKING] Manager reference missing");
+            return;
+        }
 
-        //Webへ送信（mode付き）
+        // ローカルランキング更新
+        localRanking.AddOrUpdateScore(name, score, mode);
+
+        // Web送信
         scoreSender.SendScore(name, score, mode);
 
-
-        //入力欄クリア
+        // 入力欄クリア
         nameInput.text = "";
         scoreInput.text = "";
     }
