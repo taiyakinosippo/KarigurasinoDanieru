@@ -100,10 +100,6 @@ public class ModeManager : MonoBehaviour
         gamePlay_Single.SetActive(false);
         gamePlay_Multi.SetActive(false);
 
-        matchingButtonObj.SetActive(true);
-        multiRoomInputField.SetActive(true);
-        multiNameInputField.SetActive(true);
-
         HideResultTexts();
 
         matchStatusText.gameObject.SetActive(true);
@@ -120,9 +116,6 @@ public class ModeManager : MonoBehaviour
         if (string.IsNullOrEmpty(CurrentRoomId) || string.IsNullOrEmpty(MultiPlayerName))
             return;
 
-      
-        UpdateModeText();
-
         multiRoomInputField.SetActive(false);
         multiNameInputField.SetActive(false);
         matchingButtonObj.SetActive(false);
@@ -131,7 +124,6 @@ public class ModeManager : MonoBehaviour
 
         multiSync.BeginMultiSync();
     }
-
 
     // =====================
     // MATCH SUCCESS
@@ -161,14 +153,17 @@ public class ModeManager : MonoBehaviour
     // =====================
     private void OnMultiScoreSent()
     {
+        // 🔴 InputField → int に変換
         int myScore = 0;
         if (scoreInputField != null)
         {
             int.TryParse(scoreInputField.text, out myScore);
         }
 
+        // 正本にも反映（推奨）
         MatchscoreManager.SetScore(myScore);
 
+        // MultiSync にも反映（送信側）
         multiSync.currentScore = myScore;
 
         string myName = MultiPlayerName;
@@ -218,7 +213,6 @@ public class ModeManager : MonoBehaviour
 
         HideResultTexts();
         UpdateModeText();
-        StopMultiSync();
     }
 
     private void UpdateModeText()
@@ -227,46 +221,5 @@ public class ModeManager : MonoBehaviour
             $"MODE: {(IsMultiMode ? "MULTI" : "SINGLE")}\n" +
             $"ROOM: {(string.IsNullOrEmpty(CurrentRoomId) ? "-" : CurrentRoomId)}\n" +
             $"NAME: {(IsMultiMode ? MultiPlayerName : "-")}";
-    }
-
-    private void UpdateEnemyResult(
-    string enemyName,
-    int enemyScore,
-    string myName,
-    int myScore
-)
-    {
-        if (resultEnemyText == null || resultPlayerText == null)
-            return;
-
-        // 自分はそのまま（変更しない）
-        resultPlayerText.text =
-            $"{myName}\nScore : {myScore}";
-
-        // ✅ 相手だけリアルタイム更新
-        resultEnemyText.text =
-            $"{enemyName}\nScore : {enemyScore}";
-
-        resultPlayerText.gameObject.SetActive(true);
-        resultEnemyText.gameObject.SetActive(true);
-    }
-
-    public void OnEnemyScoreUpdated(string enemyName, int enemyScore)
-    {
-        if (!IsMultiMode) return;
-
-        // 自分の現在スコア
-        int myScore = MatchscoreManager.CurrentScore;
-        string myName = MultiPlayerName;
-
-        // ✅ 相手だけ更新（自分は触らない）
-        UpdateEnemyResult(enemyName, enemyScore, myName, myScore);
-    }
-
-    public void StopMultiSync()
-    {
-        CancelInvoke();
-        StopAllCoroutines();
-        enabled = false;
     }
 }

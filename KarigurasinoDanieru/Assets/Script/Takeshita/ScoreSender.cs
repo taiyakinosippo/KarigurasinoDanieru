@@ -9,6 +9,13 @@ public class ScoreSender : MonoBehaviour
     /// </summary>
     public void SendScore(string name, int score, string mode)
     {
+
+        if (ModeManager.IsMultiMode)
+        {
+            Debug.Log("[ScoreSender] Skip ranking send (multi mode)");
+            return;
+        }
+
         Debug.Log($"[ScoreSender] SendScore name={name}, score={score}, mode={mode}");
         StartCoroutine(PostScoreCoroutine(name, score, mode));
     }
