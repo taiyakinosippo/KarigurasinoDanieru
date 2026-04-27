@@ -7,7 +7,7 @@ public class AudioSourceManager : MonoBehaviour
 
    [Header("SEˆê——")]
    [SerializeField]public AudioClip _indSE;
-   [SerializeField]public AudioClip _backSE;
+   [SerializeField]public AudioClip _SelectSE;
    [SerializeField]public AudioClip _clickSE;
    [SerializeField]public AudioClip _missSE;
    [SerializeField]public AudioClip _goodSE;
@@ -16,8 +16,15 @@ public class AudioSourceManager : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
         _audioSource = GetComponent<AudioSource>();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     public void PlaySE(SEType seType)
     {
@@ -26,8 +33,8 @@ public class AudioSourceManager : MonoBehaviour
             case SEType.indicatorSE:
                 _audioSource.PlayOneShot(_indSE);
                 break;
-            case SEType.backbuttonSE:
-                _audioSource.PlayOneShot(_backSE);
+            case SEType.SelectbuttonSE:
+                _audioSource.PlayOneShot(_SelectSE);
                 break;
             case SEType.clickSE:
                 _audioSource.PlayOneShot(_clickSE);

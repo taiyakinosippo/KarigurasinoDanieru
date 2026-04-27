@@ -9,7 +9,7 @@ public class UI_Barview : MonoBehaviour
     }
     public void barPosition(float move, float _maxwindth)
     {
-        float windth = _maxwindth * (move / 100f);
+        float windth = _maxwindth * move;
         bar_transpos.anchoredPosition = new Vector2(windth, bar_transpos.anchoredPosition.y);
     }
 
