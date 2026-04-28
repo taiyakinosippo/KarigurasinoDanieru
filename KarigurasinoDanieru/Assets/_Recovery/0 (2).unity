@@ -3092,7 +3092,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1318263879
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4244,7 +4244,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1746620924
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4438,7 +4438,7 @@ GameObject:
   - component: {fileID: 1785100430}
   - component: {fileID: 1785100429}
   m_Layer: 5
-  m_Name: ScoreInput
+  m_Name: NumberField_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5063,7 +5063,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1945177726
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5337,7 +5337,7 @@ MonoBehaviour:
   matching: {fileID: 1318263878}
   multiRoomInput: {fileID: 1754841617}
   multiPlayerNameInput: {fileID: 1224728861}
-  scoreInputField: {fileID: 1785100429}
+  scoreInputField: {fileID: 0}
   matchingButton: {fileID: 259453958}
   matchingButtonObj: {fileID: 259453956}
   multiRoomInputField: {fileID: 1754841615}
