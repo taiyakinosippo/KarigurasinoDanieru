@@ -23,12 +23,6 @@ public class RankingInputManager : MonoBehaviour
         public int score;
     }
 
-    public void Start()
-    {
-        nameInput.text = "";
-        scoreInput.text = "";
-    }
-
     void Awake()
     {
         localRanking = FindObjectOfType<LocalRankingManager>();
@@ -43,7 +37,8 @@ public class RankingInputManager : MonoBehaviour
         if (resultText == null)
             Debug.LogError("[Ranking] ResultText is not assigned");
 
-        
+        nameInput.text = "";
+        scoreInput.text = "";
     }
 
     void OnEnable()
@@ -73,15 +68,11 @@ public class RankingInputManager : MonoBehaviour
     public void OnClickSendNormal()
     {
         SendScoreInternal("normal");
-        nameInput.text = "";
-        scoreInput.text = "";
     }
 
     public void OnClickSendHard()
     {
         SendScoreInternal("hard");
-        nameInput.text = "";
-        scoreInput.text = "";
     }
 
     private void SendScoreInternal(string mode)
