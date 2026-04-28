@@ -18,6 +18,12 @@ public class LocalRankingManager : MonoBehaviour
     // スコア追加 or 上書き
     public void AddOrUpdateScore(string name, int score, string mode)
     {
+
+        if (ModeManager.IsMultiMode)
+        {
+            return;
+        }
+
         ScoreData existing = scoreList.Find(x => x.name == name);
 
         if (existing != null)
