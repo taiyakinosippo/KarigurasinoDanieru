@@ -6,11 +6,17 @@ public class Fade_Out : MonoBehaviour
     [SerializeField] Timer timer;
     public void Start()
     {
-        timer.isTimeStop = true;
+        if (timer != null)
+        {
+            timer.SetTimerRunning(false);
+        }
 
         fade.FadeOut(1f, () =>
         {
-            timer.isTimeStop = false;
+            if (timer != null)
+            {
+                timer.SetTimerRunning(true);
+            }
         });
     }
 }

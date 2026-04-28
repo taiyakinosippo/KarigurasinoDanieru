@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
-public class BarBalanceController : MonoBehaviour
+public class BalanceBarController : MonoBehaviour
 {
     public RectTransform bar;       //バー本体
     public RectTransform pointArea; //標的

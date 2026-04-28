@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Timeing_Bar_Logic : MonoBehaviour
+public class Timing_Bar_Logic : MonoBehaviour
 {
     [Header("Timing Bar İ’è")]
     [SerializeField] private GameLevel gameLevel = GameLevel.Normal;     // ƒQ[ƒ€ƒŒƒxƒ‹‚Ìİ’è
@@ -94,7 +94,7 @@ public class Timeing_Bar_Logic : MonoBehaviour
         timingBarSystem.ResetJudge();
         is_playing = true;
     }
-    public void StopTimeingBar()
+    public void StopTimingBar()
     {
         isGameOver = true;
     }
