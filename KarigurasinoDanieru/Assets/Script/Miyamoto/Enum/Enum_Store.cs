@@ -30,4 +30,29 @@ public enum SEType
     greatSE,
     perfectSE
 }
-//
+//背景のステージを定義する列挙型
+public enum StageGroup
+{
+    Ground,
+    Sky,
+    UpperSky,
+    Atmosphere,
+    AtmoToSpace,
+    Space
+}
+
+public enum StageType
+{
+    Ground_A,  
+    Sky_A,
+    Sky_B,
+    Sky_C,
+    UpperSky_A, 
+    Atmosphere_A, 
+    Atmosphere_B, 
+    Atmosphere_C, 
+    AtmoToSpace_A, 
+    Space_A, 
+    Space_B, 
+    Space_C
+}

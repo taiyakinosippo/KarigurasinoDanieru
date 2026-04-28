@@ -3,7 +3,6 @@ using TMPro;
 public class Timer : MonoBehaviour
 {
   [SerializeField]private float TimeLimit = 0f;
-  [SerializeField]private PlayerJump playerJump;
     private float currentTime = 0f;
   public TextMeshProUGUI timeText;
   [HideInInspector] public bool isTimeStop= false;
@@ -27,7 +26,6 @@ public class Timer : MonoBehaviour
         else if(!isjump)
         {
             isjump = true;
-            playerJump.Jump(); 
         }
     }
 }
