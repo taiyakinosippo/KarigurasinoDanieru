@@ -26,10 +26,11 @@ public class BarBalanceController : MonoBehaviour
 
     [Header("スコア設定")]
     public int baseScore = 1000;   //基礎スコア
-    public float multiplier;       //倍率
+    public float multiplier = 1f;       //倍率
 
     private float centerY;            //初期位置
     private bool isFirstFrame = true; //初回だけの処理
+    private bool isGameOver = false;
 
     void Start()
     {
@@ -39,6 +40,8 @@ public class BarBalanceController : MonoBehaviour
 
     void Update()
     {
+        if (isGameOver)return;
+
         //入力取得
         bool isPressed = GetInput();
 
@@ -48,7 +51,7 @@ public class BarBalanceController : MonoBehaviour
         //メーター更新
         UpdateMeter();
 
-        Debug.Log(meter);
+        //Debug.Log(meter);
     }
 
     //入力取得
@@ -132,5 +135,12 @@ public class BarBalanceController : MonoBehaviour
 
         //距離が半分以内ならtrue
         return Mathf.Abs(barY - areaY) <= areaHalfHeight;
+    }
+
+    //外部から止めるためのメソッド
+    public void StopBar()
+    {
+        isGameOver = true;
+        currentSpeed = 0f;
     }
 }
