@@ -10,10 +10,11 @@ public class PointAreaController : MonoBehaviour
     public float moveDuration = 0.5f;//移動にかかる時間(どんな距離でも一定)
 
     [Header("難易度設定")]
-    public bool isHardMode = false; //ハードモード切替
+    [SerializeField] private GameLevel gameLevel = GameLevel.Normal; //難易度切替
 
     public float nomalMoveInterval = 2f;   //通常時の移動間隔
     public float hardMoveInterval  = 0.5f; //ハードモード時の移動間隔
+    private float currentInterval;
 
     private float centerY; //初期位置
     private float timer;   //移動タイミング管理用
@@ -22,6 +23,7 @@ public class PointAreaController : MonoBehaviour
     private Vector2 startPos;      //移動開始位置
     private float moveTimer;       //移動経過時間
     private bool isMoving = false; //移動中かどうか
+    private bool isGameOver = false;
 
     void Start()
     {
@@ -30,15 +32,26 @@ public class PointAreaController : MonoBehaviour
 
         //最初の目的地を設定
         SetNewTarget();
+
+        //難易度によって移動間隔を切り替える
+        if (gameLevel == GameLevel.Normal)
+        {
+            currentInterval = nomalMoveInterval;
+        }
+        else
+        {
+            currentInterval = hardMoveInterval;
+
+        }
     }
 
     void Update()
     {
+        if (isGameOver) return;
+
         timer += Time.deltaTime;
 
-        //難易度によって移動間隔を切り替える
-        float currentInterval = isHardMode ? hardMoveInterval : nomalMoveInterval;
-
+        
         //一定時間ごとに移動開始
         if (timer >= currentInterval)
         {
@@ -76,5 +89,11 @@ public class PointAreaController : MonoBehaviour
     {
         float randomY = Random.Range(centerY - moveRange, centerY + moveRange);
         targetPos = new Vector2(area.anchoredPosition.x, randomY);
+    }
+
+    public void StopPointArea()
+    {
+        isGameOver = true;
+        isMoving = false;
     }
 }
