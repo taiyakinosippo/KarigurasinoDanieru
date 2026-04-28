@@ -41,6 +41,7 @@ public enum StageGroup
     Space
 }
 
+//背景のステージのビジュアルを定義する列挙型
 public enum StageType
 {
     Ground_A,  
@@ -55,4 +56,14 @@ public enum StageType
     Space_A, 
     Space_B, 
     Space_C
+}
+
+//ゲームの結果を定義する列挙型
+public enum FlightState
+{
+    Miss,
+    Ground,
+    Sky,
+    Atmosphere,
+    Space
 }

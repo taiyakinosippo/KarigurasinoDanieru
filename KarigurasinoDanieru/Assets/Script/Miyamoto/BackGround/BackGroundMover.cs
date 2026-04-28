@@ -6,7 +6,7 @@ public class BackGroundMover : MonoBehaviour
     [SerializeField] private float speed = 100f;
     [SerializeField] private BackGroundChanger changer;
     private float height = 540f;
-
+    
     private void Start()
     {
         // ‰Šú‰»iÅ‰‚©‚çƒ‰ƒ“ƒ_ƒ€‚É‚µ‚Ä‚¨‚­j

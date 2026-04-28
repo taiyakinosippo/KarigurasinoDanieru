@@ -7,7 +7,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private Timeing_Bar_Logic timeingBar;
 
     [SerializeField]private float TimeLimit = 0f;
-    [SerializeField]private PlayerJump playerJump;
+    //[SerializeField]private PlayerJump playerJump;
     private float currentTime = 0f;
     public TextMeshProUGUI timeText;
     [HideInInspector] public bool isTimeStop= false;
@@ -62,11 +62,11 @@ public class Timer : MonoBehaviour
             timeingBar.StopTimeingBar();
         }
 
-        if (playerJump != null &&!isjump)
-        {
-            isjump = true;
-            playerJump.Jump();
-        }
+        //if (playerJump != null &&!isjump)
+        //{
+        //    isjump = true;
+        //    playerJump.Jump();
+        //}
     }
 }
 

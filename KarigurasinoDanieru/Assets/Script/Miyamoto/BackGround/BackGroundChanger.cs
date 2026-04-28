@@ -41,16 +41,14 @@ public class BackGroundChanger : MonoBehaviour
             if (fly >= s.minHeight && fly < s.maxHeight)
             {
                 if (!groupMap.ContainsKey(s.group)) return null;
-                return GetRandomFromList(groupMap[s.group]);
+                return GetRandomFromList(s);
             }
         }
         return null;
     }
 
-    Sprite GetRandomFromList(List<StageData> list)
+    Sprite GetRandomFromList(StageData stage)
     {
-        if (list == null || list.Count == 0) return null;
-        var stage = list[Random.Range(0, list.Count)];
         if (stage.visuals == null || stage.visuals.Length == 0) return null;
         var visual = stage.visuals[Random.Range(0, stage.visuals.Length)];
         return visual.sprite;
