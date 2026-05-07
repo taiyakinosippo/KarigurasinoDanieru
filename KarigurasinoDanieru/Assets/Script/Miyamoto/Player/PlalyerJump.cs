@@ -11,7 +11,7 @@ public class PlayerJump : MonoBehaviour
     }
     public void Jump()
    {
-        int score = ScoreManager.instance.GetScore();
+        float score = ScoreManager.instance.GetScore();
         float jumpForce = basejumpForce + (score * jumpForceIncreaseRate); // Score‚É‰‚¶‚ÄƒWƒƒƒ“ƒv—Í‚ğ‘‰Á
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
