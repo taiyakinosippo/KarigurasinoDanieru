@@ -4,7 +4,6 @@ public class Timer : MonoBehaviour
 {
     [SerializeField]private float TimeLimit = 0f;
     public TextMeshProUGUI timeText;
-    public TextMeshProUGUI score_text;
     private float currentTime = 0f;
     private bool isRunning = false;
 
@@ -32,7 +31,6 @@ public class Timer : MonoBehaviour
             isRunning = false;
 
             GameManager.instance.OnTimerFinished();
-            score_text.text = "Score: " + ScoreManager.instance.GetScore();
         }
     }
 

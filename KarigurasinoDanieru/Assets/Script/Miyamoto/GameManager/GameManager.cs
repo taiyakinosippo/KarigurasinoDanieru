@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
         {
             pointArea.StopPointArea();
         }
+
+        ScoreManager.instance.StartFinalScorePresentation();
     }
 
 }

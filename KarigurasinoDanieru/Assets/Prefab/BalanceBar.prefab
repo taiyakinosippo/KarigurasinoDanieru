@@ -206,7 +206,7 @@ MonoBehaviour:
   maxMeter: 1
   increaseSpeed: 0.5
   decreaseSpeed: 0.5
-  baseScore: 1000
+  baseScore: 600
   multiplier: 1
 --- !u!114 &3014591360129146886
 MonoBehaviour:
