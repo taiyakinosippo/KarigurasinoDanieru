@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Timeing_Bar_Logic : MonoBehaviour
+public class Timing_Bar_Logic : MonoBehaviour
 {
     [Header("Timing Bar ê›íË")]
     [SerializeField] private GameLevel gameLevel = GameLevel.Normal;     // ÉQÅ[ÉÄÉåÉxÉãÇÃê›íË
@@ -40,10 +40,10 @@ public class Timeing_Bar_Logic : MonoBehaviour
     private bool isGameOver = false;
     void Start()
     {
-        if(gameLevel == GameLevel.Hard)
+        gameLevel = GameManager.instance.currentLevel;
+        if (gameLevel == GameLevel.Hard)
         {
             duration *= 0.5f; 
-            reset_time *= 0.5f;
             slowdown_factor *= 2f;
             miss_score = (int)(miss_score * 0.5f);          
             good_score = (int)(good_score * 0.5f);                   
@@ -94,7 +94,7 @@ public class Timeing_Bar_Logic : MonoBehaviour
         timingBarSystem.ResetJudge();
         is_playing = true;
     }
-    public void StopTimeingBar()
+    public void StopTimingBar()
     {
         isGameOver = true;
     }

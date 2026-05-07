@@ -2,24 +2,20 @@ using UnityEngine;
 using TMPro;
 public class Timer : MonoBehaviour
 {
-    [SerializeField] private BarBalanceController balanceBar;
-    [SerializeField] private PointAreaController pointArea;
-    [SerializeField] private Timeing_Bar_Logic timeingBar;
-
     [SerializeField]private float TimeLimit = 0f;
-    [SerializeField]private PlayerJump playerJump;
-    private float currentTime = 0f;
     public TextMeshProUGUI timeText;
-    [HideInInspector] public bool isTimeStop= false;
-    [HideInInspector] private bool isjump = false;
+    public TextMeshProUGUI score_text;
+    private float currentTime = 0f;
+    private bool isRunning = false;
 
     private void Awake()
     {
         currentTime = TimeLimit;
+        isRunning = true;
     }
     void Update()
     {
-        if (isTimeStop)
+        if (!isRunning)
         {
             return;
         }
@@ -33,40 +29,17 @@ public class Timer : MonoBehaviour
         if (currentTime <= 0)
         {
             currentTime = 0;
-            FinishGame();
+            isRunning = false;
+
+            GameManager.instance.OnTimerFinished();
+            score_text.text = "Score: " + ScoreManager.instance.GetScore();
         }
     }
 
-    void FinishGame()
+    //外部からタイマーを動かしたり止めたりするメソッド
+    public void SetTimerRunning(bool state)
     {
-        isTimeStop = true;
-
-        if (balanceBar != null)
-        {
-            balanceBar.StopBar();
-
-            ScoreManager.instance.BalanceBarScore(
-                balanceBar.meter,
-                balanceBar.baseScore, 
-                balanceBar.multiplier
-                );
-        }
-
-        if (pointArea != null)
-        {
-            pointArea.StopPointArea();
-        }
-
-        if (timeingBar != null)
-        {
-            timeingBar.StopTimeingBar();
-        }
-
-        if (playerJump != null &&!isjump)
-        {
-            isjump = true;
-            playerJump.Jump();
-        }
+        isRunning = state;
     }
 }
 

@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &192108438 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6174800708017646118, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+  m_PrefabInstance: {fileID: 1301724690423972844}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b35f7c7bbe97e2d48bfe5c2a13c1de29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickCounter
 --- !u!1 &313799784
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,13 +213,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 652fb29b22f0f5048884d8e8fce17cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timer
-  balanceBar: {fileID: 1174245167}
-  pointArea: {fileID: 1174245172}
-  timeingBar: {fileID: 940127764}
   TimeLimit: 10
-  playerJump: {fileID: 0}
   timeText: {fileID: 1782096429}
-  isTimeStop: 0
+  score_text: {fileID: 611271796}
 --- !u!114 &435217667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +300,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &611271796 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7695254663421576420, guid: 52fcc7cf1c086be43a3236c6e1d71338, type: 3}
+  m_PrefabInstance: {fileID: 5838221390559301478}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &940127764 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2558579409220247588, guid: 52fcc7cf1c086be43a3236c6e1d71338, type: 3}
@@ -383,6 +401,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab79892437ac01448461cd8ef39cafa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  balanceBar: {fileID: 1174245167}
+  pointArea: {fileID: 1174245172}
+  timingBar: {fileID: 940127764}
+  mashButton: {fileID: 192108438}
   currentMode: 0
   currentLevel: 0
 --- !u!1 &1316146382
@@ -1046,10 +1068,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1316146385}
-  - {fileID: 6798894971233945548}
   - {fileID: 2023922455}
   - {fileID: 1239518682}
   - {fileID: 435217670}
   - {fileID: 313799786}
-  - {fileID: 5838221390559301478}
   - {fileID: 1301724690423972844}
+  - {fileID: 5838221390559301478}
+  - {fileID: 6798894971233945548}

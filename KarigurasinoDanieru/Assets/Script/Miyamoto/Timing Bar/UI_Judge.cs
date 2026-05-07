@@ -4,7 +4,7 @@ public class UI_Judge : MonoBehaviour
 {
     public TextMeshProUGUI judge_text;
     public TextMeshProUGUI score_text;
-    public Timeing_Bar_Logic timing_bar_Logic;
+    public Timing_Bar_Logic timing_bar_Logic;
     int score = 0;
 
     public void SetScoreText(JudgeType result)
@@ -39,7 +39,7 @@ public class UI_Judge : MonoBehaviour
                 score += timing_bar_Logic.PerfectScore;
                 break;
         }
-        ScoreManager.instance.AddScore(score);
+        ScoreManager.instance.TimingBarScore(score);
         score = 0;
         score_text.text = "Score: " + ScoreManager.instance.GetScore();
     }
