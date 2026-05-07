@@ -22,10 +22,12 @@ public class MultiSyncManager : MonoBehaviour
     private bool isFetching;
     private bool isSending;
 
-    private ModeManager modeManager;
+    [SerializeField] private MatchState matchState;
+    [SerializeField] private ModeManager modeManager;
 
     public string opponentName = "";
     public int opponentScore = 0;
+    private int lastEnemyScore = -1;
 
     void Awake()
     {
@@ -53,13 +55,12 @@ public class MultiSyncManager : MonoBehaviour
         playerName = ModeManager.MultiPlayerName;
 
         matched = false;
+        lastEnemyScore = -1; // ✅ ★追加（超重要）
 
-        InvokeRepeating(nameof(SendState), 0f, 0.5f);
-        InvokeRepeating(nameof(FetchState), 0.25f, 0.5f);
-
-        Debug.Log($"[MULTI] Begin room={roomId} name={playerName}");
+        SendState();
+        InvokeRepeating(nameof(SendState), 0.5f, 0.5f);
+        InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
-
 
     /* ======================
        完全停止
@@ -91,6 +92,7 @@ public class MultiSyncManager : MonoBehaviour
                 Debug.LogError("[MultiSync] Send error: " + req.error);
             }
         }
+       // Debug.Log($"[SEND] room={roomId}, name={playerName}, score={currentScore}");
 
         isSending = false;
     }
@@ -108,8 +110,10 @@ public class MultiSyncManager : MonoBehaviour
     {
         isFetching = true;
 
+        //Debug.Log("[FETCH] start");
+
         string url = $"{fetchUrl}?room_id={roomId}";
-        Debug.Log("[MultiSync] Fetch: " + url);
+        
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
@@ -118,7 +122,7 @@ public class MultiSyncManager : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("[MultiSync] Fetch error: " + req.error);
+               
                 isFetching = false;
                 yield break;
             }
@@ -151,10 +155,13 @@ public class MultiSyncManager : MonoBehaviour
             if (ps.player_name == playerName)
                 continue;
 
-            opponentName = ps.player_name;
-            opponentScore = ps.score;
+            if (ps.score != lastEnemyScore)
+            {
+                lastEnemyScore = ps.score;
 
-            Debug.Log($"[ROOM:{roomId}] {opponentName} SCORE:{opponentScore}");
+                // ✅ 一時状態に保存するだけ
+                matchState.SetEnemy(ps.player_name, ps.score);
+            }
         }
     }
 
@@ -163,19 +170,20 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     void CheckMatchSuccess(PlayerState[] states)
     {
-        if (matched) return;
+        if (matched || states == null) return;
 
-        foreach (PlayerState ps in states)
+        if (states.Length >= 2)
         {
-            if (ps.player_name != playerName)
+            foreach (var ps in states)
             {
-                matched = true;
+                if (ps.player_name != playerName)
+                {
+                    matched = true;
 
-                // ✅ Fetch だけ止める
-                CancelInvoke(nameof(FetchState));
-
-                modeManager?.OnMatchSuccess(ps.player_name);
-                break;
+                    matchState.SetEnemy(ps.player_name, ps.score);
+                    modeManager?.OnMatchSuccess(ps.player_name);
+                    return;
+                }
             }
         }
     }
@@ -225,7 +233,7 @@ public class MultiSyncManager : MonoBehaviour
         StopAllCoroutines();
         enabled = false;
 
-        Debug.Log("[MULTI] Sync stopped");
+       // Debug.Log("[MULTI] Sync stopped");
     }
 
     // =====================
