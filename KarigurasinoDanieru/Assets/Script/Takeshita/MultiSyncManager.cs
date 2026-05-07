@@ -60,7 +60,6 @@ public class MultiSyncManager : MonoBehaviour
         lastEnemyScore = -1; 
 
         SendState();
-        InvokeRepeating(nameof(SendState), 0.5f, 0.5f);
         InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
 
@@ -155,18 +154,17 @@ public class MultiSyncManager : MonoBehaviour
                 continue;
 
             enemyFound = true;
-
-            Debug.Log("ENEMY FOUND");   // ← 追加
             enemyPreviouslyPresent = true;
 
+            // ✅ MatchState 更新
             matchState.SetEnemy(ps.player_name, ps.score);
-        }
 
-        Debug.Log($"enemyFound={enemyFound}, enemyPreviouslyPresent={enemyPreviouslyPresent}");
+            // ✅ ★ここが必須：UI側へ通知
+            modeManager?.OnEnemyScoreUpdated(ps.player_name, ps.score);
+        }
 
         if (!enemyFound && enemyPreviouslyPresent)
         {
-            Debug.Log("aaa");
             enemyPreviouslyPresent = false;
             modeManager?.OnEnemyLeft();
         }
@@ -252,6 +250,14 @@ public class MultiSyncManager : MonoBehaviour
     public void SendScoreManually()
     {
         if (!ModeManager.IsMultiMode) return;
+
+        if (isSending)
+        {
+            Debug.Log("Send blocked: already sending");
+            return;
+        }
+
+        currentScore = matchState.MyScore;
         StartCoroutine(SendScoreManuallyCoroutine());
     }
 

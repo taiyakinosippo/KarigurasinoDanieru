@@ -31,6 +31,9 @@ public class RankingInputManager : MonoBehaviour
 
     void Awake()
     {
+        nameInput.text = "";
+        scoreInput.text = "";
+
         localRanking = FindObjectOfType<LocalRankingManager>();
         scoreSender = FindObjectOfType<ScoreSender>();
 
@@ -70,52 +73,52 @@ public class RankingInputManager : MonoBehaviour
     // =====================
     // ソロ用ランキング送信
     // =====================
-    public void OnClickSendNormal()
+    public void OnClickSendScore()
     {
-        SendScoreInternal("normal");
-        nameInput.text = "";
-        scoreInput.text = "";
+        // マルチ中は送らない
+        if (ModeManager.IsMultiMode) return;
+
+        string name = nameInput.text.Trim();
+        if (string.IsNullOrEmpty(name)) return;
+
+        if (!int.TryParse(scoreInput.text, out int score)) return;
+
+        // ★ 難易度は ModeManager から取得
+        string mode =
+            ModeManager.CurrentDifficulty == SoloDifficulty.Normal
+                ? "normal"
+                : "hard";
+
+        // ローカル演出（任意）
+        localRanking?.AddOrUpdateScore(name, score, mode);
+
+        // DB送信
+        scoreSender.SendScore(name, score, mode);
+
+        // 結果表示
+        ShowMyRankingResult(name, mode);
     }
 
-    public void OnClickSendHard()
-    {
-        SendScoreInternal("hard");
-        nameInput.text = "";
-        scoreInput.text = "";
-    }
 
     private void SendScoreInternal(string mode)
     {
-        // マルチ中はここでは送らない（終了時に送る）
-        if (ModeManager.IsMultiMode)
-        {
-            Debug.Log("[RANKING] Skip send (Multi Mode)");
-            return;
-        }
-
-        if (nameInput == null || scoreInput == null)
-            return;
+        if (ModeManager.IsMultiMode) return;
 
         string name = nameInput.text.Trim();
-        if (string.IsNullOrEmpty(name))
-            return;
+        if (string.IsNullOrEmpty(name)) return;
 
-        if (!int.TryParse(scoreInput.text, out int score))
-            return;
+        if (!int.TryParse(scoreInput.text, out int score)) return;
 
-        // ローカル順位（演出用）
-        if (localRanking != null)
-            localRanking.AddOrUpdateScore(name, score, mode);
+        // ローカル演出用
+        localRanking?.AddOrUpdateScore(name, score, mode);
 
-        // DB保存
+        // DB送信
         scoreSender.SendScore(name, score, mode);
 
-        // DB保存後に順位表示
+        // 結果表示
         ShowMyRankingResult(name, mode);
-
-        nameInput.text = "";
-        scoreInput.text = "";
     }
+
 
     // =====================
     // ★ 結果順位表示（ソロ / マルチ共通）
@@ -177,5 +180,26 @@ public class RankingInputManager : MonoBehaviour
         }
 
         resultText.gameObject.SetActive(true);
+    }
+
+    public void SendScoreDuringPlay(int score, string mode)
+    {
+      
+        // マルチでは絶対送らない
+        if (ModeManager.IsMultiMode) return;
+
+        if (string.IsNullOrEmpty(nameInput.text))
+            return;
+
+        string name = nameInput.text.Trim();
+
+        // ローカル演出ランキング
+        if (localRanking != null)
+            localRanking.AddOrUpdateScore(name, score, mode);
+
+        // DB送信
+        scoreSender.SendScore(name, score, mode);
+
+        Debug.Log("[RANKING] Score sent during play");
     }
 }

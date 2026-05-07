@@ -2090,9 +2090,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1853501920}
-        m_TargetAssemblyTypeName: RankingInputManager, Assembly-CSharp
-        m_MethodName: OnClickSendScore
+      - m_Target: {fileID: 1966307749}
+        m_TargetAssemblyTypeName: ModeManager, Assembly-CSharp
+        m_MethodName: OnClickSendScoreDuringPlay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

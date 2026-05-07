@@ -29,6 +29,8 @@ public class MultiSyncManager : MonoBehaviour
     public int opponentScore = 0;
     private int lastEnemyScore = -1;
 
+    private bool enemyPreviouslyPresent = false;
+
     void Awake()
     {
         updateUrl = ServerConfig.BaseUrl + "mp_update.php";
@@ -55,7 +57,7 @@ public class MultiSyncManager : MonoBehaviour
         playerName = ModeManager.MultiPlayerName;
 
         matched = false;
-        lastEnemyScore = -1; // ✅ ★追加（超重要）
+        lastEnemyScore = -1; 
 
         SendState();
         InvokeRepeating(nameof(SendState), 0.5f, 0.5f);
@@ -143,25 +145,29 @@ public class MultiSyncManager : MonoBehaviour
         isFetching = false;
     }
 
-    /* ======================
-       UI更新（仮）
-    ====================== */
     void UpdateRemoteUI(PlayerState[] states)
     {
-        if (states == null) return;
+        bool enemyFound = false;
 
         foreach (var ps in states)
         {
             if (ps.player_name == playerName)
                 continue;
 
-            if (ps.score != lastEnemyScore)
-            {
-                lastEnemyScore = ps.score;
+            enemyFound = true;
+            enemyPreviouslyPresent = true;
 
-                // ✅ 一時状態に保存するだけ
-                matchState.SetEnemy(ps.player_name, ps.score);
-            }
+            // ✅ MatchState 更新
+            matchState.SetEnemy(ps.player_name, ps.score);
+
+            // ✅ ★ここが必須：UI側へ通知
+            modeManager?.OnEnemyScoreUpdated(ps.player_name, ps.score);
+        }
+
+        if (!enemyFound && enemyPreviouslyPresent)
+        {
+            enemyPreviouslyPresent = false;
+            modeManager?.OnEnemyLeft();
         }
     }
 
@@ -180,7 +186,9 @@ public class MultiSyncManager : MonoBehaviour
                 {
                     matched = true;
 
-                    matchState.SetEnemy(ps.player_name, ps.score);
+                    // ✅ ここを追加
+                    enemyPreviouslyPresent = true;
+
                     modeManager?.OnMatchSuccess(ps.player_name);
                     return;
                 }
