@@ -8,10 +8,9 @@ using UnityEngine.UI;
 public class BackGroundChanger : MonoBehaviour
 {
     [SerializeField] private StageData[] stages;
-
-    private float fly = 0f;
+    [SerializeField] private BackGroundMover backGroundMover;
     private Dictionary<StageGroup, List<StageData>> groupMap;
-
+    private float fly = 0;
     void Awake()
     {
         groupMap = new Dictionary<StageGroup, List<StageData>>();
@@ -30,9 +29,8 @@ public class BackGroundChanger : MonoBehaviour
 
     void Update()
     {
-        fly += Time.deltaTime * 1000f;
+        
     }
-
     public Sprite GetRandomBackground()
     {
         foreach (var s in stages)

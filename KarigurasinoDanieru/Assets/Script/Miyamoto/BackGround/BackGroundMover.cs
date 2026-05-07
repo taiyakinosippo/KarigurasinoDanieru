@@ -2,24 +2,38 @@ using UnityEngine;
 using UnityEngine.UI;
 public class BackGroundMover : MonoBehaviour
 {
-    [SerializeField] private RectTransform[] images;
-    [SerializeField] private float speed = 100f;
-    [SerializeField] private BackGroundChanger changer;
-    private float height = 540f;
-    
+    [SerializeField] private RectTransform[] images;     //配置する画像
+    [SerializeField] private float speed = 100;　　　　　　//基礎スピード
+    [SerializeField] private BackGroundChanger changer;　//ランダムに表示するためのスクリプト
+    [SerializeField] private int denominator = 10;　　　 //分母
+    private float height = 540f;                         //画像の高さ
+    private bool backGround = false;　　　　　　　　　　 //背景を動かすかどうか
+    private int score = 0;                               //スコアを格納するための変数
+    private float firstSpeed =0;  　　　　　　　　　　　　 //基礎スピードを格納するための変数
+    [SerializeField] private float deceleration = 2f;　　//減速率
+
     private void Start()
     {
-        // 初期化（最初からランダムにしておく）
         foreach (var img in images)
         {
             var sprite = changer.GetRandomBackground();
             if (sprite != null)
-                img.GetComponent<Image>().sprite = sprite;
+            img.GetComponent<Image>().sprite = sprite;
         }
     }
 
+    public void StartMoving()
+    {
+        firstSpeed = speed;
+        backGround = true;
+        score = ScoreManager.instance.GetScore();
+        speed += score / denominator;
+    }
+
+
     private void Update()
     {
+        if (!backGround) return;
         if (images == null || images.Length == 0) return;
 
         foreach (var img in images)
@@ -34,14 +48,13 @@ public class BackGroundMover : MonoBehaviour
             RectTransform highest = GetHighest();
             if (highest == null) return;
 
-            // 上に回す
             lowest.anchoredPosition = new Vector2(0, highest.anchoredPosition.y + height);
 
-            // ランダム背景
             var sprite = changer.GetRandomBackground();
             if (sprite != null)
                 lowest.GetComponent<Image>().sprite = sprite;
         }
+        speed = Mathf.Lerp(speed, firstSpeed, Time.deltaTime * deceleration);
     }
 
     RectTransform GetLowest()
