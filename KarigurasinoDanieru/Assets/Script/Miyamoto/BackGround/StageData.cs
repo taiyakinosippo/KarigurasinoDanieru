@@ -8,11 +8,11 @@ public class StageData
     [Header("ステージの種類")]
     public StageGroup group;
     [Header("ステージのビジュアル")]
-    public StageVisual[] visuals;
+    public Sprite[] visual;
 
     [Header("表示開始高度")]
-    public int minHeight;
+    public float minHeight;
 
     [Header("非表示高度")]
-    public int maxHeight;
+    public float maxHeight;
 }

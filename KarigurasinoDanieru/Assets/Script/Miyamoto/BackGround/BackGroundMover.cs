@@ -1,19 +1,17 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 public class BackGroundMover : MonoBehaviour
 {
     [SerializeField] private RectTransform[] images;     //配置する画像
-    [SerializeField] private float speed = 100;　　　　　//基礎スピード
     [SerializeField] private StageManager stageManager;  //ステージの情報を保持している
-    [SerializeField] private int denominator = 10;　　　 //分母
+    [SerializeField] private ScoreManager scoreManger;   //スコアの情報を保持している
+    [SerializeField] private float deceleration = 2f;　　//減速率
+    private float speed = 0;　　　　　　　　　　　　　　 //飛ぶスピードを格納する変数
     private float height = 540f;                         //画像の高さ
     private bool backGround = false;　　　　　　　　　　 //背景を動かすかどうか
-    private int score = 0;                               //スコアを格納するための変数
-    private float firstSpeed = 0;  　　　　　　　　　　　 //基礎スピードを格納するための変数
-    [SerializeField] private float deceleration = 2f;　　//減速率
-    private float targetDistance = 0;
-    private float movedDistance = 0;
 
+    //初期化
     private void Start()
     {
         foreach (var img in images)
@@ -24,37 +22,25 @@ public class BackGroundMover : MonoBehaviour
                 img.GetComponent<Image>().sprite = sprite;
         }
     }
-
-    public void StartMoving()
+    //初期化
+    public void StartMoving(float score)
     {
-        firstSpeed = speed;
         backGround = true;
-        score = ScoreManager.instance.GetScore();
-        targetDistance = score;
-        speed += score / denominator;
+        speed = scoreManger.GetAddScore(score);
+        Debug.Log($"スピード{speed}");
     }
 
 
     private void Update()
     {
+       
         if (!backGround) return;
         if (images == null || images.Length == 0) return;
-
+       
         float moveAmount = speed * Time.deltaTime;
-        movedDistance += moveAmount;
-
         foreach (var img in images)
         {
             img.anchoredPosition -= new Vector2(0, moveAmount);
-        }
-
-        if (movedDistance >= targetDistance)
-        {
-            backGround = false;
-
-            AdjustBackgroundPosition();
-
-            return;
         }
         RectTransform lowest = GetLowest();
 
@@ -63,13 +49,13 @@ public class BackGroundMover : MonoBehaviour
             RectTransform highest = GetHighest();
             if (highest == null) return;
             lowest.anchoredPosition = new Vector2(0, highest.anchoredPosition.y + height);
-            var sprite = stageManager.GetRandomBackground(score);
+            var sprite = stageManager.GetRandomBackground(scoreManger.GetCurrentScore());
             if (sprite != null)
                 lowest.GetComponent<Image>().sprite = sprite;
         }
-        speed = Mathf.Lerp(speed, firstSpeed, Time.deltaTime * deceleration);
+        speed = Mathf.Lerp(speed, 0, Time.deltaTime * deceleration);
     }
-
+    //画像がスクロールしきったか
     RectTransform GetLowest()
     {
         if (images == null || images.Length == 0) return null;
@@ -82,7 +68,7 @@ public class BackGroundMover : MonoBehaviour
         }
         return result;
     }
-
+    //一番高い画像がどこにあるのか
     RectTransform GetHighest()
     {
         if (images == null || images.Length == 0) return null;
@@ -95,16 +81,16 @@ public class BackGroundMover : MonoBehaviour
         }
         return result;
     }
-    void AdjustBackgroundPosition()
+    //スクロールを止める
+    public void ScrollEnd()
     {
         foreach (var img in images)
         {
             Vector2 pos = img.anchoredPosition;
-
             pos.y = Mathf.Round(pos.y / height) * height;
-
             img.anchoredPosition = pos;
             backGround = false;
+            speed = 0;
         }
     }
 }

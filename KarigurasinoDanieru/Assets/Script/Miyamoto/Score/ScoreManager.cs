@@ -1,17 +1,26 @@
-using UnityEngine;
+using Mono.Cecil.Cil;
 using System.Collections;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
     public TextMeshProUGUI score_text;
+    [SerializeField] BackGroundMover backGroundMover;
+    [SerializeField] private int Groudspeed = 10;        //地上での加速率
+    [SerializeField] private int SkySpeed = 100;　　　　 //空での加速率
+    [SerializeField] private int AtmospheresSeed = 1000; //大気圏での加速率
+    [SerializeField] private int SpaceSpeed = 10000;     //宇宙での加速率
     private float totalScore = 0;
     private float balanceBarScore = 0;
     private int timingBarScore = 0;
     private int mashButtonScore = 0;
-
-    [SerializeField] private float countUpDuration = 5.0f;
+    private float addScore = 0;
+    private float startScore = 0;
+    private bool isCounting = false;
+  
 
     void Awake()
     {
@@ -19,6 +28,26 @@ public class ScoreManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
+    }
+    private void Update()
+    {
+        if (!isCounting) return;
+
+        startScore += addScore * Time.deltaTime;
+
+        if (startScore >= totalScore)
+        {
+            startScore = totalScore;
+
+            isCounting = false;
+
+            score_text.text = totalScore.ToString("N2") + "m";
+
+            backGroundMover.ScrollEnd();
+
+            return;
+        }
+        score_text.text = startScore.ToString("N2") + "m";
     }
 
     public void MashButtonScore(int baseScore)
@@ -39,43 +68,38 @@ public class ScoreManager : MonoBehaviour
 
         Debug.Log("balanceBarScore"+ balanceBarScore);
     }
+    public float GetCurrentScore()
+    {
+        return startScore;
+    }
 
     public float GetScore()
     {
-        totalScore = mashButtonScore * timingBarScore * balanceBarScore;
+        totalScore = (mashButtonScore * timingBarScore * balanceBarScore / 1000);
         Debug.Log("score:" + totalScore);
         return totalScore;
     }
 
     public void StartFinalScorePresentation()
     {
-        totalScore = mashButtonScore * timingBarScore * balanceBarScore;
-
-        StartCoroutine(CountUpScoreRoutine());
+        totalScore = (mashButtonScore * timingBarScore * balanceBarScore /1000);
+        addScore = GetAddScore(totalScore);
+        isCounting = true;
     }
-
-    private IEnumerator CountUpScoreRoutine()
+    public float GetAddScore(float score)
     {
-        float elapsed = 0f;
-        float startScore = 0;
-
-        while (elapsed < countUpDuration)
+        return score switch
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / countUpDuration;
-
-            float currentDisplayScore = Mathf.Lerp(startScore, totalScore, t);
-
-            if (score_text != null)
-            {
-                float displayScore = currentDisplayScore / 100f;
-                score_text.text = displayScore.ToString("N2") + "m";
-            }
-
-            yield return null;
-        }
-
-        float finalScore = totalScore / 100f;
-        score_text.text = finalScore.ToString("N2")+"m";
+            <= 0 => 0,
+            <= 1000 =>
+                Mathf.Floor(score / 100f) * Groudspeed,
+            <= 10000 =>
+                Mathf.Floor(score / 1000f) * SkySpeed,
+            <= 100000 =>
+               Mathf.Floor(score / 10000f) * AtmospheresSeed,
+            _ =>
+                Mathf.Floor(score / 100000f) * SpaceSpeed
+        };
     }
+
 }

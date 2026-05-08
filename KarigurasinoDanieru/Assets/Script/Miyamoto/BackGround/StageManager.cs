@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
@@ -21,8 +20,10 @@ public class StageManager : MonoBehaviour
                 data.state,
                 data.group,
                 data.minHeight,
-                data.maxHeight,
-                data.visuals
+                data.group == StageGroup.Space
+                ? Mathf.Infinity
+        :       data.maxHeight,
+                data.visual
             );
 
             stages.Add(info);
@@ -30,7 +31,7 @@ public class StageManager : MonoBehaviour
     }
 
     // 高さからステージ取得
-    public StageInfo GetStage(int height)
+    public StageInfo GetStage(float height)
     {
         foreach (var stage in stages)
         {
@@ -44,7 +45,7 @@ public class StageManager : MonoBehaviour
     }
 
     // ランダム背景取得
-    public Sprite GetRandomBackground(int height)
+    public Sprite GetRandomBackground(float height)
     {
         StageInfo stage = GetStage(height);
 
@@ -55,7 +56,7 @@ public class StageManager : MonoBehaviour
     }
 
 
-    public FlightState GetFlightState(int height)
+    public FlightState GetFlightState(float height)
     {
         StageInfo stage = GetStage(height);
 

@@ -6,18 +6,17 @@ public class StageInfo
     public FlightState state;
     public StageGroup group;
 
-    public int minHeight;
-    public int maxHeight;
+    public float minHeight;
+    public float maxHeight;
 
-    public StageVisual[] visuals;
+    public Sprite[] visuals;
 
-    // コンストラクタ
     public StageInfo(
         FlightState state,
         StageGroup group,
-        int minHeight,
-        int maxHeight,
-        StageVisual[] visuals)
+        float minHeight,
+        float maxHeight,
+        Sprite[] visuals)
     {
         this.state = state;
         this.group = group;
@@ -27,7 +26,7 @@ public class StageInfo
     }
 
     // 範囲判定
-    public bool InRange(int height)
+    public bool InRange(float height)
     {
         return height >= minHeight && height < maxHeight;
     }
@@ -38,10 +37,10 @@ public class StageInfo
         if (visuals == null || visuals.Length == 0)
             return null;
 
-        StageVisual visual =
+        Sprite visual =
             visuals[Random.Range(0, visuals.Length)];
 
-        return visual.sprite;
+        return visual;
     }
 }
 
