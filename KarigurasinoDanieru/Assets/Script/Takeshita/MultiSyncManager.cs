@@ -22,11 +22,14 @@ public class MultiSyncManager : MonoBehaviour
     private bool isFetching;
     private bool isSending;
 
-    private ModeManager modeManager;
+    [SerializeField] private MatchState matchState;
+    [SerializeField] private ModeManager modeManager;
 
     public string opponentName = "";
     public int opponentScore = 0;
     private int lastEnemyScore = -1;
+
+    private bool enemyPreviouslyPresent = false;
 
     void Awake()
     {
@@ -54,7 +57,7 @@ public class MultiSyncManager : MonoBehaviour
         playerName = ModeManager.MultiPlayerName;
 
         matched = false;
-        lastEnemyScore = -1; // ✅ ★追加（超重要）
+        lastEnemyScore = -1; 
 
         SendState();
         InvokeRepeating(nameof(SendState), 0.5f, 0.5f);
@@ -91,7 +94,7 @@ public class MultiSyncManager : MonoBehaviour
                 Debug.LogError("[MultiSync] Send error: " + req.error);
             }
         }
-        Debug.Log($"[SEND] room={roomId}, name={playerName}, score={currentScore}");
+       // Debug.Log($"[SEND] room={roomId}, name={playerName}, score={currentScore}");
 
         isSending = false;
     }
@@ -108,6 +111,8 @@ public class MultiSyncManager : MonoBehaviour
     IEnumerator FetchStateCoroutine()
     {
         isFetching = true;
+
+        //Debug.Log("[FETCH] start");
 
         string url = $"{fetchUrl}?room_id={roomId}";
         
@@ -140,42 +145,39 @@ public class MultiSyncManager : MonoBehaviour
         isFetching = false;
     }
 
-    /* ======================
-       UI更新（仮）
-    ====================== */
     void UpdateRemoteUI(PlayerState[] states)
     {
-        if (states == null) return;
+        bool enemyFound = false;
 
         foreach (var ps in states)
         {
             if (ps.player_name == playerName)
                 continue;
 
-            // 相手の情報更新
-            opponentName = ps.player_name;
-            opponentScore = ps.score;
+            enemyFound = true;
 
-            // ✅ スコアが変わった瞬間だけ発火
-            if (opponentScore != lastEnemyScore)
-            {
-                lastEnemyScore = opponentScore;
+            Debug.Log("ENEMY FOUND");   // ← 追加
+            enemyPreviouslyPresent = true;
 
-                // ★ ModeManager に通知
-                modeManager?.OnEnemyScoreUpdated(
-                    opponentName,
-                    opponentScore
-                );
-            }
+            matchState.SetEnemy(ps.player_name, ps.score);
+        }
+
+        Debug.Log($"enemyFound={enemyFound}, enemyPreviouslyPresent={enemyPreviouslyPresent}");
+
+        if (!enemyFound && enemyPreviouslyPresent)
+        {
+            Debug.Log("aaa");
+            enemyPreviouslyPresent = false;
+            modeManager?.OnEnemyLeft();
         }
     }
+
     /* ======================
        マッチ成立判定
     ====================== */
     void CheckMatchSuccess(PlayerState[] states)
     {
-        if (matched) return;
-        if (states == null) return;
+        if (matched || states == null) return;
 
         if (states.Length >= 2)
         {
@@ -185,14 +187,15 @@ public class MultiSyncManager : MonoBehaviour
                 {
                     matched = true;
 
-                    // ✅ Fetch は止めない！
+                    // ✅ ここを追加
+                    enemyPreviouslyPresent = true;
+
                     modeManager?.OnMatchSuccess(ps.player_name);
                     return;
                 }
             }
         }
     }
-
 
     /* ======================
        Join

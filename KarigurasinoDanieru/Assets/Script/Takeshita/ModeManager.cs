@@ -24,10 +24,11 @@ public class ModeManager : MonoBehaviour
     [SerializeField] private Text modeText;
     [SerializeField] private Text resultPlayerText;
     [SerializeField] private Text resultEnemyText;
+    [SerializeField] private Text resultStatsText;
 
     [Header("Managers")]
     [SerializeField] private MultiSyncManager multiSync;
-    [SerializeField] private MatchScoreManager MatchscoreManager; // 現在スコア管理
+    [SerializeField] private MatchState matchState;
 
     public static string CurrentRoomId;
     public static string MultiPlayerName;
@@ -47,6 +48,10 @@ public class ModeManager : MonoBehaviour
         matching.SetActive(false);
         playMode.SetActive(true);
 
+        multiRoomInput.text = "";
+        multiPlayerNameInput.text = "";
+        scoreInputField.text = "";
+
         HideResultTexts();
 
         matchStatusText.gameObject.SetActive(false);
@@ -58,6 +63,14 @@ public class ModeManager : MonoBehaviour
             multiSync.OnScoreSent += OnMultiScoreSent;
 
         UpdateModeText();
+    }
+
+    void Update()
+    {
+        if (IsMultiMode)
+        {
+            UpdateResultUI();
+        }
     }
 
     void OnDestroy()
@@ -84,6 +97,10 @@ public class ModeManager : MonoBehaviour
         gamePlay_Multi.SetActive(false);
         gamePlay_Single.SetActive(true);
 
+        multiRoomInput.text = "";
+        multiPlayerNameInput.text = "";
+        scoreInputField.text = "";
+
         UpdateModeText();
     }
 
@@ -103,6 +120,10 @@ public class ModeManager : MonoBehaviour
         matchingButtonObj.SetActive(true);
         multiRoomInputField.SetActive(true);
         multiNameInputField.SetActive(true);
+
+        multiRoomInput.text = "";
+        multiPlayerNameInput.text = "";
+        scoreInputField.text = "";
 
         HideResultTexts();
 
@@ -163,34 +184,17 @@ public class ModeManager : MonoBehaviour
     {
         int myScore = 0;
         if (scoreInputField != null)
-        {
             int.TryParse(scoreInputField.text, out myScore);
-        }
 
-        MatchscoreManager.SetScore(myScore);
+        matchState.SetMyPlayer(MultiPlayerName);
+        matchState.SetMyScore(myScore);
 
+        // 通信用スコア
         multiSync.currentScore = myScore;
 
-        string myName = MultiPlayerName;
-        string enemyName = multiSync.opponentName;
-        int enemyScore = multiSync.opponentScore;
-
-        ShowMultiResult(myName, myScore, enemyName, enemyScore);
+        UpdateResultUI();
     }
 
-    private void ShowMultiResult(string myName, int myScore, string enemyName, int enemyScore)
-    {
-        resultPlayerText.text =
-            $"{myName}\nScore : {myScore}";
-
-        resultEnemyText.text =
-            string.IsNullOrEmpty(enemyName)
-                ? "Waiting...\nScore : -"
-                : $"{enemyName}\nScore : {enemyScore}";
-
-        resultPlayerText.gameObject.SetActive(true);
-        resultEnemyText.gameObject.SetActive(true);
-    }
 
     private void HideResultTexts()
     {
@@ -208,9 +212,6 @@ public class ModeManager : MonoBehaviour
         MultiPlayerName = "";
         matchHandled = false;
 
-        if (multiSync != null)
-            multiSync.StopMultiSync();
-
         playMode.SetActive(true);
         matching.SetActive(false);
         gamePlay_Single.SetActive(false);
@@ -218,8 +219,12 @@ public class ModeManager : MonoBehaviour
 
         HideResultTexts();
         UpdateModeText();
-        StopMultiSync();
+
+        if (multiSync != null)
+            multiSync.StopMultiSync();
+
     }
+
 
     private void UpdateModeText()
     {
@@ -229,44 +234,64 @@ public class ModeManager : MonoBehaviour
             $"NAME: {(IsMultiMode ? MultiPlayerName : "-")}";
     }
 
-    private void UpdateEnemyResult(
-    string enemyName,
-    int enemyScore,
-    string myName,
-    int myScore
-)
+    public void OnEnemyScoreUpdated(string enemyName, int enemyScore)
     {
-        if (resultEnemyText == null || resultPlayerText == null)
-            return;
+        if (!IsMultiMode) return;
 
-        // 自分はそのまま（変更しない）
+        // MatchState を更新
+        matchState.SetEnemy(enemyName, enemyScore);
+
+        UpdateResultUI();
+    }
+
+    // =====================
+    // UI UPDATE
+    // =====================
+    private void UpdateResultUI()
+    {
         resultPlayerText.text =
-            $"{myName}\nScore : {myScore}";
+            $"{matchState.MyName}\nScore : {matchState.MyScore}";
 
-        // ✅ 相手だけリアルタイム更新
         resultEnemyText.text =
-            $"{enemyName}\nScore : {enemyScore}";
+            string.IsNullOrEmpty(matchState.EnemyName)
+                ? "Waiting...\nScore : -"
+                : $"{matchState.EnemyName}\nScore : {matchState.EnemyScore}";
+
+        UpdateLeadStatusText();
 
         resultPlayerText.gameObject.SetActive(true);
         resultEnemyText.gameObject.SetActive(true);
     }
 
-    public void OnEnemyScoreUpdated(string enemyName, int enemyScore)
+    public void OnEnemyLeft()
     {
         if (!IsMultiMode) return;
 
-        // 自分の現在スコア
-        int myScore = MatchscoreManager.CurrentScore;
-        string myName = MultiPlayerName;
+        matchStatusText.gameObject.SetActive(true);
+        matchStatusText.text = "相手が退出しました";
 
-        // ✅ 相手だけ更新（自分は触らない）
-        UpdateEnemyResult(enemyName, enemyScore, myName, myScore);
+        resultEnemyText.text = "Enemy Left";
     }
 
-    public void StopMultiSync()
+    private void UpdateLeadStatusText()
     {
-        CancelInvoke();
-        StopAllCoroutines();
-        enabled = false;
+        if (string.IsNullOrEmpty(matchState.EnemyName))
+        {
+            resultStatsText.text = "Waiting for opponent...";
+            return;
+        }
+
+        if (matchState.MyScore > matchState.EnemyScore)
+        {
+            resultStatsText.text = "YOU ARE WINNING!";
+        }
+        else if (matchState.MyScore < matchState.EnemyScore)
+        {
+            resultStatsText.text = "ENEMY IS WINNING!";
+        }
+        else
+        {
+            resultStatsText.text = "TIE";
+        }
     }
 }
