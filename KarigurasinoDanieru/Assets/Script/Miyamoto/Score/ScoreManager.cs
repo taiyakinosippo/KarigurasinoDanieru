@@ -69,13 +69,13 @@ public class ScoreManager : MonoBehaviour
             if (score_text != null)
             {
                 float displayScore = currentDisplayScore / 100f;
-                score_text.text = displayScore.ToString("N2") + "m";
+                score_text.text = displayScore.ToString("F2") + "m";
             }
 
             yield return null;
         }
 
         float finalScore = totalScore / 100f;
-        score_text.text = finalScore.ToString("N2")+"m";
+        score_text.text = finalScore.ToString("F2")+"m";
     }
 }

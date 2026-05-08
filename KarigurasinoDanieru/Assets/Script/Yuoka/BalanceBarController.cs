@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class BalanceBarController : MonoBehaviour
 {
@@ -126,15 +127,24 @@ public class BalanceBarController : MonoBehaviour
     //バーがエリア内にあるか判定
     bool IsInPointArea()
     {
-        //バーとエリアのY座標
-        float barY = bar.anchoredPosition.y;
-        float areaY = pointArea.anchoredPosition.y;
+        //バーの矩形
+        Rect barRect = new Rect(
+            bar.anchoredPosition.x - bar.rect.width / 2f,
+            bar.anchoredPosition.y - bar.rect.height/2f,
+            bar.rect.width,
+            bar.rect.height
+        );
 
-        //エリアの半分の高さ
-        float areaHalfHeight = pointArea.sizeDelta.y / 2f;
+        //標的の矩形
+        Rect areaRect = new Rect(
+            pointArea.anchoredPosition.x-pointArea.rect.width/2f,
+            pointArea.anchoredPosition.y-pointArea.rect.height/2,
+            pointArea.rect.width,
+            pointArea.rect.height
+        );
 
-        //距離が半分以内ならtrue
-        return Mathf.Abs(barY - areaY) <= areaHalfHeight;
+        //少しでも重なっていたらtrue
+        return barRect.Overlaps(areaRect);
     }
 
     //外部から止めるためのメソッド
