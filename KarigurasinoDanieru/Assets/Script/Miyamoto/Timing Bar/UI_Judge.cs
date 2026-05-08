@@ -3,7 +3,6 @@ using TMPro;
 public class UI_Judge : MonoBehaviour
 {
     public TextMeshProUGUI judge_text;
-    public TextMeshProUGUI score_text;
     public Timing_Bar_Logic timing_bar_Logic;
     int score = 0;
 
@@ -41,6 +40,5 @@ public class UI_Judge : MonoBehaviour
         }
         ScoreManager.instance.TimingBarScore(score);
         score = 0;
-        score_text.text = "Score: " + ScoreManager.instance.GetScore();
     }
 }

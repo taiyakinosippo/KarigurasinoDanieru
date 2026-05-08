@@ -1,12 +1,17 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
-    private int score = 0;
-    private int balanceBarScore = 0;
+    public TextMeshProUGUI score_text;
+    private float totalScore = 0;
+    private float balanceBarScore = 0;
     private int timingBarScore = 0;
     private int mashButtonScore = 0;
+
+    [SerializeField] private float countUpDuration = 5.0f;
 
     void Awake()
     {
@@ -28,19 +33,49 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("timingBarScore:" + timingBarScore);
     }
 
-    public void BalanceBarScore(float meterValue, int baseScore, float multiplier)
+    public void BalanceBarScore(float meterValue, float baseScore, float multiplier)
     {
-        int calculatedScore = Mathf.RoundToInt(meterValue * baseScore * multiplier);
+        balanceBarScore = meterValue * baseScore * multiplier;
 
-        balanceBarScore = calculatedScore;
-
-        Debug.Log($"スコア計算：メーター:{meterValue}*ベーススコア:{baseScore}*倍率:{multiplier} 合計:{meterValue* baseScore* multiplier}");
+        Debug.Log("balanceBarScore"+ balanceBarScore);
     }
 
-    public int GetScore()
+    public float GetScore()
     {
-        score = mashButtonScore * timingBarScore * balanceBarScore;
-        Debug.Log("score:" + score);
-        return score;
+        totalScore = mashButtonScore * timingBarScore * balanceBarScore;
+        Debug.Log("score:" + totalScore);
+        return totalScore;
+    }
+
+    public void StartFinalScorePresentation()
+    {
+        totalScore = mashButtonScore * timingBarScore * balanceBarScore;
+
+        StartCoroutine(CountUpScoreRoutine());
+    }
+
+    private IEnumerator CountUpScoreRoutine()
+    {
+        float elapsed = 0f;
+        float startScore = 0;
+
+        while (elapsed < countUpDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / countUpDuration;
+
+            float currentDisplayScore = Mathf.Lerp(startScore, totalScore, t);
+
+            if (score_text != null)
+            {
+                float displayScore = currentDisplayScore / 100f;
+                score_text.text = displayScore.ToString("N2") + "m";
+            }
+
+            yield return null;
+        }
+
+        float finalScore = totalScore / 100f;
+        score_text.text = finalScore.ToString("N2")+"m";
     }
 }
