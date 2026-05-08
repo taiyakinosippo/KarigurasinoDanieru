@@ -76,12 +76,14 @@ public class MultiSyncManager : MonoBehaviour
    
     IEnumerator SendStateCoroutine()
     {
+       
         isSending = true;
 
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
         form.AddField("score", currentScore);
+        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(updateUrl, form))
         {
@@ -210,6 +212,7 @@ public class MultiSyncManager : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
+        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(joinUrl, form))
         {
@@ -246,23 +249,24 @@ public class MultiSyncManager : MonoBehaviour
     // =====================
     // 手動スコア送信（ボタン用）
     // =====================
-
     public void SendScoreManually()
     {
         if (!ModeManager.IsMultiMode) return;
+        if (isSending) return;
 
-        if (isSending)
-        {
-            Debug.Log("Send blocked: already sending");
-            return;
-        }
-
+        // ✅ MatchState を読むだけ
         currentScore = matchState.MyScore;
+
+        Debug.Log(
+            $"[MULTI SEND] name={matchState.MyName}, score={currentScore}"
+        );
+
         StartCoroutine(SendScoreManuallyCoroutine());
     }
 
     IEnumerator SendScoreManuallyCoroutine()
     {
+        
         yield return StartCoroutine(SendStateCoroutine());
         OnScoreSent?.Invoke(); // ✅ 通信後
     }

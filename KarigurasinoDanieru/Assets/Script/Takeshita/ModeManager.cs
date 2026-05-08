@@ -16,6 +16,8 @@ public class ModeManager : MonoBehaviour
     [SerializeField] private GameObject playMode;
     [SerializeField] private GameObject matching;
     [SerializeField] private GameObject gameMode; //ノーマル、ハードを選択できるWindouObject
+    [SerializeField] private GameObject ladyWindow;
+
 
     [Header("Multi UI")]
     [SerializeField] private InputField multiRoomInput;
@@ -32,11 +34,14 @@ public class ModeManager : MonoBehaviour
     [SerializeField] private Text resultPlayerText;
     [SerializeField] private Text resultEnemyText;
     [SerializeField] private Text resultStatsText;
+    [SerializeField] private Text ladyModeText;
+    [SerializeField] private Text ladyDifficultyText;
 
     [Header("Managers")]
     [SerializeField] private MultiSyncManager multiSync;
     [SerializeField] private MatchState matchState;
     [SerializeField] private RankingInputManager rankingInputManager;
+    [SerializeField] private MatchScoreManager matchScoreManager;
 
     public static string CurrentRoomId;
     public static string MultiPlayerName;
@@ -56,6 +61,8 @@ public class ModeManager : MonoBehaviour
         gamePlay_Single.SetActive(false);
         gamePlay_Multi.SetActive(false);
         matching.SetActive(false);
+        gameMode.SetActive(false);
+        ladyWindow.SetActive(false);
         playMode.SetActive(true);
 
         multiRoomInput.text = "";
@@ -75,13 +82,13 @@ public class ModeManager : MonoBehaviour
         UpdateModeText();
     }
 
-    void Update()
-    {
-        if (IsMultiMode)
-        {
-            UpdateResultUI();
-        }
-    }
+    //void Update()
+    //{
+    //    if (IsMultiMode)
+    //    {
+    //        UpdateResultUI();
+    //    }
+    //}
 
     void OnDestroy()
     {
@@ -107,62 +114,49 @@ public class ModeManager : MonoBehaviour
         gamePlay_Multi.SetActive(false);
         gameMode.SetActive(true);
 
-        multiRoomInput.text = "";
-        multiPlayerNameInput.text = "";
-        scoreInputField.text = "";
-
         UpdateModeText();
     }
 
     // =====================
     // MULTI MODE
     // =====================
+
     public void InputMulti()
     {
         IsMultiMode = true;
         matchHandled = false;
 
         playMode.SetActive(false);
-        matching.SetActive(true);
+        matching.SetActive(false);
         gamePlay_Single.SetActive(false);
         gamePlay_Multi.SetActive(false);
 
-        matchingButtonObj.SetActive(true);
-        multiRoomInputField.SetActive(true);
-        multiNameInputField.SetActive(true);
-
-        multiRoomInput.text = "";
-        multiPlayerNameInput.text = "";
-        scoreInputField.text = "";
-
-        HideResultTexts();
-
-        matchStatusText.gameObject.SetActive(true);
-        matchStatusText.text = "Input Name & Room ID";
-
-        UpdateModeText();
+        gameMode.SetActive(true);
     }
+
 
     public void SelectNormal()
     {
-      
-
         CurrentDifficulty = SoloDifficulty.Normal;
-        gameMode.SetActive(false);
-        gamePlay_Single.SetActive(true);
+        ShowLadyWindow();
     }
 
     public void SelectHard()
     {
         CurrentDifficulty = SoloDifficulty.Hard;
-        gameMode.SetActive(false);
-        gamePlay_Single.SetActive(true);
+        ShowLadyWindow();
     }
-
+  
     public void SelectBack()
     {
         gameMode.SetActive(false);
         playMode.SetActive(true);
+    }
+
+    public void LadyBack()
+    {
+        ladyWindow.SetActive(false);
+        gameMode.SetActive(true);
     }
 
     public void InputMatching()
@@ -181,6 +175,7 @@ public class ModeManager : MonoBehaviour
         matchingButtonObj.SetActive(false);
 
         matchStatusText.text = "Waiting...";
+        matchStatusText.gameObject.SetActive(true);
 
         multiSync.BeginMultiSync();
         matchState.SetMyPlayer(MultiPlayerName);
@@ -201,6 +196,8 @@ public class ModeManager : MonoBehaviour
     private IEnumerator MatchSuccessSequence(string opponentName)
     {
         matchStatusText.text = $"{opponentName} Matching!";
+        matchStatusText.gameObject.SetActive(true);
+
         yield return new WaitForSeconds(2f);
 
         matchStatusText.gameObject.SetActive(false);
@@ -248,6 +245,35 @@ public class ModeManager : MonoBehaviour
             $"MODE: {(IsMultiMode ? "MULTI" : "SINGLE")}\n" +
             $"ROOM: {(string.IsNullOrEmpty(CurrentRoomId) ? "-" : CurrentRoomId)}\n" +
             $"NAME: {(IsMultiMode ? MultiPlayerName : "-")}";
+    }
+
+    // =====================
+    // EXIT MATCHING
+    // =====================
+    public void OnClickExitMatching()
+    {
+      // ✅ 通信を完全に停止
+        if (multiSync != null)
+        {
+            multiSync.StopMultiSync();
+        }
+
+        // ✅ マルチ状態を解除
+        IsMultiMode = false;
+        matchHandled = false;
+
+        // ✅ 状態リセット
+        CurrentRoomId = "";
+        MultiPlayerName = "";
+        matchState.ResetState();
+
+        // ✅ UI を初期画面に戻す
+        matching.SetActive(false);
+        gamePlay_Multi.SetActive(false);
+        playMode.SetActive(true);
+
+        HideResultTexts();
+        UpdateModeText();
     }
 
     // =====================
@@ -318,4 +344,57 @@ public class ModeManager : MonoBehaviour
         UpdateResultUI();
     }
 
+    //GO_BUTTON
+    public void OnClickLadyGo()
+    {
+        ladyWindow.SetActive(false);
+
+        if (IsMultiMode)
+        {
+            matching.SetActive(true);
+        }
+
+        else
+        {
+            gamePlay_Single.SetActive(true);
+           
+        }
+
+    }
+
+    // =====================
+    // SCORE SEND & DISPLAY
+    // =====================
+    public void OnClickApplyScore()
+    {
+        // 入力チェック
+        if (!int.TryParse(scoreInputField.text, out int value))
+        {
+            Debug.LogWarning("Score input invalid");
+            return;
+        }
+
+        // ✅ スコアが変わった瞬間
+        matchScoreManager.AddScore(value);
+
+        // マルチなら送信
+        if (IsMultiMode)
+        {
+            multiSync.SendScoreManually();
+        }
+
+        // 入力欄リセット（任意）
+        scoreInputField.text = "";
+    }
+
+    private void ShowLadyWindow()
+    {
+        gameMode.SetActive(false);
+
+        ladyModeText.text = IsMultiMode ? "MODE:MULTI" : "MODE:SINGLE";
+
+        ladyDifficultyText.text = CurrentDifficulty == SoloDifficulty.Normal ? "DIFFICURY:NORMAL" : "DIFFICURY:HARD";
+
+        ladyWindow.SetActive(true);
+    }
 }

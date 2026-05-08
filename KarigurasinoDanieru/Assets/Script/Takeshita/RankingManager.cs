@@ -75,6 +75,7 @@ public class RankingInputManager : MonoBehaviour
     // =====================
     public void OnClickSendScore()
     {
+        Debug.Log("bbb");
         // マルチ中は送らない
         if (ModeManager.IsMultiMode) return;
 
@@ -129,7 +130,9 @@ public class RankingInputManager : MonoBehaviour
         StartCoroutine(GetRankingAndShowResult(playerName, mode));
     }
 
-    private IEnumerator GetRankingAndShowResult(string playerName, string mode)
+    private IEnumerator GetRankingAndShowResult(
+     string playerName,
+     string mode)
     {
         string url = ServerConfig.BaseUrl + $"get_ranking.php?mode={mode}";
 
@@ -146,10 +149,14 @@ public class RankingInputManager : MonoBehaviour
             RankingData[] list =
                 JsonHelper.FromJson<RankingData>(req.downloadHandler.text);
 
+            // ✅ 入力したスコアを取得
+            if (!int.TryParse(scoreInput.text, out int myScore))
+                myScore = 0;
+
             for (int i = 0; i < list.Length; i++)
             {
-                // NOTE: 名前重複時は最初に見つかった順位を使用
-                if (list[i].name == playerName)
+                // ✅ スコア一致で順位決定
+                if (list[i].score == myScore)
                 {
                     ShowResultText(playerName, i + 1);
                     yield break;
