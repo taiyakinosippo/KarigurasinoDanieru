@@ -197,6 +197,7 @@ MonoBehaviour:
   bar: {fileID: 6202626955859949759}
   pointArea: {fileID: 3482231408312761496}
   MeterImage: {fileID: 1024387791987970645}
+  pointAreaController: {fileID: 3014591360129146886}
   minSpeed: 50
   maxSpeed: 700
   acceleration: 600
@@ -226,6 +227,9 @@ MonoBehaviour:
   gameLevel: 0
   nomalMoveInterval: 2
   hardMoveInterval: 0.5
+  areaImage: {fileID: 6182592726513178894}
+  activeAlpha: 0.8
+  inactiveAlpha: 1
 --- !u!1 &5208548410837714721
 GameObject:
   m_ObjectHideFlags: 0

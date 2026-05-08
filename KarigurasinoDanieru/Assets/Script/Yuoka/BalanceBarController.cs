@@ -8,7 +8,7 @@ public class BalanceBarController : MonoBehaviour
     public RectTransform bar;       //バー本体
     public RectTransform pointArea; //標的
     public Image MeterImage;        //メーターUI
-
+    public PointAreaController pointAreaController;
     [Header("速度設定")]
     public float minSpeed = 10f;    //最低速度
     public float maxSpeed = 100f;   //最高速度
@@ -103,8 +103,15 @@ public class BalanceBarController : MonoBehaviour
     //メーターの更新処理
     void UpdateMeter()
     {
+        bool isInArea = IsInPointArea();
+
+        if (pointAreaController != null)
+        {
+            pointAreaController.SetHighlight(isInArea);
+        }
+
         //エリア内の場合は増加
-        if (IsInPointArea())
+        if (isInArea)
         {
             meter += increaseSpeed * Time.deltaTime;
         }
