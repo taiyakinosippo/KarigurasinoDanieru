@@ -51,14 +51,17 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     public void BeginMultiSync()
     {
+       
         enabled = true;
 
         roomId = ModeManager.CurrentRoomId;
         playerName = ModeManager.MultiPlayerName;
 
         matched = false;
-        lastEnemyScore = -1; 
+        lastEnemyScore = -1;
 
+        SendJoinOnce();
+        currentScore = matchState.MyScore;
         SendState();
         InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
@@ -105,6 +108,7 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     private void FetchState()
     {
+        //Debug.Log("[FetchState] called");
         if (isFetching) return;
         StartCoroutine(FetchStateCoroutine());
     }
@@ -115,17 +119,23 @@ public class MultiSyncManager : MonoBehaviour
 
         //Debug.Log("[FETCH] start");
 
-        string url = $"{fetchUrl}?room_id={roomId}";
-        
+        string url =
+     $"{fetchUrl}?room_id={roomId}&difficulty={ModeManager.CurrentDifficulty}";
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
             req.timeout = 10;
             yield return req.SendWebRequest();
+            Debug.Log("[FETCH RAW RESPONSE] " + req.downloadHandler.text);
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-               
+                Debug.LogError(
+                    "[FETCH FAILED]\n" +
+                    "url: " + url + "\n" +
+                    "result: " + req.result + "\n" +
+                    "error: " + req.error
+                );
                 isFetching = false;
                 yield break;
             }
@@ -148,6 +158,7 @@ public class MultiSyncManager : MonoBehaviour
 
     void UpdateRemoteUI(PlayerState[] states)
     {
+        Debug.Log($"[UpdateRemoteUI] called. states.Count={states.Length}");
         bool enemyFound = false;
 
         foreach (var ps in states)
@@ -158,18 +169,28 @@ public class MultiSyncManager : MonoBehaviour
             enemyFound = true;
             enemyPreviouslyPresent = true;
 
-            // ✅ MatchState 更新
+            // ✅ MultiSyncManager 自身にもセット
+            opponentName = ps.player_name;
+            opponentScore = ps.score;
+
+            // ✅ MatchState 更新（正本）
             matchState.SetEnemy(ps.player_name, ps.score);
 
-            // ✅ ★ここが必須：UI側へ通知
+            // ✅ UIへ通知
             modeManager?.OnEnemyScoreUpdated(ps.player_name, ps.score);
         }
 
         if (!enemyFound && enemyPreviouslyPresent)
         {
             enemyPreviouslyPresent = false;
+
+            opponentName = "";
+            opponentScore = 0;
+
             modeManager?.OnEnemyLeft();
         }
+
+        Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
     }
 
     /* ======================
@@ -271,6 +292,13 @@ public class MultiSyncManager : MonoBehaviour
         OnScoreSent?.Invoke(); // ✅ 通信後
     }
 
+    public void ResetJoinState()
+    {
+        joined = false;
+        matched = false;
+        enemyPreviouslyPresent = false;
+        lastEnemyScore = -1;
+    }
 }
 
 /* ======================

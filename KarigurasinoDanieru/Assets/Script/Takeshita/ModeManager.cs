@@ -36,6 +36,7 @@ public class ModeManager : MonoBehaviour
     [SerializeField] private Text resultStatsText;
     [SerializeField] private Text ladyModeText;
     [SerializeField] private Text ladyDifficultyText;
+    [SerializeField] private Text difficultyText;
 
     [Header("Managers")]
     [SerializeField] private MultiSyncManager multiSync;
@@ -80,6 +81,7 @@ public class ModeManager : MonoBehaviour
             multiSync.OnScoreSent += OnMultiScoreSent;
 
         UpdateModeText();
+        UpdateDifficultyText();
     }
 
     //void Update()
@@ -138,12 +140,14 @@ public class ModeManager : MonoBehaviour
     public void SelectNormal()
     {
         CurrentDifficulty = SoloDifficulty.Normal;
+        UpdateDifficultyText();
         ShowLadyWindow();
     }
 
     public void SelectHard()
     {
         CurrentDifficulty = SoloDifficulty.Hard;
+        UpdateDifficultyText();
         ShowLadyWindow();
     }
   
@@ -252,22 +256,30 @@ public class ModeManager : MonoBehaviour
     // =====================
     public void OnClickExitMatching()
     {
-      // ✅ 通信を完全に停止
+        // 通信停止
         if (multiSync != null)
         {
             multiSync.StopMultiSync();
+            multiSync.ResetJoinState();
         }
 
-        // ✅ マルチ状態を解除
+        // 状態リセット
         IsMultiMode = false;
         matchHandled = false;
 
-        // ✅ 状態リセット
         CurrentRoomId = "";
         MultiPlayerName = "";
-        matchState.ResetState();
 
-        // ✅ UI を初期画面に戻す
+        matchState.ResetState();
+        matchScoreManager.ResetScore();
+
+        // --------------------
+        // ★ ここが重要
+        // --------------------
+        matchStatusText.text = "";
+        matchStatusText.gameObject.SetActive(false); 
+
+        // UI を戻す
         matching.SetActive(false);
         gamePlay_Multi.SetActive(false);
         playMode.SetActive(true);
@@ -351,15 +363,36 @@ public class ModeManager : MonoBehaviour
 
         if (IsMultiMode)
         {
-            matching.SetActive(true);
-        }
+            // ---------- 通信・状態リセット ----------
+            if (multiSync != null)
+            {
+                multiSync.StopMultiSync();
+                multiSync.ResetJoinState();
+            }
 
+            matchHandled = false;
+            matchState.ResetState();
+            matchScoreManager.ResetScore();
+
+            // ---------- UI 初期化（★最重要） ----------
+            matching.SetActive(true);
+
+            // ★ 入力UIを必ず復活させる
+            multiRoomInputField.SetActive(true);
+            multiNameInputField.SetActive(true);
+            matchingButtonObj.SetActive(true);
+
+            // ★ 入力内容リセット
+            multiRoomInput.text = "";
+            multiPlayerNameInput.text = "";
+
+            matchStatusText.gameObject.SetActive(true);
+            matchStatusText.text = "Input Name & Room ID";
+        }
         else
         {
             gamePlay_Single.SetActive(true);
-           
         }
-
     }
 
     // =====================
@@ -389,6 +422,7 @@ public class ModeManager : MonoBehaviour
 
     private void ShowLadyWindow()
     {
+      
         gameMode.SetActive(false);
 
         ladyModeText.text = IsMultiMode ? "MODE:MULTI" : "MODE:SINGLE";
@@ -396,5 +430,15 @@ public class ModeManager : MonoBehaviour
         ladyDifficultyText.text = CurrentDifficulty == SoloDifficulty.Normal ? "DIFFICURY:NORMAL" : "DIFFICURY:HARD";
 
         ladyWindow.SetActive(true);
+    }
+
+    private void UpdateDifficultyText()
+    {
+        if (difficultyText == null) return;
+
+        difficultyText.text =
+            CurrentDifficulty == SoloDifficulty.Normal
+            ? "DIFFICULTY : NORMAL"
+            : "DIFFICULTY : HARD";
     }
 }
