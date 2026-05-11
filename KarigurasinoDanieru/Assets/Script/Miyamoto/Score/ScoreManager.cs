@@ -9,10 +9,10 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager instance;
     public TextMeshProUGUI score_text;
     [SerializeField] BackGroundMover backGroundMover;
-    [SerializeField] private int Groudspeed = 10;        //’nã‚Å‚Ì‰Á‘¬—¦
-    [SerializeField] private int SkySpeed = 100;@@@@ //‹ó‚Å‚Ì‰Á‘¬—¦
-    [SerializeField] private int AtmospheresSeed = 1000; //‘å‹CŒ—‚Å‚Ì‰Á‘¬—¦
-    [SerializeField] private int SpaceSpeed = 10000;     //‰F’ˆ‚Å‚Ì‰Á‘¬—¦
+    [SerializeField] private int Groudspeed = 10;        //ï¿½nï¿½ï¿½Å‚Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private int SkySpeed = 100;ï¿½@ï¿½@ï¿½@ï¿½@ //ï¿½ï¿½Å‚Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private int AtmospheresSeed = 1000; //ï¿½ï¿½Cï¿½ï¿½ï¿½Å‚Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private int SpaceSpeed = 10000;     //ï¿½Fï¿½ï¿½ï¿½Å‚Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½
     private float totalScore = 0;
     private float balanceBarScore = 0;
     private int timingBarScore = 0;
