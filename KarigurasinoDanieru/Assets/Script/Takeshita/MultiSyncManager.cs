@@ -22,11 +22,14 @@ public class MultiSyncManager : MonoBehaviour
     private bool isFetching;
     private bool isSending;
 
-    private ModeManager modeManager;
+    [SerializeField] private MatchState matchState;
+    [SerializeField] private ModeManager modeManager;
 
     public string opponentName = "";
     public int opponentScore = 0;
     private int lastEnemyScore = -1;
+
+    private bool enemyPreviouslyPresent = false;
 
     void Awake()
     {
@@ -54,10 +57,9 @@ public class MultiSyncManager : MonoBehaviour
         playerName = ModeManager.MultiPlayerName;
 
         matched = false;
-        lastEnemyScore = -1; // ✅ ★追加（超重要）
+        lastEnemyScore = -1; 
 
         SendState();
-        InvokeRepeating(nameof(SendState), 0.5f, 0.5f);
         InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
 
@@ -74,12 +76,14 @@ public class MultiSyncManager : MonoBehaviour
    
     IEnumerator SendStateCoroutine()
     {
+       
         isSending = true;
 
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
         form.AddField("score", currentScore);
+        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(updateUrl, form))
         {
@@ -91,7 +95,7 @@ public class MultiSyncManager : MonoBehaviour
                 Debug.LogError("[MultiSync] Send error: " + req.error);
             }
         }
-        Debug.Log($"[SEND] room={roomId}, name={playerName}, score={currentScore}");
+       // Debug.Log($"[SEND] room={roomId}, name={playerName}, score={currentScore}");
 
         isSending = false;
     }
@@ -108,6 +112,8 @@ public class MultiSyncManager : MonoBehaviour
     IEnumerator FetchStateCoroutine()
     {
         isFetching = true;
+
+        //Debug.Log("[FETCH] start");
 
         string url = $"{fetchUrl}?room_id={roomId}";
         
@@ -140,42 +146,38 @@ public class MultiSyncManager : MonoBehaviour
         isFetching = false;
     }
 
-    /* ======================
-       UI更新（仮）
-    ====================== */
     void UpdateRemoteUI(PlayerState[] states)
     {
-        if (states == null) return;
+        bool enemyFound = false;
 
         foreach (var ps in states)
         {
             if (ps.player_name == playerName)
                 continue;
 
-            // 相手の情報更新
-            opponentName = ps.player_name;
-            opponentScore = ps.score;
+            enemyFound = true;
+            enemyPreviouslyPresent = true;
 
-            // ✅ スコアが変わった瞬間だけ発火
-            if (opponentScore != lastEnemyScore)
-            {
-                lastEnemyScore = opponentScore;
+            // ✅ MatchState 更新
+            matchState.SetEnemy(ps.player_name, ps.score);
 
-                // ★ ModeManager に通知
-                modeManager?.OnEnemyScoreUpdated(
-                    opponentName,
-                    opponentScore
-                );
-            }
+            // ✅ ★ここが必須：UI側へ通知
+            modeManager?.OnEnemyScoreUpdated(ps.player_name, ps.score);
+        }
+
+        if (!enemyFound && enemyPreviouslyPresent)
+        {
+            enemyPreviouslyPresent = false;
+            modeManager?.OnEnemyLeft();
         }
     }
+
     /* ======================
        マッチ成立判定
     ====================== */
     void CheckMatchSuccess(PlayerState[] states)
     {
-        if (matched) return;
-        if (states == null) return;
+        if (matched || states == null) return;
 
         if (states.Length >= 2)
         {
@@ -185,14 +187,15 @@ public class MultiSyncManager : MonoBehaviour
                 {
                     matched = true;
 
-                    // ✅ Fetch は止めない！
+                    // ✅ ここを追加
+                    enemyPreviouslyPresent = true;
+
                     modeManager?.OnMatchSuccess(ps.player_name);
                     return;
                 }
             }
         }
     }
-
 
     /* ======================
        Join
@@ -209,6 +212,7 @@ public class MultiSyncManager : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
+        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(joinUrl, form))
         {
@@ -245,15 +249,24 @@ public class MultiSyncManager : MonoBehaviour
     // =====================
     // 手動スコア送信（ボタン用）
     // =====================
-
     public void SendScoreManually()
     {
         if (!ModeManager.IsMultiMode) return;
+        if (isSending) return;
+
+        // ✅ MatchState を読むだけ
+        currentScore = matchState.MyScore;
+
+        Debug.Log(
+            $"[MULTI SEND] name={matchState.MyName}, score={currentScore}"
+        );
+
         StartCoroutine(SendScoreManuallyCoroutine());
     }
 
     IEnumerator SendScoreManuallyCoroutine()
     {
+        
         yield return StartCoroutine(SendStateCoroutine());
         OnScoreSent?.Invoke(); // ✅ 通信後
     }
