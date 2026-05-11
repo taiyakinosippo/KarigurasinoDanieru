@@ -10,7 +10,7 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI score_text;
     [SerializeField] BackGroundMover backGroundMover;
     [SerializeField] private int Groudspeed = 10;        //�n��ł̉�����
-    [SerializeField] private int SkySpeed = 100;�@�@�@�@ //��ł̉�����
+    [SerializeField] private int SkySpeed = 100;         //��ł̉�����
     [SerializeField] private int AtmospheresSeed = 1000; //��C���ł̉�����
     [SerializeField] private int SpaceSpeed = 10000;     //�F���ł̉�����
     private float totalScore = 0;
