@@ -1,4 +1,4 @@
-using System.Collections;
+
 using UnityEngine;
 using UnityEngine.UI;
 public class BackGroundMover : MonoBehaviour
@@ -6,7 +6,8 @@ public class BackGroundMover : MonoBehaviour
     [SerializeField] private RectTransform[] images;     //配置する画像
     [SerializeField] private StageManager stageManager;  //ステージの情報を保持している
     [SerializeField] private ScoreManager scoreManger;   //スコアの情報を保持している
-    [SerializeField] private float deceleration = 2f;　　//減速率
+    [SerializeField] private ScoreCalculation scoreCalculation;
+    [SerializeField] private float direction = 0.01f;    //画像の減速率
     private float speed = 0;　　　　　　　　　　　　　　 //飛ぶスピードを格納する変数
     private float height = 540f;                         //画像の高さ
     private bool backGround = false;　　　　　　　　　　 //背景を動かすかどうか
@@ -23,20 +24,26 @@ public class BackGroundMover : MonoBehaviour
         }
     }
     //初期化
-    public void StartMoving(float score)
+    public void StartMoving()
     {
         backGround = true;
-        speed = scoreManger.GetAddScore(score);
-        Debug.Log($"スピード{speed}");
     }
 
 
     private void Update()
     {
-       
         if (!backGround) return;
         if (images == null || images.Length == 0) return;
-       
+        if (!scoreCalculation.isLastSecond)
+        {
+            speed = scoreCalculation.GetScoreSpeed();
+        }
+        else        
+        {
+            Debug.Log("Last second reached");
+            speed = Mathf.Lerp(speed, scoreCalculation.GetScoreSpeed(), direction);
+            Debug.Log("画像のスクロール: " + speed);
+        }
         float moveAmount = speed * Time.deltaTime;
         foreach (var img in images)
         {
@@ -49,11 +56,10 @@ public class BackGroundMover : MonoBehaviour
             RectTransform highest = GetHighest();
             if (highest == null) return;
             lowest.anchoredPosition = new Vector2(0, highest.anchoredPosition.y + height);
-            var sprite = stageManager.GetRandomBackground(scoreManger.GetCurrentScore());
+            var sprite = stageManager.GetRandomBackground(scoreCalculation.UpdateScore());
             if (sprite != null)
                 lowest.GetComponent<Image>().sprite = sprite;
         }
-        speed = Mathf.Lerp(speed, 0, Time.deltaTime * deceleration);
     }
     //画像がスクロールしきったか
     RectTransform GetLowest()
@@ -84,13 +90,6 @@ public class BackGroundMover : MonoBehaviour
     //スクロールを止める
     public void ScrollEnd()
     {
-        foreach (var img in images)
-        {
-            Vector2 pos = img.anchoredPosition;
-            pos.y = Mathf.Round(pos.y / height) * height;
-            img.anchoredPosition = pos;
-            backGround = false;
-            speed = 0;
-        }
+        backGround = false;
     }
 }

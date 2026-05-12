@@ -851,6 +851,7 @@ MonoBehaviour:
   stageManager: {fileID: 1546890541}
   scoreManger: {fileID: 1689767429}
   scoreCalculation: {fileID: 1689767431}
+  deceleration: 10
 --- !u!114 &1220477284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1330,10 +1331,10 @@ MonoBehaviour:
   score_text: {fileID: 1915347666}
   backGroundMover: {fileID: 1220477283}
   scoreCalculation: {fileID: 1689767431}
-  <GroundTime>k__BackingField: 5
-  <SkyTime>k__BackingField: 10
-  <AtmospheresTime>k__BackingField: 15
-  <SpaceTime>k__BackingField: 30
+  Groudspeed: 10
+  SkySpeed: 100
+  AtmospheresSeed: 1000
+  SpaceSpeed: 10000
 --- !u!4 &1689767430
 Transform:
   m_ObjectHideFlags: 0
@@ -1363,10 +1364,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreCalculation
   scoreManager: {fileID: 1689767429}
   backGroundMover: {fileID: 1220477283}
-  LastGroundSpeed: 10
-  LastSkySpeed: 100
-  LastAtmospheresSpeed: 200
-  LastSpaceSpeed: 500
+  lastSpeed: 1000
+  lastDistance: 1000
 --- !u!1 &1858740696
 GameObject:
   m_ObjectHideFlags: 0

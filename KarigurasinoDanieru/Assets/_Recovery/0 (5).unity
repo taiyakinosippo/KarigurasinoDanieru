@@ -850,7 +850,7 @@ MonoBehaviour:
   - {fileID: 1858740697}
   stageManager: {fileID: 1546890541}
   scoreManger: {fileID: 1689767429}
-  scoreCalculation: {fileID: 1689767431}
+  deceleration: 2
 --- !u!114 &1220477284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1166,6 +1166,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Timing_Bar_System (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2558579409220247588, guid: 52fcc7cf1c086be43a3236c6e1d71338, type: 3}
+      propertyPath: good_score
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2558579409220247588, guid: 52fcc7cf1c086be43a3236c6e1d71338, type: 3}
+      propertyPath: great_score
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2558579409220247588, guid: 52fcc7cf1c086be43a3236c6e1d71338, type: 3}
+      propertyPath: perfect_score
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1288,7 +1300,6 @@ GameObject:
   - component: {fileID: 1689767430}
   - component: {fileID: 1689767429}
   - component: {fileID: 1689767428}
-  - component: {fileID: 1689767431}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -1312,7 +1323,7 @@ MonoBehaviour:
   pointArea: {fileID: 46595583}
   timingBar: {fileID: 1089314324}
   mashButton: {fileID: 513459624}
-  scoreCalculation: {fileID: 1689767431}
+  backGroundMover: {fileID: 1220477283}
   currentMode: 0
   currentLevel: 0
 --- !u!114 &1689767429
@@ -1329,11 +1340,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   score_text: {fileID: 1915347666}
   backGroundMover: {fileID: 1220477283}
-  scoreCalculation: {fileID: 1689767431}
-  <GroundTime>k__BackingField: 5
-  <SkyTime>k__BackingField: 10
-  <AtmospheresTime>k__BackingField: 15
-  <SpaceTime>k__BackingField: 30
+  Groudspeed: 10
+  SkySpeed: 100
+  AtmospheresSeed: 1000
+  SpaceSpeed: 10000
 --- !u!4 &1689767430
 Transform:
   m_ObjectHideFlags: 0
@@ -1349,24 +1359,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1689767431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1689767427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf43532f73b66446af3215c16f53af5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScoreCalculation
-  scoreManager: {fileID: 1689767429}
-  backGroundMover: {fileID: 1220477283}
-  LastGroundSpeed: 10
-  LastSkySpeed: 100
-  LastAtmospheresSpeed: 200
-  LastSpaceSpeed: 500
 --- !u!1 &1858740696
 GameObject:
   m_ObjectHideFlags: 0

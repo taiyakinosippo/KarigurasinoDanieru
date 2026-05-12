@@ -851,6 +851,7 @@ MonoBehaviour:
   stageManager: {fileID: 1546890541}
   scoreManger: {fileID: 1689767429}
   scoreCalculation: {fileID: 1689767431}
+  deceleration: 10
 --- !u!114 &1220477284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1330,10 +1331,10 @@ MonoBehaviour:
   score_text: {fileID: 1915347666}
   backGroundMover: {fileID: 1220477283}
   scoreCalculation: {fileID: 1689767431}
-  <GroundTime>k__BackingField: 5
-  <SkyTime>k__BackingField: 10
-  <AtmospheresTime>k__BackingField: 15
-  <SpaceTime>k__BackingField: 30
+  Groudspeed: 10
+  SkySpeed: 100
+  AtmospheresSeed: 1000
+  SpaceSpeed: 10000
 --- !u!4 &1689767430
 Transform:
   m_ObjectHideFlags: 0
@@ -1342,12 +1343,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1689767427}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 466, y: 262, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -14, y: -8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1964096476}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1689767431
 MonoBehaviour:
@@ -1363,10 +1364,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreCalculation
   scoreManager: {fileID: 1689767429}
   backGroundMover: {fileID: 1220477283}
-  LastGroundSpeed: 10
-  LastSkySpeed: 100
-  LastAtmospheresSpeed: 200
-  LastSpaceSpeed: 500
+  lastSpeed: 4000
+  lastDistance: 500
 --- !u!1 &1858740696
 GameObject:
   m_ObjectHideFlags: 0
@@ -1611,6 +1610,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1915347668}
+  - {fileID: 1689767430}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1868,4 +1868,3 @@ SceneRoots:
   - {fileID: 632484101}
   - {fileID: 1546890542}
   - {fileID: 1964096476}
-  - {fileID: 1689767430}
