@@ -227,6 +227,23 @@ public class ModeManager : MonoBehaviour
     // =====================
     public void InputBack()
     {
+
+        // ★ マルチ終了時にランキング保存
+        if (IsMultiMode)
+        {
+            Debug.Log("aaa");
+            // 勝者のみランキング登録（推奨）
+            if (matchState.MyScore > matchState.EnemyScore)
+            {
+                Debug.Log("[MULTI END] I am winner. Save ranking.");
+                multiSync.SaveMultiResult();  // ← これが超重要
+            }
+            else
+            {
+                Debug.Log("[MULTI END] Not winner. Skip ranking.");
+            }
+        }
+
         IsMultiMode = false;
         CurrentRoomId = "";
         MultiPlayerName = "";
@@ -403,23 +420,26 @@ public class ModeManager : MonoBehaviour
     // =====================
     public void OnClickApplyScore()
     {
-        // 入力チェック
         if (!int.TryParse(scoreInputField.text, out int value))
         {
             Debug.LogWarning("Score input invalid");
             return;
         }
 
-        // ✅ スコアが変わった瞬間
-        matchScoreManager.AddScore(value);
-
-        // マルチなら送信
         if (IsMultiMode)
         {
-            multiSync.SendScoreManually();
+            // ✅ マルチは「上書き」
+            matchScoreManager.SetScore(value);
+
+            // ✅ 前回より大きい場合だけ送信
+            multiSync.SendScoreIfHigher(matchScoreManager.CurrentScore);
+        }
+        else
+        {
+            // ✅ シングルだけ加算
+            matchScoreManager.AddScore(value);
         }
 
-        // 入力欄リセット（任意）
         scoreInputField.text = "";
     }
 

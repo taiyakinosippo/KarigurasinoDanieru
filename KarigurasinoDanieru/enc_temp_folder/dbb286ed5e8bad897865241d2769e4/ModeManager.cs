@@ -20,9 +20,9 @@ public class ModeManager : MonoBehaviour
 
 
     [Header("Multi UI")]
-    [SerializeField] private InputField multiRoomInput;
-    [SerializeField] private InputField multiPlayerNameInput;
-    [SerializeField] private InputField scoreInputField;
+    [SerializeField] private InputField multiRoomInput; //ルームID
+    [SerializeField] private InputField multiPlayerNameInput;　//プレイヤーネーム
+    [SerializeField] private InputField scoreInputField;　//スコア
     [SerializeField] private Button matchingButton;
     [SerializeField] private GameObject matchingButtonObj;
     [SerializeField] private GameObject multiRoomInputField;
@@ -67,8 +67,11 @@ public class ModeManager : MonoBehaviour
         playMode.SetActive(true);
 
         multiRoomInput.text = "";
+        multiRoomInput.characterLimit = 5;
         multiPlayerNameInput.text = "";
+        multiPlayerNameInput.characterLimit = 10;
         scoreInputField.text = "";
+        //scoreInputField.characterLimit = 6;
 
         HideResultTexts();
 
@@ -224,6 +227,23 @@ public class ModeManager : MonoBehaviour
     // =====================
     public void InputBack()
     {
+
+        // ★ マルチ終了時にランキング保存
+        if (IsMultiMode)
+        {
+            Debug.Log("aaa");
+            // 勝者のみランキング登録（推奨）
+            if (matchState.MyScore > matchState.EnemyScore)
+            {
+                Debug.Log("[MULTI END] I am winner. Save ranking.");
+                multiSync.SaveMultiResult();  // ← これが超重要
+            }
+            else
+            {
+                Debug.Log("[MULTI END] Not winner. Skip ranking.");
+            }
+        }
+
         IsMultiMode = false;
         CurrentRoomId = "";
         MultiPlayerName = "";

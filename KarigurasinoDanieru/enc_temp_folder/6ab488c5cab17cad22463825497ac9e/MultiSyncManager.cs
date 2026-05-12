@@ -8,6 +8,7 @@ public class MultiSyncManager : MonoBehaviour
     private string updateUrl;
     private string fetchUrl;
     private string joinUrl;
+    private string saveMultiScoreUrl;
 
     [Header("Player Info")]
     public string playerName;
@@ -36,6 +37,7 @@ public class MultiSyncManager : MonoBehaviour
         updateUrl = ServerConfig.BaseUrl + "mp_update.php";
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";
+        saveMultiScoreUrl = ServerConfig.BaseUrl + "save_multi_score.php";
 
         modeManager = FindObjectOfType<ModeManager>();
     }
@@ -120,13 +122,16 @@ public class MultiSyncManager : MonoBehaviour
         //Debug.Log("[FETCH] start");
 
         string url =
-     $"{fetchUrl}?room_id={roomId}&difficulty={ModeManager.CurrentDifficulty}";
+      $"{fetchUrl}?room_id={roomId}" +
+      $"&difficulty={ModeManager.CurrentDifficulty}" +
+      $"&player_name={playerName}";
+
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
             req.timeout = 10;
             yield return req.SendWebRequest();
-            Debug.Log("[FETCH RAW RESPONSE] " + req.downloadHandler.text);
+            //Debug.Log("[FETCH RAW RESPONSE] " + req.downloadHandler.text);
 
             if (req.result != UnityWebRequest.Result.Success)
             {
@@ -158,7 +163,7 @@ public class MultiSyncManager : MonoBehaviour
 
     void UpdateRemoteUI(PlayerState[] states)
     {
-        Debug.Log($"[UpdateRemoteUI] called. states.Count={states.Length}");
+        //Debug.Log($"[UpdateRemoteUI] called. states.Count={states.Length}");
         bool enemyFound = false;
 
         foreach (var ps in states)
@@ -190,7 +195,7 @@ public class MultiSyncManager : MonoBehaviour
             modeManager?.OnEnemyLeft();
         }
 
-        Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
+        //Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
     }
 
     /* ======================
@@ -198,25 +203,29 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     void CheckMatchSuccess(PlayerState[] states)
     {
+        //Debug.Log($"[CHECK] myName={playerName}, count={(states == null ? -1 : states.Length)}");
+        //if (states != null)
+        //{
+        //    foreach (var ps in states)
+        //    {
+        //        Debug.Log($"[STATE] {ps.player_name}");
+        //    }
+        //}
+
         if (matched || states == null) return;
 
-        if (states.Length >= 2)
+        foreach (var ps in states)
         {
-            foreach (var ps in states)
+            if (ps.player_name != playerName)
             {
-                if (ps.player_name != playerName)
-                {
-                    matched = true;
-
-                    // ✅ ここを追加
-                    enemyPreviouslyPresent = true;
-
-                    modeManager?.OnMatchSuccess(ps.player_name);
-                    return;
-                }
+                matched = true;
+                enemyPreviouslyPresent = true;
+                modeManager?.OnMatchSuccess(ps.player_name);
+                return;
             }
         }
     }
+
 
     /* ======================
        Join
@@ -242,7 +251,7 @@ public class MultiSyncManager : MonoBehaviour
 
             if (req.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("[MultiSync] Joined room");
+                //Debug.Log("[MultiSync] Joined room");
             }
             else
             {
@@ -298,6 +307,35 @@ public class MultiSyncManager : MonoBehaviour
         matched = false;
         enemyPreviouslyPresent = false;
         lastEnemyScore = -1;
+    }
+
+    public void SaveMultiResult()
+    {
+        if (!ModeManager.IsMultiMode) return;
+        StartCoroutine(SaveMultiResultCoroutine());
+    }
+
+    IEnumerator SaveMultiResultCoroutine()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("name", playerName);
+        form.AddField("score", matchState.MyScore);
+        form.AddField("mode", ModeManager.CurrentDifficulty.ToString().ToLower());
+
+        using (UnityWebRequest req = UnityWebRequest.Post(saveMultiScoreUrl, form))
+        {
+            req.timeout = 10;
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("[MULTI SAVE FAILED] " + req.error);
+            }
+            else
+            {
+                Debug.Log("[MULTI SAVE SUCCESS]");
+            }
+        }
     }
 }
 
