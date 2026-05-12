@@ -120,16 +120,13 @@ public class MultiSyncManager : MonoBehaviour
         //Debug.Log("[FETCH] start");
 
         string url =
-      $"{fetchUrl}?room_id={roomId}" +
-      $"&difficulty={ModeManager.CurrentDifficulty}" +
-      $"&player_name={playerName}";
-
+     $"{fetchUrl}?room_id={roomId}&difficulty={ModeManager.CurrentDifficulty}";
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
             req.timeout = 10;
             yield return req.SendWebRequest();
-            //Debug.Log("[FETCH RAW RESPONSE] " + req.downloadHandler.text);
+            Debug.Log("[FETCH RAW RESPONSE] " + req.downloadHandler.text);
 
             if (req.result != UnityWebRequest.Result.Success)
             {
@@ -161,7 +158,7 @@ public class MultiSyncManager : MonoBehaviour
 
     void UpdateRemoteUI(PlayerState[] states)
     {
-        //Debug.Log($"[UpdateRemoteUI] called. states.Count={states.Length}");
+        Debug.Log($"[UpdateRemoteUI] called. states.Count={states.Length}");
         bool enemyFound = false;
 
         foreach (var ps in states)
@@ -193,7 +190,7 @@ public class MultiSyncManager : MonoBehaviour
             modeManager?.OnEnemyLeft();
         }
 
-        //Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
+        Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
     }
 
     /* ======================
@@ -201,29 +198,25 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     void CheckMatchSuccess(PlayerState[] states)
     {
-        //Debug.Log($"[CHECK] myName={playerName}, count={(states == null ? -1 : states.Length)}");
-        //if (states != null)
-        //{
-        //    foreach (var ps in states)
-        //    {
-        //        Debug.Log($"[STATE] {ps.player_name}");
-        //    }
-        //}
-
         if (matched || states == null) return;
 
-        foreach (var ps in states)
+        if (states.Length >= 2)
         {
-            if (ps.player_name != playerName)
+            foreach (var ps in states)
             {
-                matched = true;
-                enemyPreviouslyPresent = true;
-                modeManager?.OnMatchSuccess(ps.player_name);
-                return;
+                if (ps.player_name != playerName)
+                {
+                    matched = true;
+
+                    // ✅ ここを追加
+                    enemyPreviouslyPresent = true;
+
+                    modeManager?.OnMatchSuccess(ps.player_name);
+                    return;
+                }
             }
         }
     }
-
 
     /* ======================
        Join
@@ -249,7 +242,7 @@ public class MultiSyncManager : MonoBehaviour
 
             if (req.result == UnityWebRequest.Result.Success)
             {
-                //Debug.Log("[MultiSync] Joined room");
+                Debug.Log("[MultiSync] Joined room");
             }
             else
             {

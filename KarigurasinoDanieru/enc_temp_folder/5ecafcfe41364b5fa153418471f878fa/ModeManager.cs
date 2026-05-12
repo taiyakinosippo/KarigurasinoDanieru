@@ -20,9 +20,9 @@ public class ModeManager : MonoBehaviour
 
 
     [Header("Multi UI")]
-    [SerializeField] private InputField multiRoomInput; //ルームID
-    [SerializeField] private InputField multiPlayerNameInput;　//プレイヤーネーム
-    [SerializeField] private InputField scoreInputField;　//スコア
+    [SerializeField] private InputField multiRoomInput;
+    [SerializeField] private InputField multiPlayerNameInput;
+    [SerializeField] private InputField scoreInputField;
     [SerializeField] private Button matchingButton;
     [SerializeField] private GameObject matchingButtonObj;
     [SerializeField] private GameObject multiRoomInputField;
@@ -67,11 +67,8 @@ public class ModeManager : MonoBehaviour
         playMode.SetActive(true);
 
         multiRoomInput.text = "";
-        multiRoomInput.characterLimit = 5;
         multiPlayerNameInput.text = "";
-        multiPlayerNameInput.characterLimit = 10;
         scoreInputField.text = "";
-        //scoreInputField.characterLimit = 6;
 
         HideResultTexts();
 

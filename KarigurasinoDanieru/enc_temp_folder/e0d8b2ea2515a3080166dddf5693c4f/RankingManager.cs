@@ -26,9 +26,7 @@ public class RankingInputManager : MonoBehaviour
     public void Start()
     {
         nameInput.text = "";
-        nameInput.characterLimit = 10;
         scoreInput.text = "";
-        //scoreInput.characterLimit = 6;
     }
 
     void Awake()
