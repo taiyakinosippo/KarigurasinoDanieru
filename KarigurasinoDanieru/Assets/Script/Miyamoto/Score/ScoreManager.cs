@@ -8,8 +8,6 @@ using UnityEngine.SocialPlatforms.Impl;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
-    public TextMeshProUGUI score_text;
-    [SerializeField] BackGroundMover backGroundMover;
     [SerializeField]private ScoreCalculation scoreCalculation;
     [field: SerializeField] public float GroundTime { get; private set; } = 5;
     [field: SerializeField] public float SkyTime { get; private set; } = 10;
@@ -20,7 +18,7 @@ public class ScoreManager : MonoBehaviour
     private int timingBarScore = 0;
     private int mashButtonScore = 0;
     private float addScore = 0;
-    private bool isCounting = false;
+ 
   
 
     void Awake()
@@ -30,20 +28,7 @@ public class ScoreManager : MonoBehaviour
         else
             Destroy(gameObject);
     }
-    private void Update()
-    {
-        if (!isCounting) return;
-
-        float score = scoreCalculation.UpdateScore();
-        score_text.text = score.ToString("N2") + "m";
-
-        if (scoreCalculation.IsFinished())
-        {
-            score_text.text = GetScore().ToString("N2") + "m";
-            backGroundMover.ScrollEnd();
-            isCounting = false;
-        }
-    }
+   
 
     public void MashButtonScore(int baseScore)
     {
@@ -75,7 +60,7 @@ public class ScoreManager : MonoBehaviour
     {
         totalScore = GetScore();
         addScore = GetArriveTime(totalScore);
-        isCounting = true;
+        UI_Manager.instance.StartCount();
     }
     public float GetArriveTime(float score)
     {
@@ -88,5 +73,13 @@ public class ScoreManager : MonoBehaviour
             _ =>SpaceTime
         };
     }
+    public float UpdatePresentationScore()
+    {
+        return scoreCalculation.UpdateScore();
+    }
 
+    public bool IsPresentationFinished()
+    {
+        return scoreCalculation.IsFinished();
+    }
 }

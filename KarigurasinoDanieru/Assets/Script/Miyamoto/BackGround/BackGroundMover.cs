@@ -40,9 +40,7 @@ public class BackGroundMover : MonoBehaviour
         }
         else        
         {
-            Debug.Log("Last second reached");
             speed = Mathf.Lerp(speed, scoreCalculation.GetScoreSpeed(), direction);
-            Debug.Log("‰æ‘œ‚ÌƒXƒNƒ[ƒ‹: " + speed);
         }
         float moveAmount = speed * Time.deltaTime;
         foreach (var img in images)
