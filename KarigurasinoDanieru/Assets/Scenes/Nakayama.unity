@@ -401,6 +401,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5198477644789899850, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 299
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198477644789899850, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -110
+      objectReference: {fileID: 0}
+    - target: {fileID: 6174800708017646118, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+      propertyPath: buttonRect
+      value: 
+      objectReference: {fileID: 1401248917}
+    - target: {fileID: 6174800708017646118, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+      propertyPath: isHardMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6174800708017646118, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+      propertyPath: moveTarget
+      value: 
+      objectReference: {fileID: 1401248917}
     - target: {fileID: 6997157088024259114, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
       propertyPath: m_Name
       value: MashButton
@@ -410,6 +430,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+--- !u!224 &1401248917 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5198477644789899850, guid: b82e4d0408434524da19470ecc7ee974, type: 3}
+  m_PrefabInstance: {fileID: 1037332280}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1768554701
 GameObject:
   m_ObjectHideFlags: 0
