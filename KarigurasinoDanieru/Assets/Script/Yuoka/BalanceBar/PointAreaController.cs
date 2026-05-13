@@ -28,7 +28,7 @@ public class PointAreaController : MonoBehaviour
     private Vector2 startPos;      //移動開始位置
     private float moveTimer;       //移動経過時間
     private bool isMoving = false; //移動中かどうか
-    private bool isGameOver = false;
+    private bool isGameOver = true;
     private bool isInside = false;
 
     void Start()
@@ -108,6 +108,11 @@ public class PointAreaController : MonoBehaviour
     {
         float randomY = Random.Range(centerY - moveRange, centerY + moveRange);
         targetPos = new Vector2(area.anchoredPosition.x, randomY);
+    }
+
+    public void StartPointArea()
+    {
+        isGameOver = false;
     }
 
     public void StopPointArea()

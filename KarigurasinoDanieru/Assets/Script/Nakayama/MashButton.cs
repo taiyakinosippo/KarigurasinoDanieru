@@ -18,7 +18,7 @@ public class MashButton : MonoBehaviour
     public float displayTime = 1.0f;//画像を消す秒数
 
     private float timerw;
-    private bool isGameOver = false;//
+    private bool isGameOver = true;//
 
     public AudioSource audioSource;//
     public AudioClip clickSound;//
@@ -72,6 +72,11 @@ public class MashButton : MonoBehaviour
         clickImage.gameObject.SetActive(true);
         yield return new WaitForSeconds(displayTime);
         clickImage.gameObject.SetActive(false);
+    }
+
+    public void StartMashButton()
+    {
+        isGameOver = false;
     }
 
     public void StopMashButton()
