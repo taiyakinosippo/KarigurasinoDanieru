@@ -4974,6 +4974,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9fa05f775489e4297ca2d240b9a73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
+  scoreManager: {fileID: 0}
+  backGroundMover: {fileID: 0}
+  score_text: {fileID: 0}
 --- !u!1 &1807479818
 GameObject:
   m_ObjectHideFlags: 0
