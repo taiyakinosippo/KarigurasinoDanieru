@@ -35,6 +35,8 @@ public class MashButton : MonoBehaviour
     public float maxY = 190f;
 
     private Vector2 startPos;
+    private int clickCount = 0;
+    private float score = 0;
     void Start()
     {
         timerw = fadeDuration;
@@ -59,9 +61,7 @@ public class MashButton : MonoBehaviour
 
             float alpha = timerw / fadeDuration;
 
-            //targetImage.color = new Color(1, 1, 1, alpha);
-
-            // StartCoroutine(RandomMoveRoutine());
+            //StartCoroutine(RandomMoveRoutine());
 
         }
 
@@ -73,13 +73,13 @@ public class MashButton : MonoBehaviour
                 buttonRect,
                 mousePos,
                 null))
-            //clickCount++;
-            //score = clickCount * baseScore;
             {
+                clickCount++;
+                score = clickCount * baseScore;
                 PlaySound();
                 ShowImage();
             }
-            // ScoreManager.instance.MashButtonScore(baseScore);
+            ScoreManager.instance.MashButtonScore(baseScore);
         }
     }
 
