@@ -8,8 +8,7 @@ public class MultiSyncManager : MonoBehaviour
     private string updateUrl;
     private string fetchUrl;
     private string joinUrl;
-    private string saveMultiScoreUrl;
-
+   
     [Header("Player Info")]
     public string playerName;
     public int currentScore;
@@ -38,8 +37,7 @@ public class MultiSyncManager : MonoBehaviour
         updateUrl = ServerConfig.BaseUrl + "mp_update.php";
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";
-        saveMultiScoreUrl = ServerConfig.BaseUrl + "save_multi_score.php";
-
+       
         modeManager = FindObjectOfType<ModeManager>();
     }
 
@@ -310,34 +308,7 @@ public class MultiSyncManager : MonoBehaviour
         lastEnemyScore = -1;
     }
 
-    public void SaveMultiResult()
-    {
-        if (!ModeManager.IsMultiMode) return;
-        StartCoroutine(SaveMultiResultCoroutine());
-    }
-
-    IEnumerator SaveMultiResultCoroutine()
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("name", playerName);
-        form.AddField("score", matchState.MyScore);
-        form.AddField("mode", ModeManager.CurrentDifficulty.ToString().ToLower());
-
-        using (UnityWebRequest req = UnityWebRequest.Post(saveMultiScoreUrl, form))
-        {
-            req.timeout = 10;
-            yield return req.SendWebRequest();
-
-            if (req.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("[MULTI SAVE FAILED] " + req.error);
-            }
-            else
-            {
-                Debug.Log("[MULTI SAVE SUCCESS]");
-            }
-        }
-    }
+   
 
     public void SendScoreIfHigher(int currentTotalScore)
     {

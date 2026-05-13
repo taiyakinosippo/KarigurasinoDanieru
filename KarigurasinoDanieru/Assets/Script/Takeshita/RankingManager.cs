@@ -211,4 +211,24 @@ public class RankingInputManager : MonoBehaviour
 
         Debug.Log("[RANKING] Score sent during play");
     }
+
+    public void SendScore(string name, int score, string mode)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            Debug.LogWarning("[RANKING] name is empty");
+            return;
+        }
+
+        Debug.Log($"[RANKING SEND] {name} score={score} mode={mode}");
+
+        // ✅ ローカル演出
+        localRanking?.AddOrUpdateScore(name, score, mode);
+
+        // ✅ DB送信（既存の ScoreSender を使う）
+        scoreSender.SendScore(name, score, mode);
+
+        // ✅ 結果表示
+        ShowMyRankingResult(name, mode);
+    }
 }

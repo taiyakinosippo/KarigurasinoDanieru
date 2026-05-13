@@ -228,20 +228,16 @@ public class ModeManager : MonoBehaviour
     public void InputBack()
     {
 
-        // ★ マルチ終了時にランキング保存
+        // マルチの場合、勝者のみ保存（任意）
         if (IsMultiMode)
         {
-            Debug.Log("aaa");
-            // 勝者のみランキング登録（推奨）
-            if (matchState.MyScore > matchState.EnemyScore)
-            {
-                Debug.Log("[MULTI END] I am winner. Save ranking.");
-                multiSync.SaveMultiResult();  // ← これが超重要
-            }
-            else
-            {
-                Debug.Log("[MULTI END] Not winner. Skip ranking.");
-            }
+            SaveUnifiedScore();
+        }
+
+        // シングルの場合
+        if (!IsMultiMode)
+        {
+            SaveUnifiedScore();
         }
 
         IsMultiMode = false;
@@ -463,5 +459,14 @@ public class ModeManager : MonoBehaviour
             CurrentDifficulty == SoloDifficulty.Normal
             ? "DIFFICULTY : NORMAL"
             : "DIFFICULTY : HARD";
+    }
+
+    void SaveUnifiedScore()
+    {
+        rankingInputManager.SendScore(
+            matchState.MyName,
+            matchState.MyScore,
+            CurrentDifficulty.ToString().ToLower()
+        );
     }
 }
