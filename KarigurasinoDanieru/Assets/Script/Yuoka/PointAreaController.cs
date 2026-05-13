@@ -1,5 +1,6 @@
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PointAreaController : MonoBehaviour
 {
@@ -11,10 +12,14 @@ public class PointAreaController : MonoBehaviour
 
     [Header("難易度設定")]
     [SerializeField] private GameLevel gameLevel = GameLevel.Normal; //難易度切替
-
     public float nomalMoveInterval = 2f;   //通常時の移動間隔
-    public float hardMoveInterval  = 0.5f; //ハードモード時の移動間隔
+    public float hardMoveInterval = 0.5f; //ハードモード時の移動間隔
     private float currentInterval;
+
+    [Header("透明度設定")]
+    public Image areaImage;
+    public float activeAlpha = 1.0f;
+    public float inactiveAlpha = 0.3f;
 
     private float centerY; //初期位置
     private float timer;   //移動タイミング管理用
@@ -24,6 +29,7 @@ public class PointAreaController : MonoBehaviour
     private float moveTimer;       //移動経過時間
     private bool isMoving = false; //移動中かどうか
     private bool isGameOver = false;
+    private bool isInside = false;
 
     void Start()
     {
@@ -41,7 +47,6 @@ public class PointAreaController : MonoBehaviour
         else
         {
             currentInterval = hardMoveInterval;
-
         }
     }
 
@@ -49,8 +54,17 @@ public class PointAreaController : MonoBehaviour
     {
         if (isGameOver) return;
 
-        timer += Time.deltaTime;
+        //透明度の更新
+        if (areaImage != null)
+        {
+            float targetAlpha = isInside ? activeAlpha : inactiveAlpha;
+            Color c = areaImage.color;
 
+            c.a = targetAlpha;
+            areaImage.color = c;
+        }
+
+        timer += Time.deltaTime;
         
         //一定時間ごとに移動開始
         if (timer >= currentInterval)
@@ -73,6 +87,11 @@ public class PointAreaController : MonoBehaviour
                 isMoving = false;
             }
         }
+    }
+
+    public void SetHighlight(bool state)
+    {
+        isInside = state;
     }
 
     //移動開始処理

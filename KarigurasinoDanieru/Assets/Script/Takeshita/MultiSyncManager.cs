@@ -60,7 +60,6 @@ public class MultiSyncManager : MonoBehaviour
         lastEnemyScore = -1; 
 
         SendState();
-        InvokeRepeating(nameof(SendState), 0.5f, 0.5f);
         InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
 
@@ -77,12 +76,14 @@ public class MultiSyncManager : MonoBehaviour
    
     IEnumerator SendStateCoroutine()
     {
+       
         isSending = true;
 
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
         form.AddField("score", currentScore);
+        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(updateUrl, form))
         {
@@ -155,18 +156,17 @@ public class MultiSyncManager : MonoBehaviour
                 continue;
 
             enemyFound = true;
-
-            Debug.Log("ENEMY FOUND");   // ← 追加
             enemyPreviouslyPresent = true;
 
+            // ✅ MatchState 更新
             matchState.SetEnemy(ps.player_name, ps.score);
-        }
 
-        Debug.Log($"enemyFound={enemyFound}, enemyPreviouslyPresent={enemyPreviouslyPresent}");
+            // ✅ ★ここが必須：UI側へ通知
+            modeManager?.OnEnemyScoreUpdated(ps.player_name, ps.score);
+        }
 
         if (!enemyFound && enemyPreviouslyPresent)
         {
-            Debug.Log("aaa");
             enemyPreviouslyPresent = false;
             modeManager?.OnEnemyLeft();
         }
@@ -212,6 +212,7 @@ public class MultiSyncManager : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
+        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(joinUrl, form))
         {
@@ -248,15 +249,24 @@ public class MultiSyncManager : MonoBehaviour
     // =====================
     // 手動スコア送信（ボタン用）
     // =====================
-
     public void SendScoreManually()
     {
         if (!ModeManager.IsMultiMode) return;
+        if (isSending) return;
+
+        // ✅ MatchState を読むだけ
+        currentScore = matchState.MyScore;
+
+        Debug.Log(
+            $"[MULTI SEND] name={matchState.MyName}, score={currentScore}"
+        );
+
         StartCoroutine(SendScoreManuallyCoroutine());
     }
 
     IEnumerator SendScoreManuallyCoroutine()
     {
+        
         yield return StartCoroutine(SendStateCoroutine());
         OnScoreSent?.Invoke(); // ✅ 通信後
     }

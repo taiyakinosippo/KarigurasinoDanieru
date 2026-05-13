@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public PointAreaController pointArea;
     public Timing_Bar_Logic timingBar;
     public MashButton mashButton;
+    [SerializeField] private ScoreCalculation scoreCalculation;
 
     public GameMode currentMode;
     public GameLevel currentLevel;
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
     private bool isGameOver = false;
     public void Awake()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
         if (instance == null)
         {
             instance = this;
@@ -27,7 +30,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     /// <summary>
     /// ゲームモード選択のメソッド。引数でソロかマルチかを受け取る。
     /// </summary>
@@ -80,7 +82,8 @@ public class GameManager : MonoBehaviour
         {
             pointArea.StopPointArea();
         }
-
+        float finalScore = ScoreManager.instance.GetScore();
+        scoreCalculation.StartScore(finalScore);
         ScoreManager.instance.StartFinalScorePresentation();
     }
 
