@@ -37,7 +37,7 @@ public class Timer : MonoBehaviour
     //外部からタイマーを動かしたり止めたりするメソッド
     public void SetTimerRunning(bool state)
     {
-        isRunning = state; 
+        isRunning = state;
     }
 }
 

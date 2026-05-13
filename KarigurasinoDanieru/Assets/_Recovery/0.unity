@@ -910,8 +910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de1bc485f6dc3f41a4cf9896aa4690c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PalyerJump
-  basejumpForce: 2
-  jumpForceIncreaseRate: 0.01
+  basejumpForce: 20
 --- !u!1 &1020672934
 GameObject:
   m_ObjectHideFlags: 0
@@ -2343,29 +2342,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e3627b06e74cb449e346c3561f642c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timeing_Bar_Logic
-  gameLevel: 1
-  duration: 1
+  speed: 500
   maxwindth: 400
-  reset_time: 0.3
-  slowdown_start: 0.3
-  slowdown_end: 0.7
-  slowdown_factor: 0.5
-  first_goodline_min: 0.1
-  first_goodline_max: 0.3
-  last_goodline_min: 0.7
-  last_goodline_max: 0.9
-  first_greatline_min: 0.3
-  first_greatline_max: 0.45
-  last_greatline_min: 0.55
-  last_greatline_max: 0.7
-  first_perfectline: 0.45
-  last_perfectline: 0.55
+  first_goodline_min: 10
+  first_goodline_max: 30
+  last_goodline_min: 70
+  last_goodline_max: 90
+  first_greatline_min: 30
+  first_greatline_max: 45
+  last_greatline_min: 55
+  last_greatline_max: 70
+  first_perfectline: 45
+  last_perfectline: 55
   miss_score: 0
   good_score: 100
   great_score: 200
   perfect_score: 300
+  judge: 0
   barView: {fileID: 1311908860}
   barText: {fileID: 1807235474}
+  reset_time: 0.3
 --- !u!114 &1807235474
 MonoBehaviour:
   m_ObjectHideFlags: 0

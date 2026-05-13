@@ -27,15 +27,15 @@ RectTransform:
   m_GameObject: {fileID: 2136970485954920458}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.72599006, y: 0.72599006, z: 0.72599006}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1175444194710722853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 60, y: 0}
-  m_SizeDelta: {x: 80, y: 80}
+  m_AnchoredPosition: {x: 70, y: -17}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8872066702998581457
 CanvasRenderer:
@@ -197,7 +197,6 @@ MonoBehaviour:
   bar: {fileID: 6202626955859949759}
   pointArea: {fileID: 3482231408312761496}
   MeterImage: {fileID: 1024387791987970645}
-  pointAreaController: {fileID: 3014591360129146886}
   minSpeed: 50
   maxSpeed: 700
   acceleration: 600
@@ -227,9 +226,6 @@ MonoBehaviour:
   gameLevel: 0
   nomalMoveInterval: 2
   hardMoveInterval: 0.5
-  areaImage: {fileID: 6182592726513178894}
-  activeAlpha: 0.8
-  inactiveAlpha: 1
 --- !u!1 &5208548410837714721
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,15 +328,15 @@ RectTransform:
   m_GameObject: {fileID: 8281482927384056300}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.72599006, y: 0.14519799, z: 0.72599006}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1175444194710722853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 60, y: 0}
-  m_SizeDelta: {x: 80, y: 20}
+  m_AnchoredPosition: {x: 70, y: -17}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7340586269883666996
 CanvasRenderer:

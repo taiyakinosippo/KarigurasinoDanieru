@@ -29,8 +29,6 @@ public class MultiSyncManager : MonoBehaviour
     public int opponentScore = 0;
     private int lastEnemyScore = -1;
 
-    private bool enemyPreviouslyPresent = false;
-
     void Awake()
     {
         updateUrl = ServerConfig.BaseUrl + "mp_update.php";
@@ -57,7 +55,7 @@ public class MultiSyncManager : MonoBehaviour
         playerName = ModeManager.MultiPlayerName;
 
         matched = false;
-        lastEnemyScore = -1; 
+        lastEnemyScore = -1; // ✅ ★追加（超重要）
 
         SendState();
         InvokeRepeating(nameof(SendState), 0.5f, 0.5f);
@@ -145,30 +143,25 @@ public class MultiSyncManager : MonoBehaviour
         isFetching = false;
     }
 
+    /* ======================
+       UI更新（仮）
+    ====================== */
     void UpdateRemoteUI(PlayerState[] states)
     {
-        bool enemyFound = false;
+        if (states == null) return;
 
         foreach (var ps in states)
         {
             if (ps.player_name == playerName)
                 continue;
 
-            enemyFound = true;
+            if (ps.score != lastEnemyScore)
+            {
+                lastEnemyScore = ps.score;
 
-            Debug.Log("ENEMY FOUND");   // ← 追加
-            enemyPreviouslyPresent = true;
-
-            matchState.SetEnemy(ps.player_name, ps.score);
-        }
-
-        Debug.Log($"enemyFound={enemyFound}, enemyPreviouslyPresent={enemyPreviouslyPresent}");
-
-        if (!enemyFound && enemyPreviouslyPresent)
-        {
-            Debug.Log("aaa");
-            enemyPreviouslyPresent = false;
-            modeManager?.OnEnemyLeft();
+                // ✅ 一時状態に保存するだけ
+                matchState.SetEnemy(ps.player_name, ps.score);
+            }
         }
     }
 
@@ -187,9 +180,7 @@ public class MultiSyncManager : MonoBehaviour
                 {
                     matched = true;
 
-                    // ✅ ここを追加
-                    enemyPreviouslyPresent = true;
-
+                    matchState.SetEnemy(ps.player_name, ps.score);
                     modeManager?.OnMatchSuccess(ps.player_name);
                     return;
                 }

@@ -800,11 +800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab79892437ac01448461cd8ef39cafa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  balanceBar: {fileID: 0}
-  pointArea: {fileID: 0}
-  timingBar: {fileID: 0}
-  mashButton: {fileID: 0}
-  scoreCalculation: {fileID: 0}
   currentMode: 0
   currentLevel: 0
 --- !u!4 &395884066
@@ -3518,7 +3513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9678cedc81c19ee41829ce3acf18fd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Scene_Changer
-  sceneName: Main
+  sceneName: Miyamoto
   highlightColor: {r: 1.2, g: 1.2, b: 1.2, a: 1}
   fade: {fileID: 779262766}
 --- !u!1 &1465079704
@@ -4974,9 +4969,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9fa05f775489e4297ca2d240b9a73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
-  scoreManager: {fileID: 0}
-  backGroundMover: {fileID: 0}
-  score_text: {fileID: 0}
 --- !u!1 &1807479818
 GameObject:
   m_ObjectHideFlags: 0

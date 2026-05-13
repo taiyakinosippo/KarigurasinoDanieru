@@ -1,14 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 public class BalanceBarController : MonoBehaviour
 {
     public RectTransform bar;       //バー本体
     public RectTransform pointArea; //標的
     public Image MeterImage;        //メーターUI
-    public PointAreaController pointAreaController;
+
     [Header("速度設定")]
     public float minSpeed = 10f;    //最低速度
     public float maxSpeed = 100f;   //最高速度
@@ -103,15 +102,8 @@ public class BalanceBarController : MonoBehaviour
     //メーターの更新処理
     void UpdateMeter()
     {
-        bool isInArea = IsInPointArea();
-
-        if (pointAreaController != null)
-        {
-            pointAreaController.SetHighlight(isInArea);
-        }
-
         //エリア内の場合は増加
-        if (isInArea)
+        if (IsInPointArea())
         {
             meter += increaseSpeed * Time.deltaTime;
         }
@@ -134,24 +126,15 @@ public class BalanceBarController : MonoBehaviour
     //バーがエリア内にあるか判定
     bool IsInPointArea()
     {
-        //バーの矩形
-        Rect barRect = new Rect(
-            bar.anchoredPosition.x - bar.rect.width / 2f,
-            bar.anchoredPosition.y - bar.rect.height/2f,
-            bar.rect.width,
-            bar.rect.height
-        );
+        //バーとエリアのY座標
+        float barY = bar.anchoredPosition.y;
+        float areaY = pointArea.anchoredPosition.y;
 
-        //標的の矩形
-        Rect areaRect = new Rect(
-            pointArea.anchoredPosition.x-pointArea.rect.width/2f,
-            pointArea.anchoredPosition.y-pointArea.rect.height/2,
-            pointArea.rect.width,
-            pointArea.rect.height
-        );
+        //エリアの半分の高さ
+        float areaHalfHeight = pointArea.sizeDelta.y / 2f;
 
-        //少しでも重なっていたらtrue
-        return barRect.Overlaps(areaRect);
+        //距離が半分以内ならtrue
+        return Mathf.Abs(barY - areaY) <= areaHalfHeight;
     }
 
     //外部から止めるためのメソッド

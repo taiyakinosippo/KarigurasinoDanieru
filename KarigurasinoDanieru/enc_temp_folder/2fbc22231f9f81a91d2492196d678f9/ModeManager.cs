@@ -24,7 +24,6 @@ public class ModeManager : MonoBehaviour
     [SerializeField] private Text modeText;
     [SerializeField] private Text resultPlayerText;
     [SerializeField] private Text resultEnemyText;
-    [SerializeField] private Text resultStatsText;
 
     [Header("Managers")]
     [SerializeField] private MultiSyncManager multiSync;
@@ -97,10 +96,6 @@ public class ModeManager : MonoBehaviour
         gamePlay_Multi.SetActive(false);
         gamePlay_Single.SetActive(true);
 
-        multiRoomInput.text = "";
-        multiPlayerNameInput.text = "";
-        scoreInputField.text = "";
-
         UpdateModeText();
     }
 
@@ -120,10 +115,6 @@ public class ModeManager : MonoBehaviour
         matchingButtonObj.SetActive(true);
         multiRoomInputField.SetActive(true);
         multiNameInputField.SetActive(true);
-
-        multiRoomInput.text = "";
-        multiPlayerNameInput.text = "";
-        scoreInputField.text = "";
 
         HideResultTexts();
 
@@ -196,6 +187,20 @@ public class ModeManager : MonoBehaviour
     }
 
 
+    private void ShowMultiResult(string myName, int myScore, string enemyName, int enemyScore)
+    {
+        resultPlayerText.text =
+            $"{myName}\nScore : {myScore}";
+
+        resultEnemyText.text =
+            string.IsNullOrEmpty(enemyName)
+                ? "Waiting...\nScore : -"
+                : $"{enemyName}\nScore : {enemyScore}";
+
+        resultPlayerText.gameObject.SetActive(true);
+        resultEnemyText.gameObject.SetActive(true);
+    }
+
     private void HideResultTexts()
     {
         resultPlayerText.gameObject.SetActive(false);
@@ -212,6 +217,9 @@ public class ModeManager : MonoBehaviour
         MultiPlayerName = "";
         matchHandled = false;
 
+        if (multiSync != null)
+            multiSync.StopMultiSync(); // ✅ 通信だけ止める
+
         playMode.SetActive(true);
         matching.SetActive(false);
         gamePlay_Single.SetActive(false);
@@ -219,10 +227,6 @@ public class ModeManager : MonoBehaviour
 
         HideResultTexts();
         UpdateModeText();
-
-        if (multiSync != null)
-            multiSync.StopMultiSync();
-
     }
 
 
@@ -232,6 +236,28 @@ public class ModeManager : MonoBehaviour
             $"MODE: {(IsMultiMode ? "MULTI" : "SINGLE")}\n" +
             $"ROOM: {(string.IsNullOrEmpty(CurrentRoomId) ? "-" : CurrentRoomId)}\n" +
             $"NAME: {(IsMultiMode ? MultiPlayerName : "-")}";
+    }
+
+    private void UpdateEnemyResult(
+    string enemyName,
+    int enemyScore,
+    string myName,
+    int myScore
+)
+    {
+        if (resultEnemyText == null || resultPlayerText == null)
+            return;
+
+        // 自分はそのまま（変更しない）
+        resultPlayerText.text =
+            $"{myName}\nScore : {myScore}";
+
+        // ✅ 相手だけリアルタイム更新
+        resultEnemyText.text =
+            $"{enemyName}\nScore : {enemyScore}";
+
+        resultPlayerText.gameObject.SetActive(true);
+        resultEnemyText.gameObject.SetActive(true);
     }
 
     public void OnEnemyScoreUpdated(string enemyName, int enemyScore)
@@ -257,41 +283,7 @@ public class ModeManager : MonoBehaviour
                 ? "Waiting...\nScore : -"
                 : $"{matchState.EnemyName}\nScore : {matchState.EnemyScore}";
 
-        UpdateLeadStatusText();
-
         resultPlayerText.gameObject.SetActive(true);
         resultEnemyText.gameObject.SetActive(true);
-    }
-
-    public void OnEnemyLeft()
-    {
-        if (!IsMultiMode) return;
-
-        matchStatusText.gameObject.SetActive(true);
-        matchStatusText.text = "相手が退出しました";
-
-        resultEnemyText.text = "Enemy Left";
-    }
-
-    private void UpdateLeadStatusText()
-    {
-        if (string.IsNullOrEmpty(matchState.EnemyName))
-        {
-            resultStatsText.text = "Waiting for opponent...";
-            return;
-        }
-
-        if (matchState.MyScore > matchState.EnemyScore)
-        {
-            resultStatsText.text = "YOU ARE WINNING!";
-        }
-        else if (matchState.MyScore < matchState.EnemyScore)
-        {
-            resultStatsText.text = "ENEMY IS WINNING!";
-        }
-        else
-        {
-            resultStatsText.text = "TIE";
-        }
     }
 }

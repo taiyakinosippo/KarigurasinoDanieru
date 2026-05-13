@@ -9,6 +9,9 @@ public class Timing_Bar_Logic : MonoBehaviour
     [SerializeField] private float duration = 1f;                     // タイミングバーが移動する時間（秒）
     [SerializeField] private float maxwindth = 400f;                  // タイミングバーの最大幅
     [SerializeField] private float reset_time = 1f;                   //リセットするまでの時間
+    [SerializeField] private float slowdown_start = 0.4f;             //スローダウンが始まる位置
+    [SerializeField] private float slowdown_end = 0.6f;               //スローダウンが終わる位置
+    [SerializeField] private float slowdown_factor = 0.5f;            //スローダウンの速度の割合
     [Header("判定ライン設定")]
     [SerializeField] private float first_goodline_min = 0.1f;           //最初のグッドラインの最小値
     [SerializeField] private float first_goodline_max = 0.3f;           //最初のグッドラインの最大値
@@ -41,6 +44,7 @@ public class Timing_Bar_Logic : MonoBehaviour
         if (gameLevel == GameLevel.Hard)
         {
             duration *= 0.5f; 
+            slowdown_factor *= 2f;
             miss_score = (int)(miss_score * 0.5f);          
             good_score = (int)(good_score * 0.5f);                   
             great_score = (int)(great_score * 0.5f);                  
@@ -49,7 +53,7 @@ public class Timing_Bar_Logic : MonoBehaviour
         }
 
         timingBarSystem = new Timing_Bar_System(
-        duration,
+        duration, slowdown_factor, slowdown_start, slowdown_end,
         first_goodline_min, first_goodline_max, last_goodline_min, last_goodline_max,
         first_greatline_min, first_greatline_max, last_greatline_min, last_greatline_max,
         first_perfectline, last_perfectline);
