@@ -327,7 +327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: -100}
+  m_AnchoredPosition: {x: 299, y: -110}
   m_SizeDelta: {x: 113.5162, y: 49.9799}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2393803590164161403
@@ -578,13 +578,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickCounter
   baseScore: 10
-  isHardMode: 0
+  isHardMode: 1
   targetImage: {fileID: 4655664908779983994}
   fadeDuration: 5
+  buttonRect: {fileID: 5198477644789899850}
   clickImage: {fileID: 5924876353706721239}
   displayTime: 0.26
   audioSource: {fileID: 1802666124001554306}
   clickSound: {fileID: 8300000, guid: cb71a2fb8cc21dc4084ea6768acdab6c, type: 3}
+  moveTarget: {fileID: 5198477644789899850}
+  moveInterval: 2
+  moveDuration: 0.5
+  minY: -190
+  maxY: 190
 --- !u!222 &8987158537001982445
 CanvasRenderer:
   m_ObjectHideFlags: 0
