@@ -11,7 +11,6 @@ public class LocalRankingManager : MonoBehaviour
         public int score;
     }
 
-    public Text rankText;
 
     List<ScoreData> scoreList = new List<ScoreData>();
 
@@ -60,21 +59,7 @@ public class LocalRankingManager : MonoBehaviour
             }
         }
 
-        // 表示テキスト構築
-        if (rank > 0 && rank <= 10)
-        {
-            rankText.text =
-                $"{mode.ToUpper()} MODE\n" +
-                $"{playerName}\n" +
-                $"No.{rank}\n" +
-                "Rankin!";
-        }
-        else
-        {
-            rankText.text =
-                $"{mode.ToUpper()} MODE\n" +
-                $"{playerName}\n" +
-                "Out of ranking...";
-        }
+       
+        
     }
 }

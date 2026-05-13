@@ -23,7 +23,7 @@ public class MultiSyncManager : MonoBehaviour
     private bool isSending;
 
     [SerializeField] private MatchState matchState;
-    [SerializeField] private ModeManager modeManager;
+    [SerializeField] private MainModeManager MainmodeManager;
 
     public string opponentName = "";
     public int opponentScore = 0;
@@ -38,7 +38,7 @@ public class MultiSyncManager : MonoBehaviour
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";
        
-        modeManager = FindObjectOfType<ModeManager>();
+        MainmodeManager = FindObjectOfType<MainModeManager>();
     }
 
     void Start()
@@ -180,8 +180,7 @@ public class MultiSyncManager : MonoBehaviour
             // ✅ MatchState 更新（正本）
             matchState.SetEnemy(ps.player_name, ps.score);
 
-            // ✅ UIへ通知
-            modeManager?.OnEnemyScoreUpdated(ps.player_name, ps.score);
+         
         }
 
         if (!enemyFound && enemyPreviouslyPresent)
@@ -191,7 +190,6 @@ public class MultiSyncManager : MonoBehaviour
             opponentName = "";
             opponentScore = 0;
 
-            modeManager?.OnEnemyLeft();
         }
 
         //Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
@@ -219,7 +217,7 @@ public class MultiSyncManager : MonoBehaviour
             {
                 matched = true;
                 enemyPreviouslyPresent = true;
-                modeManager?.OnMatchSuccess(ps.player_name);
+                MainmodeManager?.OnMatchSuccess();
                 return;
             }
         }
