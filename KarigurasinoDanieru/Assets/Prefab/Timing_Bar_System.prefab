@@ -306,9 +306,9 @@ MonoBehaviour:
   first_perfectline: 0.45
   last_perfectline: 0.55
   miss_score: 0
-  good_score: 100
-  great_score: 200
-  perfect_score: 300
+  good_score: 20
+  great_score: 40
+  perfect_score: 60
   barView: {fileID: 8331242313726611252}
   barText: {fileID: 2412644170430871885}
 --- !u!114 &2412644170430871885
