@@ -219,9 +219,6 @@ MonoBehaviour:
   duration: 1
   maxwindth: 400
   reset_time: 0.3
-  slowdown_start: 0.3
-  slowdown_end: 0.7
-  slowdown_factor: 0.5
   first_goodline_min: 0.1
   first_goodline_max: 0.3
   last_goodline_min: 0.7
@@ -233,9 +230,9 @@ MonoBehaviour:
   first_perfectline: 0.45
   last_perfectline: 0.55
   miss_score: 0
-  good_score: 100
-  great_score: 200
-  perfect_score: 300
+  good_score: 20
+  great_score: 40
+  perfect_score: 60
   barView: {fileID: 8331242313726611252}
   barText: {fileID: 2412644170430871885}
 --- !u!114 &2412644170430871885
@@ -251,7 +248,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bar_Text
   judge_text: {fileID: 9098429401916511109}
-  score_text: {fileID: 0}
   timing_bar_Logic: {fileID: 2558579409220247588}
 --- !u!1 &3089383401462994875
 GameObject:

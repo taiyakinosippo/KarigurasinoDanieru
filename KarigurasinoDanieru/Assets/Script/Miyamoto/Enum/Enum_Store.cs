@@ -30,4 +30,40 @@ public enum SEType
     greatSE,
     perfectSE
 }
-//
+//背景のステージを定義する列挙型
+public enum StageGroup
+{
+    Ground,
+    Sky,
+    UpperSky,
+    Atmosphere,
+    AtmoToSpace,
+    Space
+}
+
+//背景のステージのビジュアルを定義する列挙型
+public enum StageType
+{
+    Ground_A,  
+    Sky_A,
+    Sky_B,
+    Sky_C,
+    UpperSky_A, 
+    Atmosphere_A, 
+    Atmosphere_B, 
+    Atmosphere_C, 
+    AtmoToSpace_A, 
+    Space_A, 
+    Space_B, 
+    Space_C
+}
+
+//ゲームの結果を定義する列挙型
+public enum FlightState
+{
+    Miss,
+    Ground,
+    Sky,
+    Atmosphere,
+    Space
+}
