@@ -31,7 +31,7 @@ public class BalanceBarController : MonoBehaviour
 
     private float centerY;            //初期位置
     private bool isFirstFrame = true; //初回だけの処理
-    private bool isGameOver = false;
+    private bool isGameOver = true;
 
     void Start()
     {
@@ -152,6 +152,11 @@ public class BalanceBarController : MonoBehaviour
 
         //少しでも重なっていたらtrue
         return barRect.Overlaps(areaRect);
+    }
+
+    public void StartBar()
+    {
+        isGameOver = false;
     }
 
     //外部から止めるためのメソッド

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Fade_Out : MonoBehaviour
 {
     [SerializeField] Fade fade;
-    [SerializeField] Timer timer;
+    [SerializeField] InGameTimer timer;
     public void Start()
     {
         if (timer != null)
@@ -15,7 +15,7 @@ public class Fade_Out : MonoBehaviour
         {
             if (timer != null)
             {
-                timer.SetTimerRunning(true);
+                //timer.SetTimerRunning(true);
             }
         });
     }
