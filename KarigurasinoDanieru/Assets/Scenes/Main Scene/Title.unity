@@ -5245,7 +5245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainModeManager
   roomIdInputFieldObj: {fileID: 1458171780}
-  goButton: {fileID: 0}
+  goButton: {fileID: 1438211350}
   roomIdInputField: {fileID: 1458171782}
   multiSync: {fileID: 1663138957}
   matchState: {fileID: 1663138956}
