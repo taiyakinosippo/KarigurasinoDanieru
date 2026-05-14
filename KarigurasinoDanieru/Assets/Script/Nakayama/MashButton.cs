@@ -21,6 +21,9 @@ public class MashButton : MonoBehaviour
     public AudioSource audioSource;//
     public AudioClip clickSound;//
 
+    public int clickCount = 0;//クリック数
+    public int score = 0;//スコア
+
     // ===================
     // ランダム移動用
     // ===================
@@ -35,8 +38,6 @@ public class MashButton : MonoBehaviour
     public float maxY = 190f;
 
     private Vector2 startPos;
-    private int clickCount = 0;
-    private float score = 0;
     void Start()
     {
         timerw = fadeDuration;
@@ -52,7 +53,7 @@ public class MashButton : MonoBehaviour
     }
     void Update()
     {
-        if (isGameOver) return;
+        if (!isGameOver) return;
 
         if (isHardMode)
         {
@@ -61,7 +62,9 @@ public class MashButton : MonoBehaviour
 
             float alpha = timerw / fadeDuration;
 
-            //StartCoroutine(RandomMoveRoutine());
+            //targetImage.color = new Color(1, 1, 1, alpha);
+
+            // StartCoroutine(RandomMoveRoutine());
 
         }
 
@@ -78,8 +81,10 @@ public class MashButton : MonoBehaviour
                 score = clickCount * baseScore;
                 PlaySound();
                 ShowImage();
+
+                
             }
-            ScoreManager.instance.MashButtonScore(baseScore);
+            ScoreManager.instance.MashButtonScore(score);
         }
     }
 
@@ -112,6 +117,9 @@ public class MashButton : MonoBehaviour
 
     IEnumerator RandomMoveRoutine()
     {
+        // ゲーム開始まで待機
+        yield return new WaitUntil(() => !isGameOver);
+
         while (!isGameOver)
         {
             yield return new WaitForSeconds(moveInterval);
