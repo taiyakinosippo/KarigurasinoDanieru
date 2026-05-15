@@ -53,6 +53,11 @@ public class ScoreController : MonoBehaviour
         currentScore = 0;
         TargetScore = targetScore;
         FlightState newState = stageManager.GetFlightState(targetScore);
+        if (currentSettings == null)
+        {
+            Debug.Log("Settings ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+            return;
+        }
         isPlaying = true;
         currentSettings = GetSettings(newState);
         ChangeState(new StartSpeedState());

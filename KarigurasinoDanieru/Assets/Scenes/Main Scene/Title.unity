@@ -914,11 +914,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab79892437ac01448461cd8ef39cafa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  uiModeManager: {fileID: 0}
   balanceBar: {fileID: 0}
   pointArea: {fileID: 0}
   timingBar: {fileID: 0}
   mashButton: {fileID: 0}
-  scoreCalculation: {fileID: 0}
   currentMode: 0
   currentLevel: 0
 --- !u!4 &395884066
@@ -4344,7 +4344,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aada2e940a3222948bd73ecc0f4f678b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioSourceManager
-  seList: []
+  seList:
+  - seType: 1
+    audioClip: {fileID: 8300000, guid: cb71a2fb8cc21dc4084ea6768acdab6c, type: 3}
 --- !u!1 &1510146802
 GameObject:
   m_ObjectHideFlags: 0
@@ -5555,7 +5557,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -5031945380614327119, guid: 9d2ef76bfbb64fe4c96babd786ba346a, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 2f3df4e1d9a7a8b4d9cf777078c130a7, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -5780,8 +5782,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
   scoreManager: {fileID: 0}
-  backGroundMover: {fileID: 0}
-  score_text: {fileID: 0}
+  scoreController: {fileID: 0}
+  scoreText: {fileID: 0}
 --- !u!1 &1807479818
 GameObject:
   m_ObjectHideFlags: 0
