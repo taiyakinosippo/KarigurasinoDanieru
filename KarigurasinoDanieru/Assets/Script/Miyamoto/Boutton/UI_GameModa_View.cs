@@ -29,7 +29,9 @@ public class UI_GameModa_View : MonoBehaviour, IPointerClickHandler, IPointerDow
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("Button clicked");
         GameManager.instance.GameModeSelect(gameMode);
+        Debug.Log("Button clicked1");
         AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         switch (action)
         {
