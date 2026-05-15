@@ -8,14 +8,6 @@ public class MissBehavior : FlightBehavior
     }
 }
 
-public class GroundBehavior : FlightBehavior
-{
-    public void Execute(GameObject rocket)
-    {
-        Debug.Log("‰½‚µ‚Ä‚Ë‚ñ");
-    }
-}
-
 public class SkyBehavior : FlightBehavior
 {
     public void Execute(GameObject rocket)

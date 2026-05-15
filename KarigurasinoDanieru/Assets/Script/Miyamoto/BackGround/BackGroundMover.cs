@@ -3,91 +3,168 @@ using UnityEngine;
 using UnityEngine.UI;
 public class BackGroundMover : MonoBehaviour
 {
-    [SerializeField] private RectTransform[] images;     //配置する画像
-    [SerializeField] private StageManager stageManager;  //ステージの情報を保持している
-    [SerializeField] private ScoreManager scoreManger;   //スコアの情報を保持している
-    [SerializeField] private ScoreCalculation scoreCalculation;
-    [SerializeField] private float direction = 0.01f;    //画像の減速率
-    private float speed = 0;　　　　　　　　　　　　　　 //飛ぶスピードを格納する変数
-    private float height = 540f;                         //画像の高さ
-    private bool backGround = false;　　　　　　　　　　 //背景を動かすかどうか
+    [SerializeField]private ScoreController scoreController;
+    [SerializeField]private StageManager stageManager;
+    [SerializeField]private RectTransform[] images;
+    [SerializeField] private float imageHeight = 540f;
+    private float deceleration;
+    private float speed;
+    private bool isMoving;
+    private bool isSlowDown;
 
-    //初期化
+
+
+    // ========================================
+    // 初期化
+    // ========================================
+
     private void Start()
     {
-        foreach (var img in images)
+        scoreController.OnStartSpeedEnd +=
+            HalfSpeed;
+
+        scoreController.OnMiddleSpeedEnd +=
+            StartSlowDown;
+
+        scoreController.OnEndSpeedEnd +=
+            StopMove;
+        foreach (var image in images)
         {
-            Sprite sprite =
-            stageManager.GetRandomBackground(0);
+            Sprite sprite =stageManager.GetRandomBackground(0);
             if (sprite != null)
-                img.GetComponent<Image>().sprite = sprite;
+            {
+                image.GetComponent<Image>().sprite = sprite;
+            }
         }
     }
-    //初期化
-    public void StartMoving()
+
+    // ========================================
+    // 最高速度の動きを開始
+    // ========================================
+
+    public void StartMoving(float startSpeed, float decelerationRate)
     {
-        backGround = true;
+        speed = startSpeed;
+        deceleration = decelerationRate;
+        isMoving = true;
     }
 
+    // ========================================
+    // 背景を動かす速度の計算
+    // ========================================
 
     private void Update()
     {
-        if (!backGround) return;
-        if (images == null || images.Length == 0) return;
-        if (!scoreCalculation.isLastSecond)
-        {
-            speed = scoreCalculation.GetScoreSpeed();
-        }
-        else        
-        {
-            speed = Mathf.Lerp(speed, scoreCalculation.GetScoreSpeed(), direction);
-        }
-        float moveAmount = speed * Time.deltaTime;
-        foreach (var img in images)
-        {
-            img.anchoredPosition -= new Vector2(0, moveAmount);
-        }
-        RectTransform lowest = GetLowest();
+        if (!isMoving)
+            return;
 
-        if (lowest != null && lowest.anchoredPosition.y <= -height)
+        if (isSlowDown)
         {
-            RectTransform highest = GetHighest();
-            if (highest == null) return;
-            lowest.anchoredPosition = new Vector2(0, highest.anchoredPosition.y + height);
-            var sprite = stageManager.GetRandomBackground(scoreCalculation.UpdateScore());
-            if (sprite != null)
-                lowest.GetComponent<Image>().sprite = sprite;
+            speed = Mathf.Lerp(speed,  0,deceleration * Time.deltaTime);
         }
+        Move();
     }
-    //画像がスクロールしきったか
-    RectTransform GetLowest()
-    {
-        if (images == null || images.Length == 0) return null;
 
-        RectTransform result = images[0];
-        foreach (var img in images)
+    // ========================================
+    // 背景を動かす
+    // ========================================
+
+    private void Move()
+    {
+        float moveAmount =speed * Time.deltaTime;
+        foreach (var image in images)
         {
-            if (img != null && img.anchoredPosition.y < result.anchoredPosition.y)
-                result = img;
+            image.anchoredPosition -=new Vector2(0, moveAmount);
         }
+        LoopBackground();
+    }
+
+    // ========================================
+    // 中速のスピードの動きを開始
+    // ========================================
+    private void HalfSpeed()
+    {
+        speed *= 0.5f;
+        Debug.Log("背景半減速");
+    }
+
+    // ========================================
+    // 最後の速度の動きを開始
+    // ========================================
+
+    private void StartSlowDown()
+    {
+        isSlowDown = true;
+        Debug.Log("背景減速");
+    }
+
+    // ========================================
+    // 背景の動きを止める
+    // ========================================
+
+    private void StopMove()
+    {
+        isMoving = false;
+
+        Debug.Log("背景停止");
+    }
+
+    // ========================================
+    // 背景が下まで下がったかの判定と下に下がった場合の位置のリセット
+    // ========================================
+
+    private void LoopBackground()
+    {
+        RectTransform lowest =
+            GetLowest();
+
+        if (lowest == null)
+            return;
+
+        if (lowest.anchoredPosition.y <= -imageHeight)
+        {
+            RectTransform highest =GetHighest();
+            lowest.anchoredPosition =new Vector2( 0, highest.anchoredPosition.y + imageHeight); 
+            Sprite sprite =stageManager.GetRandomBackground(scoreController.GetCurrentScore());
+            Image image = lowest.GetComponent<Image>();
+            if (sprite != null) image.sprite = sprite;
+        }
+
+    }
+    
+
+    /// <summary>
+    /// 最も下にある背景画像を取得する
+    /// </summary>
+    private RectTransform GetLowest()
+    {
+        RectTransform result = images[0];
+
+        foreach (var image in images)
+        {
+            if (image.anchoredPosition.y <
+                result.anchoredPosition.y)
+            {
+                result = image;
+            }
+        }
+
         return result;
     }
-    //一番高い画像がどこにあるのか
-    RectTransform GetHighest()
-    {
-        if (images == null || images.Length == 0) return null;
 
-        RectTransform result = images[0];
-        foreach (var img in images)
+    /// <summary>
+    /// 最も上にある背景画像を取得する
+    /// </summary>
+    private RectTransform GetHighest()
+    {
+        RectTransform result =images[0];
+        foreach (var image in images)
         {
-            if (img != null && img.anchoredPosition.y > result.anchoredPosition.y)
-                result = img;
+            if (image.anchoredPosition.y > result.anchoredPosition.y)
+            {
+                result = image;
+            }
         }
         return result;
-    }
-    //スクロールを止める
-    public void ScrollEnd()
-    {
-        backGround = false;
     }
 }

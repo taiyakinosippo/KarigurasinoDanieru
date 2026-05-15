@@ -38,7 +38,8 @@ public enum StageGroup
     UpperSky,
     Atmosphere,
     AtmoToSpace,
-    Space
+    Space,
+    Galaxy
 }
 
 //背景のステージのビジュアルを定義する列挙型
@@ -62,8 +63,8 @@ public enum StageType
 public enum FlightState
 {
     Miss,
-    Ground,
     Sky,
     Atmosphere,
-    Space
+    Space,
+    Galaxy
 }
