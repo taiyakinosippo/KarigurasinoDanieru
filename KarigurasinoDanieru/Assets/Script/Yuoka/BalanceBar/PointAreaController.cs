@@ -11,7 +11,7 @@ public class PointAreaController : MonoBehaviour
     public float moveDuration = 0.5f;//移動にかかる時間(どんな距離でも一定)
 
     [Header("難易度設定")]
-    [SerializeField] private GameLevel gameLevel = GameLevel.Normal; //難易度切替
+    [SerializeField] private GameLevel gameLevel; //難易度切替
     public float nomalMoveInterval = 2f;   //通常時の移動間隔
     public float hardMoveInterval = 0.5f; //ハードモード時の移動間隔
     private float currentInterval;
@@ -31,13 +31,9 @@ public class PointAreaController : MonoBehaviour
     private bool isGameOver = true;
     private bool isInside = false;
 
-    void Start()
+    public void SetupPointArea(GameLevel level)
     {
-        //初期位置を中心として保存
-        centerY = area.anchoredPosition.y;
-
-        //最初の目的地を設定
-        SetNewTarget();
+        gameLevel = level;
 
         //難易度によって移動間隔を切り替える
         if (gameLevel == GameLevel.Normal)
@@ -48,6 +44,12 @@ public class PointAreaController : MonoBehaviour
         {
             currentInterval = hardMoveInterval;
         }
+
+        //初期位置を中心として保存
+        centerY = area.anchoredPosition.y;
+
+        //最初の目的地を設定
+        SetNewTarget();
     }
 
     void Update()

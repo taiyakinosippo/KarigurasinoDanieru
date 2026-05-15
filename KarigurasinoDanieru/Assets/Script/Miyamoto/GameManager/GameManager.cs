@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "Yuoka")
+        if (scene.name == "Main")
         {
             InitializeInGame();
         }
@@ -87,6 +87,21 @@ public class GameManager : MonoBehaviour
         {
             //GameManager‚ª•Û‚µ‚Ä‚¢‚éŒ»İ‚Ìƒ‚[ƒh‚ğ“n‚µ‚Ä‰Šú‰»
             uiModeManager.SetupScreen(currentMode);
+        }
+
+        if (timingBar != null)
+        {
+            timingBar.SetupTimingBar(currentLevel);
+        }
+
+        if (mashButton != null)
+        {
+            mashButton.SetupMashButton(currentLevel);
+        }
+
+        if (pointArea != null)
+        {
+            pointArea.SetupPointArea(currentLevel);
         }
     }
 
