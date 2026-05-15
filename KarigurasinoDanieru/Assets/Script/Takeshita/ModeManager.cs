@@ -20,9 +20,9 @@ public class ModeManager : MonoBehaviour
 
 
     [Header("Multi UI")]
-    [SerializeField] private InputField multiRoomInput;
-    [SerializeField] private InputField multiPlayerNameInput;
-    [SerializeField] private InputField scoreInputField;
+    [SerializeField] private InputField multiRoomInput; //ルームID
+    [SerializeField] private InputField multiPlayerNameInput;　//プレイヤーネーム
+    [SerializeField] private InputField scoreInputField;　//スコア
     [SerializeField] private Button matchingButton;
     [SerializeField] private GameObject matchingButtonObj;
     [SerializeField] private GameObject multiRoomInputField;
@@ -36,6 +36,7 @@ public class ModeManager : MonoBehaviour
     [SerializeField] private Text resultStatsText;
     [SerializeField] private Text ladyModeText;
     [SerializeField] private Text ladyDifficultyText;
+    [SerializeField] private Text difficultyText;
 
     [Header("Managers")]
     [SerializeField] private MultiSyncManager multiSync;
@@ -66,8 +67,11 @@ public class ModeManager : MonoBehaviour
         playMode.SetActive(true);
 
         multiRoomInput.text = "";
+        multiRoomInput.characterLimit = 5;
         multiPlayerNameInput.text = "";
+        multiPlayerNameInput.characterLimit = 10;
         scoreInputField.text = "";
+        //scoreInputField.characterLimit = 6;
 
         HideResultTexts();
 
@@ -80,6 +84,7 @@ public class ModeManager : MonoBehaviour
             multiSync.OnScoreSent += OnMultiScoreSent;
 
         UpdateModeText();
+        UpdateDifficultyText();
     }
 
     //void Update()
@@ -138,12 +143,14 @@ public class ModeManager : MonoBehaviour
     public void SelectNormal()
     {
         CurrentDifficulty = SoloDifficulty.Normal;
+        UpdateDifficultyText();
         ShowLadyWindow();
     }
 
     public void SelectHard()
     {
         CurrentDifficulty = SoloDifficulty.Hard;
+        UpdateDifficultyText();
         ShowLadyWindow();
     }
   
@@ -220,6 +227,19 @@ public class ModeManager : MonoBehaviour
     // =====================
     public void InputBack()
     {
+
+        // マルチの場合、勝者のみ保存（任意）
+        if (IsMultiMode)
+        {
+            SaveUnifiedScore();
+        }
+
+        // シングルの場合
+        if (!IsMultiMode)
+        {
+            SaveUnifiedScore();
+        }
+
         IsMultiMode = false;
         CurrentRoomId = "";
         MultiPlayerName = "";
@@ -252,22 +272,30 @@ public class ModeManager : MonoBehaviour
     // =====================
     public void OnClickExitMatching()
     {
-      // ✅ 通信を完全に停止
+        // 通信停止
         if (multiSync != null)
         {
             multiSync.StopMultiSync();
+            multiSync.ResetJoinState();
         }
 
-        // ✅ マルチ状態を解除
+        // 状態リセット
         IsMultiMode = false;
         matchHandled = false;
 
-        // ✅ 状態リセット
         CurrentRoomId = "";
         MultiPlayerName = "";
-        matchState.ResetState();
 
-        // ✅ UI を初期画面に戻す
+        matchState.ResetState();
+        matchScoreManager.ResetScore();
+
+        // --------------------
+        // ★ ここが重要
+        // --------------------
+        matchStatusText.text = "";
+        matchStatusText.gameObject.SetActive(false); 
+
+        // UI を戻す
         matching.SetActive(false);
         gamePlay_Multi.SetActive(false);
         playMode.SetActive(true);
@@ -351,15 +379,36 @@ public class ModeManager : MonoBehaviour
 
         if (IsMultiMode)
         {
-            matching.SetActive(true);
-        }
+            // ---------- 通信・状態リセット ----------
+            if (multiSync != null)
+            {
+                multiSync.StopMultiSync();
+                multiSync.ResetJoinState();
+            }
 
+            matchHandled = false;
+            matchState.ResetState();
+            matchScoreManager.ResetScore();
+
+            // ---------- UI 初期化（★最重要） ----------
+            matching.SetActive(true);
+
+            // ★ 入力UIを必ず復活させる
+            multiRoomInputField.SetActive(true);
+            multiNameInputField.SetActive(true);
+            matchingButtonObj.SetActive(true);
+
+            // ★ 入力内容リセット
+            multiRoomInput.text = "";
+            multiPlayerNameInput.text = "";
+
+            matchStatusText.gameObject.SetActive(true);
+            matchStatusText.text = "Input Name & Room ID";
+        }
         else
         {
             gamePlay_Single.SetActive(true);
-           
         }
-
     }
 
     // =====================
@@ -367,28 +416,32 @@ public class ModeManager : MonoBehaviour
     // =====================
     public void OnClickApplyScore()
     {
-        // 入力チェック
         if (!int.TryParse(scoreInputField.text, out int value))
         {
             Debug.LogWarning("Score input invalid");
             return;
         }
 
-        // ✅ スコアが変わった瞬間
-        matchScoreManager.AddScore(value);
-
-        // マルチなら送信
         if (IsMultiMode)
         {
-            multiSync.SendScoreManually();
+            // ✅ マルチは「上書き」
+            matchScoreManager.SetScore(value);
+
+            // ✅ 前回より大きい場合だけ送信
+            multiSync.SendScoreIfHigher(matchScoreManager.CurrentScore);
+        }
+        else
+        {
+            // ✅ シングルだけ加算
+            matchScoreManager.AddScore(value);
         }
 
-        // 入力欄リセット（任意）
         scoreInputField.text = "";
     }
 
     private void ShowLadyWindow()
     {
+      
         gameMode.SetActive(false);
 
         ladyModeText.text = IsMultiMode ? "MODE:MULTI" : "MODE:SINGLE";
@@ -396,5 +449,24 @@ public class ModeManager : MonoBehaviour
         ladyDifficultyText.text = CurrentDifficulty == SoloDifficulty.Normal ? "DIFFICURY:NORMAL" : "DIFFICURY:HARD";
 
         ladyWindow.SetActive(true);
+    }
+
+    private void UpdateDifficultyText()
+    {
+        if (difficultyText == null) return;
+
+        difficultyText.text =
+            CurrentDifficulty == SoloDifficulty.Normal
+            ? "DIFFICULTY : NORMAL"
+            : "DIFFICULTY : HARD";
+    }
+
+    void SaveUnifiedScore()
+    {
+        rankingInputManager.SendScore(
+            matchState.MyName,
+            matchState.MyScore,
+            CurrentDifficulty.ToString().ToLower()
+        );
     }
 }
