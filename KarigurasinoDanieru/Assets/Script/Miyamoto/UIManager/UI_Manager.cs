@@ -59,15 +59,15 @@ public class UI_Manager : MonoBehaviour
     ///</summary>
     public void ShowUI(Canvas target)
     {
-        target.gameObject.SetActive(true);
+        target.enabled =true;
     }
 
     /// <summary>
     /// UI‚ð”ñ•\Ž¦‚É‚·‚é
-    ///</summary>>
+    ///</summary>
     public void CloseUI(Canvas target)
     {
-        target.gameObject.SetActive(false);
+        target.enabled = false;
     }
 }
 
