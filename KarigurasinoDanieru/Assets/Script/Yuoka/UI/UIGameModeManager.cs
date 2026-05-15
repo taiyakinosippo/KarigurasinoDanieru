@@ -18,18 +18,14 @@ public class UIGameModeManager : MonoBehaviour
     public float transitionDuration = 1.0f;//アニメーションにかかる時間
     public bool isMulti = true;
 
-    private void Start()
-    {
-        SetupScreen();
-    }
 
     /// <summary>
     /// 各オブジェクトの初期配置を行い、演出を開始する
     /// </summary>
-    public void SetupScreen(/*GameMode mode*/)
+    public void SetupScreen(GameMode mode)
     {
         //マルチかどうかの判定
-        //bool isMulti = (mode == GameMode.Multi);
+        bool isMulti = (mode == GameMode.Multi);
 
         // 画面分割の初期状態を設定
         enemyView.gameObject.SetActive(isMulti);
@@ -126,14 +122,14 @@ public class UIGameModeManager : MonoBehaviour
             float t = Mathf.SmoothStep(0, 1, elapsed / transitionDuration);
 
             //UIを画面外へ動かす
-            balanceBarPanel.anchoredPosition = new Vector2(Mathf.Lerp(0,-500f, t), 0);
-            mashButtonPanel.anchoredPosition = new Vector2(Mathf.Lerp(0,500f, t), 0);
+            balanceBarPanel.anchoredPosition = new Vector2(Mathf.Lerp(0, -500f, t), 0);
+            mashButtonPanel.anchoredPosition = new Vector2(Mathf.Lerp(0, 500f, t), 0);
             timingBarPanel.anchoredPosition = new Vector2(0, Mathf.Lerp(0, -400f, t));
 
             //画面を分割する
             if (isMulti)
             {
-                float edge = Mathf.Lerp(1.0f,0.5f, t);
+                float edge = Mathf.Lerp(1.0f, 0.5f, t);
                 playerView.anchorMax = new Vector2(edge, 1);
                 enemyView.anchorMin = new Vector2(edge, 0);
                 enemyView.anchorMax = new Vector2(edge + 0.5f, 1);
