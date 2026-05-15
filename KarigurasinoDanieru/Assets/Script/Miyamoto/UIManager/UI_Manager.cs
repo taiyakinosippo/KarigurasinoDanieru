@@ -6,10 +6,9 @@ public class UI_Manager : MonoBehaviour
 {
    public static UI_Manager instance;
    [SerializeField] private ScoreManager scoreManager; //スコアの情報を保持している
-   [SerializeField] BackGroundMover backGroundMover;  //背景を動かすスクリプト
+   [SerializeField] private ScoreController scoreController; //スコアのプレゼンテーションを管理している
+   [SerializeField] private TextMeshProUGUI scoreText;                 //スコアのテキスト
     public static Action OnCountFinished;
-    public TextMeshProUGUI score_text;                 //スコアのテキスト
-    private bool isCounting = false;                   //スコアのカウントを開始するかどうか
     private void Awake()
    {
         if (instance == null)
@@ -22,33 +21,53 @@ public class UI_Manager : MonoBehaviour
         }
     }
     //スコアの更新
-    public void Update()
+    private void Start()
     {
-        if (!isCounting) return;
-        float score = ScoreManager.instance.UpdatePresentationScore();
-        score_text.text = score.ToString("N2") + "m";
-        if (ScoreManager.instance.IsPresentationFinished())
-        {
-            score_text.text = ScoreManager.instance.GetScore().ToString("N2") + "m";
-            backGroundMover.ScrollEnd();
+        scoreController.OnScoreChanged +=
+            UpdateScoreText;
+
+        scoreController.OnFinished +=
+            FinishText;
+    }
+
+    // ========================================
+    // ここではスコアのテキストの更新を行う
+    // ========================================
+
+    private void UpdateScoreText(float score)
+    {
+        scoreText.text =
+            score.ToString("N2")
+            + "m";
+    }
+
+    // ========================================
+    // 動きが終了したときのテキストの更新
+    // ========================================
+
+    private void FinishText()
+    {
+        scoreText.text = scoreController
+            .GetCurrentScore()
+            .ToString("N2")
+            + "m";
             OnCountFinished?.Invoke();
-            isCounting = false;
-        }
     }
-    //テキストのカウントを開始する
-    public void StartCount()
+
+    /// <summary>
+    /// UIを表示する
+    ///</summary>
+    public void ShowUI(Canvas target)
     {
-        isCounting = true;
+        target.gameObject.SetActive(true);
     }
-    //UIの表示
-    public void ShowUI(Canvas ui)
+
+    /// <summary>
+    /// UIを非表示にする
+    ///</summary>>
+    public void CloseUI(Canvas target)
     {
-        ui.enabled = true;
-    }
-    //UIの非表示
-    public void CloseUI(Canvas ui)
-    {
-        ui.enabled = false;
+        target.gameObject.SetActive(false);
     }
 }
 

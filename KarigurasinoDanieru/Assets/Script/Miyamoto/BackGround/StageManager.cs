@@ -20,7 +20,7 @@ public class StageManager : MonoBehaviour
                 data.state,
                 data.group,
                 data.minHeight,
-                data.group == StageGroup.Space
+                data.group == StageGroup.Galaxy
                 ? Mathf.Infinity
         :       data.maxHeight,
                 data.visual
@@ -55,7 +55,7 @@ public class StageManager : MonoBehaviour
         return stage.GetRandomSprite();
     }
 
-
+    //‚‚³‚©‚çƒvƒŒƒCƒ„[‚Ìó‘Ôæ“¾‚·‚é
     public FlightState GetFlightState(float height)
     {
         StageInfo stage = GetStage(height);

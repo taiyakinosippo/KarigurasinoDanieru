@@ -15,7 +15,6 @@ public class Player_State_Result : MonoBehaviour
         behaviors = new Dictionary<FlightState, FlightBehavior>()
         {
           { FlightState.Miss, new MissBehavior() },
-          { FlightState.Ground, new GroundBehavior() },
           { FlightState.Sky, new SkyBehavior() },
           { FlightState. Atmosphere, new  AtmosphereBehavior() },
           { FlightState.Space, new SpaceBehavior() }

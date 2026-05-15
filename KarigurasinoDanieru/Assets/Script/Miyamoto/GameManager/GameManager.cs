@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     public PointAreaController pointArea;
     public Timing_Bar_Logic timingBar;
     public MashButton mashButton;
-    [SerializeField] private ScoreCalculation scoreCalculation;
 
     public GameMode currentMode;
     public GameLevel currentLevel;
@@ -89,7 +88,6 @@ public class GameManager : MonoBehaviour
             pointArea.StopPointArea();
         }
         float finalScore = ScoreManager.instance.GetScore();
-        scoreCalculation.StartScore(finalScore);
         ScoreManager.instance.StartFinalScorePresentation();
     }
 
