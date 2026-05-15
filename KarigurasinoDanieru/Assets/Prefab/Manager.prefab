@@ -1,5 +1,55 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &52235817813648103
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2671696036599269685}
+  - component: {fileID: 1550793121606884589}
+  m_Layer: 0
+  m_Name: ScoreController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2671696036599269685
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52235817813648103}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -480.94623, y: -278.8404, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5257963444384005223}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1550793121606884589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52235817813648103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4ee31f46d813b45975a52f2bb0d030, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreController
+  stageManager: {fileID: 3680076966681554567}
+  settings:
+  - {fileID: 11400000, guid: 55a78608873d6694ba188c5aa8a578e6, type: 2}
+  - {fileID: 11400000, guid: 5123c4e8087f57945b1ffc261602fced, type: 2}
+  - {fileID: 11400000, guid: d8838d5adffa5524fb36034e2f12eb29, type: 2}
+  - {fileID: 11400000, guid: bf748ca820750bd4c8343fe442d19003, type: 2}
 --- !u!1 &883397013604295336
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,7 +137,7 @@ GameObject:
   - component: {fileID: 689582895398374064}
   - component: {fileID: 7735020424021382480}
   - component: {fileID: 443341384263956637}
-  - component: {fileID: 8266686404977796462}
+  - component: {fileID: 8382888765160442712}
   m_Layer: 5
   m_Name: Manager
   m_TagString: Untagged
@@ -114,6 +164,7 @@ RectTransform:
   - {fileID: 3617500631827177264}
   - {fileID: 962661411066124639}
   - {fileID: 1344758570888039512}
+  - {fileID: 2671696036599269685}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -185,7 +236,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8266686404977796462
+--- !u!114 &8382888765160442712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,14 +248,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba53b5004b7999468ca38eb9c914723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackGroundMover
+  scoreController: {fileID: 1550793121606884589}
+  satgeManager: {fileID: 3680076966681554567}
   images:
   - {fileID: 1409970508794008700}
   - {fileID: 6944923136079629093}
   - {fileID: 2885491128931525123}
-  stageManager: {fileID: 3680076966681554567}
-  scoreManger: {fileID: 628435843846182653}
-  scoreCalculation: {fileID: 1731449497763942694}
-  direction: 0.01
+  imageHeight: 540
+  deceleration: 3
 --- !u!1 &3268895823764171969
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +266,6 @@ GameObject:
   m_Component:
   - component: {fileID: 962661411066124639}
   - component: {fileID: 3680076966681554567}
-  - component: {fileID: 3813428788416821988}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -299,18 +349,6 @@ MonoBehaviour:
     - {fileID: -5692243971946571404, guid: f738cef3c9ae007479874030946a4ba4, type: 3}
     minHeight: 110000
     maxHeight: 1000000
---- !u!114 &3813428788416821988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3268895823764171969}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d83c9102532159a42a50206071128665, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player_State_Result
 --- !u!1 &3274186911576228667
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,10 +546,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   scoreCalculation: {fileID: 1731449497763942694}
-  <GroundTime>k__BackingField: 5
-  <SkyTime>k__BackingField: 10
-  <AtmospheresTime>k__BackingField: 15
-  <SpaceTime>k__BackingField: 30
+  stageManager: {fileID: 3680076966681554567}
+  backGroundMover: {fileID: 8382888765160442712}
+  scoreController: {fileID: 1550793121606884589}
 --- !u!114 &2990418148601816489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,12 +580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbf43532f73b66446af3215c16f53af5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreCalculation
-  scoreManager: {fileID: 628435843846182653}
-  backGroundMover: {fileID: 8266686404977796462}
-  LastGroundSpeed: 10
-  LastSkySpeed: 100
-  LastAtmospheresSpeed: 200
-  LastSpaceSpeed: 500
 --- !u!1 &4666158878127722155
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,5 +762,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
   scoreManager: {fileID: 628435843846182653}
-  backGroundMover: {fileID: 8266686404977796462}
-  score_text: {fileID: 3053015147972464702}
+  scoreController: {fileID: 1550793121606884589}
+  scoreText: {fileID: 3053015147972464702}
