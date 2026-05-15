@@ -35,7 +35,8 @@ public class Timing_Bar_Logic : MonoBehaviour
     private float judge = 0;                         //”»’è‚ÌŒ‹‰Ê‚ğŠi”[‚·‚é•Ï”
     private bool is_playing = true;
     private bool isGameOver = true;
-    void Start()
+    
+    public void SetupTimingBar(GameLevel level)
     {
         gameLevel = GameManager.instance.currentLevel;
         if (gameLevel == GameLevel.Hard)
@@ -44,8 +45,7 @@ public class Timing_Bar_Logic : MonoBehaviour
             miss_score = (int)(miss_score * 0.5f);          
             good_score = (int)(good_score * 0.5f);                   
             great_score = (int)(great_score * 0.5f);                  
-            perfect_score = (int)(perfect_score * 0.5f);     
-            
+            perfect_score = (int)(perfect_score * 0.5f);  
         }
 
         timingBarSystem = new Timing_Bar_System(
