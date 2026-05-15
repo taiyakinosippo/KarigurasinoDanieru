@@ -16,10 +16,13 @@ public class MashButton : MonoBehaviour
     public float displayTime = 1.0f;//画像を消す秒数
 
     private float timerw;
-    private bool isGameOver = false;//
+    private bool isGameOver = true;//
 
     public AudioSource audioSource;//
     public AudioClip clickSound;//
+
+    public int clickCount = 0;//クリック数
+    public int score = 0;//スコア
 
     // ===================
     // ランダム移動用
@@ -50,7 +53,7 @@ public class MashButton : MonoBehaviour
     }
     void Update()
     {
-        if (isGameOver) return;
+        if (!isGameOver) return;
 
         if (isHardMode)
         {
@@ -73,13 +76,15 @@ public class MashButton : MonoBehaviour
                 buttonRect,
                 mousePos,
                 null))
-            //clickCount++;
-            //score = clickCount * baseScore;
             {
+                clickCount++;
+                score = clickCount * baseScore;
                 PlaySound();
                 ShowImage();
+
+                
             }
-            // ScoreManager.instance.MashButtonScore(baseScore);
+            ScoreManager.instance.MashButtonScore(score);
         }
     }
 
@@ -99,6 +104,11 @@ public class MashButton : MonoBehaviour
         clickImage.gameObject.SetActive(false);
     }
 
+    public void StartMashButton()
+    {
+        isGameOver = false;
+    }
+
     public void StopMashButton()
     {
         isGameOver = true;
@@ -107,6 +117,9 @@ public class MashButton : MonoBehaviour
 
     IEnumerator RandomMoveRoutine()
     {
+        // ゲーム開始まで待機
+        yield return new WaitUntil(() => !isGameOver);
+
         while (!isGameOver)
         {
             yield return new WaitForSeconds(moveInterval);

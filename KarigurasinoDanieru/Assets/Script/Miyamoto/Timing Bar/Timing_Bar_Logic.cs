@@ -34,7 +34,7 @@ public class Timing_Bar_Logic : MonoBehaviour
     public  int PerfectScore => perfect_score;       //外部からパーフェクトの点数を取得できるプロパティ
     private float judge = 0;                         //判定の結果を格納する変数
     private bool is_playing = true;
-    private bool isGameOver = false;
+    private bool isGameOver = true;
     void Start()
     {
         gameLevel = GameManager.instance.currentLevel;
@@ -90,6 +90,12 @@ public class Timing_Bar_Logic : MonoBehaviour
         timingBarSystem.ResetJudge();
         is_playing = true;
     }
+
+    public void StartTimingBar()
+    {
+        isGameOver = false;
+    }
+
     public void StopTimingBar()
     {
         isGameOver = true;

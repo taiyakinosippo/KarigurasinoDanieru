@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-public class Timer : MonoBehaviour
+public class InGameTimer : MonoBehaviour
 {
     [SerializeField]private float TimeLimit = 0f;
     public TextMeshProUGUI timeText;
@@ -10,7 +10,7 @@ public class Timer : MonoBehaviour
     private void Awake()
     {
         currentTime = TimeLimit;
-        isRunning = true;
+        //isRunning = true;
     }
     void Update()
     {
