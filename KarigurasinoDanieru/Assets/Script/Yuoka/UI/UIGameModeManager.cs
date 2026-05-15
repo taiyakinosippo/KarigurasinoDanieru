@@ -16,7 +16,7 @@ public class UIGameModeManager : MonoBehaviour
 
     [Header("演出設定")]
     public float transitionDuration = 1.0f;//アニメーションにかかる時間
-    public bool isMulti = true;
+    public bool isMulti;
 
 
     /// <summary>
@@ -25,7 +25,7 @@ public class UIGameModeManager : MonoBehaviour
     public void SetupScreen(GameMode mode)
     {
         //マルチかどうかの判定
-        bool isMulti = (mode == GameMode.Multi);
+        isMulti = (mode == GameMode.Multi);
 
         // 画面分割の初期状態を設定
         enemyView.gameObject.SetActive(isMulti);
