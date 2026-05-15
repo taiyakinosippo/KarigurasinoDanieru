@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public UIGameModeManager uiModeManager;
     public BalanceBarController balanceBar;
     public PointAreaController pointArea;
     public Timing_Bar_Logic timingBar;
@@ -55,6 +56,11 @@ public class GameManager : MonoBehaviour
     public void FinishGame()
     {
         isGameOver = true;
+
+        if (uiModeManager != null)
+        {
+            uiModeManager.ShowResultLayout();
+        }
 
         if (mashButton != null)
         {

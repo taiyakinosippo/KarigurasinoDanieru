@@ -8,7 +8,7 @@ public class MultiSyncManager : MonoBehaviour
     private string updateUrl;
     private string fetchUrl;
     private string joinUrl;
-
+   
     [Header("Player Info")]
     public string playerName;
     public int currentScore;
@@ -23,11 +23,12 @@ public class MultiSyncManager : MonoBehaviour
     private bool isSending;
 
     [SerializeField] private MatchState matchState;
-    [SerializeField] private ModeManager modeManager;
+    [SerializeField] private MainModeManager MainmodeManager;
 
     public string opponentName = "";
     public int opponentScore = 0;
     private int lastEnemyScore = -1;
+    private int lastSentScore = 0;
 
     private bool enemyPreviouslyPresent = false;
 
@@ -36,8 +37,8 @@ public class MultiSyncManager : MonoBehaviour
         updateUrl = ServerConfig.BaseUrl + "mp_update.php";
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";
-
-        modeManager = FindObjectOfType<ModeManager>();
+       
+        MainmodeManager = FindObjectOfType<MainModeManager>();
     }
 
     void Start()
@@ -51,14 +52,17 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     public void BeginMultiSync()
     {
+       
         enabled = true;
 
         roomId = ModeManager.CurrentRoomId;
         playerName = ModeManager.MultiPlayerName;
 
         matched = false;
-        lastEnemyScore = -1; 
+        lastEnemyScore = -1;
 
+        SendJoinOnce();
+        currentScore = matchState.MyScore;
         SendState();
         InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
@@ -105,6 +109,7 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     private void FetchState()
     {
+        //Debug.Log("[FetchState] called");
         if (isFetching) return;
         StartCoroutine(FetchStateCoroutine());
     }
@@ -115,17 +120,26 @@ public class MultiSyncManager : MonoBehaviour
 
         //Debug.Log("[FETCH] start");
 
-        string url = $"{fetchUrl}?room_id={roomId}";
-        
+        string url =
+      $"{fetchUrl}?room_id={roomId}" +
+      $"&difficulty={ModeManager.CurrentDifficulty}" +
+      $"&player_name={playerName}";
+
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
             req.timeout = 10;
             yield return req.SendWebRequest();
+            //Debug.Log("[FETCH RAW RESPONSE] " + req.downloadHandler.text);
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-               
+                Debug.LogError(
+                    "[FETCH FAILED]\n" +
+                    "url: " + url + "\n" +
+                    "result: " + req.result + "\n" +
+                    "error: " + req.error
+                );
                 isFetching = false;
                 yield break;
             }
@@ -148,6 +162,7 @@ public class MultiSyncManager : MonoBehaviour
 
     void UpdateRemoteUI(PlayerState[] states)
     {
+        //Debug.Log($"[UpdateRemoteUI] called. states.Count={states.Length}");
         bool enemyFound = false;
 
         foreach (var ps in states)
@@ -158,18 +173,26 @@ public class MultiSyncManager : MonoBehaviour
             enemyFound = true;
             enemyPreviouslyPresent = true;
 
-            // ✅ MatchState 更新
+            // ✅ MultiSyncManager 自身にもセット
+            opponentName = ps.player_name;
+            opponentScore = ps.score;
+
+            // ✅ MatchState 更新（正本）
             matchState.SetEnemy(ps.player_name, ps.score);
 
-            // ✅ ★ここが必須：UI側へ通知
-            modeManager?.OnEnemyScoreUpdated(ps.player_name, ps.score);
+         
         }
 
         if (!enemyFound && enemyPreviouslyPresent)
         {
             enemyPreviouslyPresent = false;
-            modeManager?.OnEnemyLeft();
+
+            opponentName = "";
+            opponentScore = 0;
+
         }
+
+        //Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
     }
 
     /* ======================
@@ -177,25 +200,29 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     void CheckMatchSuccess(PlayerState[] states)
     {
+        //Debug.Log($"[CHECK] myName={playerName}, count={(states == null ? -1 : states.Length)}");
+        //if (states != null)
+        //{
+        //    foreach (var ps in states)
+        //    {
+        //        Debug.Log($"[STATE] {ps.player_name}");
+        //    }
+        //}
+
         if (matched || states == null) return;
 
-        if (states.Length >= 2)
+        foreach (var ps in states)
         {
-            foreach (var ps in states)
+            if (ps.player_name != playerName)
             {
-                if (ps.player_name != playerName)
-                {
-                    matched = true;
-
-                    // ✅ ここを追加
-                    enemyPreviouslyPresent = true;
-
-                    modeManager?.OnMatchSuccess(ps.player_name);
-                    return;
-                }
+                matched = true;
+                enemyPreviouslyPresent = true;
+                MainmodeManager?.OnMatchSuccess();
+                return;
             }
         }
     }
+
 
     /* ======================
        Join
@@ -221,7 +248,7 @@ public class MultiSyncManager : MonoBehaviour
 
             if (req.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("[MultiSync] Joined room");
+                //Debug.Log("[MultiSync] Joined room");
             }
             else
             {
@@ -271,6 +298,31 @@ public class MultiSyncManager : MonoBehaviour
         OnScoreSent?.Invoke(); // ✅ 通信後
     }
 
+    public void ResetJoinState()
+    {
+        joined = false;
+        matched = false;
+        enemyPreviouslyPresent = false;
+        lastEnemyScore = -1;
+    }
+
+   
+
+    public void SendScoreIfHigher(int currentTotalScore)
+    {
+        // 前回送信より大きければ送信
+        if (currentTotalScore <= lastSentScore)
+        {
+            Debug.Log($"[MULTI SKIP] current={currentTotalScore}, lastSent={lastSentScore}");
+            return;
+        }
+
+        lastSentScore = currentTotalScore;
+        currentScore = currentTotalScore;
+
+        Debug.Log($"[MULTI SEND] new high score = {currentScore}");
+        StartCoroutine(SendStateCoroutine());
+    }
 }
 
 /* ======================
