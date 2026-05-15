@@ -4,18 +4,29 @@ using System.Collections;
 
 public class ScoreSender : MonoBehaviour
 {
+    [Header("Debug")]
+    public bool isTestMode = false; // ✅ Inspectorで切り替え
+
     /// <summary>
     /// スコア送信（外部から呼ぶ用）
     /// </summary>
     public void SendScore(string name, int score, string mode)
     {
+        // ✅ テストモードなら名前を強制変更
+        if (isTestMode)
+        {
+            name = "TEST";
+            Debug.Log("[TEST MODE ENABLED]");
+        }
+
+        // ✅ デバッグ表示
         Debug.Log(
             $"[SEND DEBUG] name='{name}', score={score}, mode='{mode}'"
         );
 
+        // ✅ 送信開始
         StartCoroutine(PostScoreCoroutine(name, score, mode));
     }
-
 
     /// <summary>
     /// PHPへPOST送信
@@ -31,7 +42,6 @@ public class ScoreSender : MonoBehaviour
 
         using (UnityWebRequest req = UnityWebRequest.Post(url, form))
         {
-            // タイムアウト（秒）
             req.timeout = 10;
 
             yield return req.SendWebRequest();
@@ -50,5 +60,17 @@ public class ScoreSender : MonoBehaviour
                 );
             }
         }
+    }
+
+    // =====================
+    // ✅ デバッグ用（ボタンで直接送れる）
+    // =====================
+    public void SendTestScoreButton()
+    {
+        int score = ScoreHolder.instance != null
+            ? ScoreHolder.instance.FinalScore
+            : 9999;
+
+        SendScore("DEBUG", score, "normal");
     }
 }
