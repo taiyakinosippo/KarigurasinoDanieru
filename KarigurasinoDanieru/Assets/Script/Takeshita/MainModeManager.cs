@@ -111,7 +111,7 @@ public class MainModeManager : MonoBehaviour
     {
         Debug.Log("[GAME END]");
 
-        if (matchState.MyScore > 0)
+        if (ScoreHolder.instance != null && ScoreHolder.instance.FinalScore > 0)
         {
             SaveUnifiedScore();
         }
@@ -145,12 +145,15 @@ public class MainModeManager : MonoBehaviour
     // =====================
     void SaveUnifiedScore()
     {
+        int finalScore = ScoreHolder.instance.FinalScore;
+
         rankingInputManager.SendScore(
             matchState.MyName,
-            matchState.MyScore,
+            finalScore,
             GM.currentLevel.ToString().ToLower()
         );
     }
+
 
     void PrintCurrentGameState()
 {
