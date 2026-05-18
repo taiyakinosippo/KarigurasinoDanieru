@@ -7,7 +7,7 @@ public class MashButton : MonoBehaviour
 {
     public int baseScore = 10;//一回クリックのポイント
 
-    public bool isHardMode = false;//ハードモード切り替え
+    bool isHardMode = false;//ハードモード切り替え
     public Image targetImage;//透明度を下げる画像
     public float fadeDuration = 5f;
     public RectTransform buttonRect;
@@ -38,8 +38,11 @@ public class MashButton : MonoBehaviour
     public float maxY = 190f;
 
     private Vector2 startPos;
-    void Start()
+    
+    public void SetupMashButton(GameLevel level)
     {
+        isHardMode = (level == GameLevel.Hard);
+
         timerw = fadeDuration;
 
         startPos = moveTarget.anchoredPosition;
@@ -48,12 +51,11 @@ public class MashButton : MonoBehaviour
         {
             StartCoroutine(RandomMoveRoutine());
         }
-
-
     }
+
     void Update()
     {
-        if (!isGameOver) return;
+        if (isGameOver) return;
 
         if (isHardMode)
         {
