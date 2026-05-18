@@ -1,12 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainModeManager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] public GameObject roomIdInputFieldObj;
-    [SerializeField] public Button goButton;
+    [SerializeField] public GameObject goButton;
     [SerializeField] public InputField roomIdInputField;
+    [SerializeField] private TextMeshProUGUI matchingText;
+    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private string nextSceneName;
+    [SerializeField] private string playerNameInput;
+    [SerializeField] private Fade fade;
 
     [Header("Managers")]
     [SerializeField] private MultiSyncManager multiSync;
@@ -28,8 +36,8 @@ public class MainModeManager : MonoBehaviour
         roomIdInputField.characterLimit = 5;
         roomIdInputField.contentType = InputField.ContentType.IntegerNumber;
 
-        goButton.interactable = false;
-
+        goButton.SetActive(true);
+        matchingText.gameObject.SetActive(false);
     }
 
     void Awake()
@@ -42,6 +50,8 @@ public class MainModeManager : MonoBehaviour
     // =====================
     public void OnClickSingle()
     {
+        goButton.SetActive(true);
+        roomIdInputFieldObj.SetActive(false);
         GM.GameModeSelect(GameMode.Solo);
         PrintCurrentGameState();
         UpdateRoomIdUI();
@@ -49,6 +59,8 @@ public class MainModeManager : MonoBehaviour
 
     public void OnClickMulti()
     {
+        roomIdInputFieldObj.SetActive(true);
+        goButton.SetActive(false);
         GM.GameModeSelect(GameMode.Multi);
         PrintCurrentGameState();
         UpdateRoomIdUI();
@@ -75,10 +87,13 @@ public class MainModeManager : MonoBehaviour
         roomIdInputFieldObj.SetActive(isMulti);
     }
 
-
     void OnRoomIdChanged(string input)
     {
-        goButton.interactable = input.Length > 0;
+        if (GM.currentMode == GameMode.Multi)
+        {
+            // ✅ 入力あればボタン表示
+            goButton.SetActive(input.Length > 0);
+        }
     }
 
     // =====================
@@ -162,5 +177,93 @@ public class MainModeManager : MonoBehaviour
         $"Difficulty: {GameManager.instance.currentLevel}"
     );
 }
+
+    public void OnGoButtonPressed()
+    {
+        if (GM.currentMode == GameMode.Multi)
+        {
+            CurrentRoomId = roomIdInputField.text;
+
+            if (string.IsNullOrEmpty(CurrentRoomId))
+            {
+                Debug.LogError("[ERROR] roomId empty");
+                return;
+            }
+
+            MultiPlayerName = string.IsNullOrEmpty(playerNameInput)
+                ? "PLAYER"
+                : playerNameInput;
+
+            MultiPlayerName += "_" + Random.Range(1000, 9999);
+            UpdatePlayerInfoUI();
+
+            // ✅ コールバック無しに変更
+            StartCoroutine(StartMatchingRoutine());
+        }
+        else
+        {
+            StartCoroutine(LoadSingleRoutine());
+        }
+    }
+
+    IEnumerator LoadSingleRoutine()
+    {
+        fade.FadeIn(1f);
+
+        yield return new WaitForSeconds(1f);
+
+        SceneManager.LoadScene(nextSceneName);
+    }
+    void StartMatchingAndWait()
+    {
+        // ✅ UI表示
+        matchingText.gameObject.SetActive(true);
+        matchingText.text = "Waiting Matching...";
+
+        // ✅ マルチ開始
+        StartMulti(CurrentRoomId, MultiPlayerName);
+
+        // ✅ マッチ待ち
+        StartCoroutine(WaitForMatchAndLoad(nextSceneName));
+    }
+
+    private IEnumerator WaitForMatchAndLoad(string sceneName)
+    {
+        while (!matchState.IsMatched)
+        {
+            yield return null;
+        }
+
+        Debug.Log("[MATCH FOUND]");
+
+        matchingText.text = $"VS {matchState.EnemyName}";
+
+        yield return new WaitForSeconds(0.5f);
+
+        fade.FadeIn(1f);
+
+        yield return new WaitForSeconds(1.2f);
+
+        SceneManager.LoadScene(sceneName);
+    }
+
+    IEnumerator StartMatchingRoutine()
+    {
+        fade.FadeIn(1f); // ✅ 演出だけ
+
+        yield return new WaitForSeconds(1f);
+
+        StartMatchingAndWait();
+    }
+
+
+    void UpdatePlayerInfoUI()
+    {
+        if (infoText == null) return;
+
+        infoText.text =
+            $"RoomID: {CurrentRoomId}\n" +
+            $"Name: {MultiPlayerName}";
+    }
 
 }

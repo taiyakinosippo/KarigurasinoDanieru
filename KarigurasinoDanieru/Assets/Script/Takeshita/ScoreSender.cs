@@ -7,6 +7,10 @@ public class ScoreSender : MonoBehaviour
     [Header("Debug")]
     public bool isTestMode = false; // ✅ Inspectorで切り替え
 
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     /// <summary>
     /// スコア送信（外部から呼ぶ用）
     /// </summary>

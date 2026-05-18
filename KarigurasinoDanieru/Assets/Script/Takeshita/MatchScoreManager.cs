@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MatchScoreManager : MonoBehaviour
 {
-    [SerializeField] private MatchState matchState; // ★ これを追加
+    [SerializeField] private MatchState matchState; 
 
     public int CurrentScore { get; private set; }
 

@@ -39,6 +39,8 @@ public class MultiSyncManager : MonoBehaviour
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";
        
         MainmodeManager = FindObjectOfType<MainModeManager>();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -47,22 +49,42 @@ public class MultiSyncManager : MonoBehaviour
         StopAllSync();
     }
 
+    void Update()
+    {
+        if (matchState == null)
+        {
+            matchState = FindObjectOfType<MatchState>();
+        }
+
+        if (MainmodeManager == null)
+        {
+            MainmodeManager = FindObjectOfType<MainModeManager>();
+        }
+    }
+
     /* ======================
        マルチ開始
     ====================== */
     public void BeginMultiSync()
     {
-       
         enabled = true;
 
-        roomId = ModeManager.CurrentRoomId;
-        playerName = ModeManager.MultiPlayerName;
+        roomId = MainModeManager.CurrentRoomId;
+        playerName = MainModeManager.MultiPlayerName;
 
+        if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogError("[SYNC INIT ERROR] roomId or playerName is NULL!");
+            return;
+        }
+
+    
         matched = false;
         lastEnemyScore = -1;
 
         SendJoinOnce();
         currentScore = matchState.MyScore;
+
         SendState();
         InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
@@ -87,7 +109,7 @@ public class MultiSyncManager : MonoBehaviour
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
         form.AddField("score", currentScore);
-        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
+        form.AddField("difficulty", GameManager.instance.currentLevel.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(updateUrl, form))
         {
@@ -122,7 +144,7 @@ public class MultiSyncManager : MonoBehaviour
 
         string url =
       $"{fetchUrl}?room_id={roomId}" +
-      $"&difficulty={ModeManager.CurrentDifficulty}" +
+    $"&difficulty={GameManager.instance.currentLevel}" +
       $"&player_name={playerName}";
 
 
@@ -144,14 +166,27 @@ public class MultiSyncManager : MonoBehaviour
                 yield break;
             }
 
+            // ✅ 生データ確認
+            Debug.Log("[RAW JSON] " + req.downloadHandler.text);
+
             if (string.IsNullOrEmpty(req.downloadHandler.text))
             {
+                Debug.LogWarning("[FETCH] Empty response");
                 isFetching = false;
                 yield break;
             }
 
+            // ✅ パース
             PlayerState[] states =
                 JsonHelper.FromJson<PlayerState>(req.downloadHandler.text);
+
+            // ✅ ★これ追加（最重要）
+            if (states == null || states.Length == 0)
+            {
+                Debug.LogWarning("[MULTI] states null or empty");
+                isFetching = false;
+                yield break;
+            }
 
             UpdateRemoteUI(states);
             CheckMatchSuccess(states);
@@ -162,25 +197,28 @@ public class MultiSyncManager : MonoBehaviour
 
     void UpdateRemoteUI(PlayerState[] states)
     {
-        //Debug.Log($"[UpdateRemoteUI] called. states.Count={states.Length}");
         bool enemyFound = false;
+
+        Debug.Log($"[ME] {playerName}");
 
         foreach (var ps in states)
         {
+            if (ps == null) continue;
+
+            Debug.Log($"[SERVER] {ps.player_name}");
+
             if (ps.player_name == playerName)
                 continue;
 
             enemyFound = true;
             enemyPreviouslyPresent = true;
 
-            // ✅ MultiSyncManager 自身にもセット
             opponentName = ps.player_name;
             opponentScore = ps.score;
 
-            // ✅ MatchState 更新（正本）
             matchState.SetEnemy(ps.player_name, ps.score);
 
-         
+            Debug.Log($"[ENEMY FOUND] {opponentName}");
         }
 
         if (!enemyFound && enemyPreviouslyPresent)
@@ -189,10 +227,9 @@ public class MultiSyncManager : MonoBehaviour
 
             opponentName = "";
             opponentScore = 0;
-
         }
 
-        //Debug.Log($"[ENEMY] name={opponentName}, score={opponentScore}");
+        Debug.Log($"[STATE] enemyFound={enemyFound} / opponent={opponentName}");
     }
 
     /* ======================
@@ -217,8 +254,7 @@ public class MultiSyncManager : MonoBehaviour
             {
                 matched = true;
                 enemyPreviouslyPresent = true;
-                MainmodeManager?.OnMatchSuccess();
-                return;
+               return;
             }
         }
     }
@@ -236,10 +272,16 @@ public class MultiSyncManager : MonoBehaviour
 
     IEnumerator SendJoinCoroutine()
     {
+        if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogError("[MULTI ERROR] roomId or playerName is NULL");
+            yield break;
+        }
+
         WWWForm form = new WWWForm();
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
-        form.AddField("difficulty", ModeManager.CurrentDifficulty.ToString());
+        form.AddField("difficulty", GameManager.instance.currentLevel.ToString());
 
         using (UnityWebRequest req = UnityWebRequest.Post(joinUrl, form))
         {
@@ -260,6 +302,13 @@ public class MultiSyncManager : MonoBehaviour
 
     void SendState()
     {
+
+        if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogError("[SEND ERROR] roomId or playerName NULL!");
+           return;
+        }
+
         if (isSending) return;
         StartCoroutine(SendStateCoroutine());
     }
@@ -278,7 +327,8 @@ public class MultiSyncManager : MonoBehaviour
     // =====================
     public void SendScoreManually()
     {
-        if (!ModeManager.IsMultiMode) return;
+        if (GameManager.instance.currentMode != GameMode.Multi) return;
+
         if (isSending) return;
 
         // ✅ MatchState を読むだけ
