@@ -1654,7 +1654,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4410609447667304473}
   - component: {fileID: 2539695778684084922}
-  - component: {fileID: 5092660058518354523}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -1692,25 +1691,6 @@ MonoBehaviour:
   stageManager: {fileID: 8674972253883362822}
   backGroundMover: {fileID: 1032555520694219453}
   scoreController: {fileID: 8984319816332538975}
---- !u!114 &5092660058518354523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6245880556708965555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ab79892437ac01448461cd8ef39cafa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  uiModeManager: {fileID: 3669867237848051162}
-  balanceBar: {fileID: 6440830529850208101}
-  pointArea: {fileID: 5978247690435820164}
-  timingBar: {fileID: 7511906804867461974}
-  mashButton: {fileID: 8712272064969430154}
-  currentMode: 0
-  currentLevel: 0
 --- !u!1 &6270109674641059452
 GameObject:
   m_ObjectHideFlags: 0

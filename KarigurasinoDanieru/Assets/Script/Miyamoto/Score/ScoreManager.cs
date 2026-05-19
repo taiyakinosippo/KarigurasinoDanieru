@@ -18,30 +18,31 @@ public class ScoreManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
+        Debug.Log("ScoreManager instance is set.");
     }
 
 
     public void MashButtonScore(int baseScore)
     {
-        mashButtonScore += baseScore;
+        mashButtonScore = baseScore;
         Debug.Log("mashButtonScore:" + mashButtonScore);
     }
 
     public void TimingBarScore(int amount)
     {
         timingBarScore += amount;
-        Debug.Log("timingBarScore:" + timingBarScore);
     }
 
     public void BalanceBarScore(float meterValue, float baseScore, float multiplier)
     {
         balanceBarScore = meterValue * baseScore * multiplier;
-
-        Debug.Log("balanceBarScore" + balanceBarScore);
     }
 
     public float GetScore()
     {
+        Debug.Log("mashButtonScore:" + mashButtonScore);
+        Debug.Log("timingBarScore:" + timingBarScore);
+        Debug.Log("balanceBarScore" + balanceBarScore);
         totalScore = (mashButtonScore * timingBarScore * balanceBarScore / 1000);
         Debug.Log("score:" + totalScore);
         return totalScore;

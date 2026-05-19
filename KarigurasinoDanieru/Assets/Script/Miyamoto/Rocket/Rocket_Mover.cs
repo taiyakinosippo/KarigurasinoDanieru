@@ -7,6 +7,15 @@ using UnityEngine;
 
 public class Rocket_Mover : MonoBehaviour
 {
+    [SerializeField] private float missUpMove = 20f;
+    [SerializeField] private float missDownMove = 50f;
+    [SerializeField] private float skyMove = 100f;
+    [SerializeField] private float spaceMove = 40f;
+    [SerializeField] private float atmosphereRotate = 360f;
+    [SerializeField] private float missMoveSpeed = 10f;
+    [SerializeField] private float skyMoveSpeed = 10f;
+    [SerializeField] private float spaceMoveSpeed = 10f;
+
     public void MissRocketMove()
     {
        StartCoroutine(MissRocketMoveCoroutine());
@@ -27,15 +36,15 @@ public class Rocket_Mover : MonoBehaviour
     //0～500メートルのの時のロケットの動き
     private IEnumerator MissRocketMoveCoroutine()
     {
-        Vector2 uPtarget = new Vector2(transform.position.x, transform.position.y + 3f);
-        Vector2 downTarget = new Vector2(transform.position.x, transform.position.y - 3f);
+        Vector2 uPtarget = new Vector2(transform.position.x, transform.position.y + missUpMove);
+        Vector2 downTarget = new Vector2(transform.position.x, transform.position.y - missDownMove);
         // 上に飛ぶ
         while ((Vector2)transform.position != uPtarget)
         {
             transform.position = Vector2.MoveTowards(
                     transform.position,
                     uPtarget,
-                    2f * Time.deltaTime);
+                    missMoveSpeed * Time.deltaTime);
             yield return null;
         }
         yield return new WaitForSeconds(0.5f);
@@ -47,7 +56,7 @@ public class Rocket_Mover : MonoBehaviour
                 Vector2.MoveTowards(
                     transform.position,
                     downTarget,
-                    4f * Time.deltaTime);
+                    missMoveSpeed * Time.deltaTime);
 
             yield return null;
         }
@@ -56,13 +65,13 @@ public class Rocket_Mover : MonoBehaviour
     //
     private IEnumerator SkyRocketMoveCoroutine()
     {
-        Vector2 target = new Vector2(transform.position.x + 5f, transform.position.y);
+        Vector2 target = new Vector2(transform.position.x + skyMove, transform.position.y);
         while ((Vector2)transform.position != target)
         {
             transform.position = Vector3.MoveTowards(
                     transform.position,
                     target,
-                    2f * Time.deltaTime);
+                    skyMoveSpeed * Time.deltaTime);
             yield return null;
         }
     }
@@ -85,13 +94,13 @@ public class Rocket_Mover : MonoBehaviour
     private IEnumerator SpaceMoveRocketCoroutine()
     {
 
-        Vector2 target = new Vector2(transform.position.x, -3f);
+        Vector2 target = new Vector2(transform.position.x, transform.position.y - spaceMove);
         while ((Vector2)transform.position != target)
         {
             transform.position = Vector3.MoveTowards(
                     transform.position,
                     target,
-                    2f * Time.deltaTime);
+                    spaceMoveSpeed * Time.deltaTime);
             yield return null;
         }
     }
