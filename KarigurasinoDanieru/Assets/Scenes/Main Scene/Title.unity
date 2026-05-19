@@ -3905,7 +3905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9678cedc81c19ee41829ce3acf18fd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Scene_Changer
-  sceneName: Miyamoto
+  sceneName: Main
   highlightColor: {r: 1.2, g: 1.2, b: 1.2, a: 1}
   fade: {fileID: 779262766}
 --- !u!114 &1438211350

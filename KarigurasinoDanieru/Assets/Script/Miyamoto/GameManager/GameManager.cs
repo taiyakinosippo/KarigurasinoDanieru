@@ -30,6 +30,25 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Main")
+        {
+            InitializeInGame();
+        }
+    }
+
     /// <summary>
     /// ゲームモード選択のメソッド。引数でソロかマルチかを受け取る。
     /// </summary>
@@ -44,7 +63,46 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameLevelSelect(GameLevel level)
     {
-       currentLevel = level;
+        currentLevel = level;
+    }
+
+    private void InitializeInGame()
+    {
+        isGameOver = false;
+
+        //インゲームシーンの各コンポーネントを取得
+        uiModeManager = FindFirstObjectByType<UIGameModeManager>();
+        balanceBar = FindFirstObjectByType<BalanceBarController>();
+        pointArea = FindFirstObjectByType<PointAreaController>();
+        timingBar = FindFirstObjectByType<Timing_Bar_Logic>();
+        mashButton = FindFirstObjectByType<MashButton>();
+
+        //ヒエラルキーからUIGameModeManagerを探す
+        if (uiModeManager == null)
+        {
+            uiModeManager = FindFirstObjectByType<UIGameModeManager>();
+        }
+
+        if (uiModeManager != null)
+        {
+            //GameManagerが保持している現在のモードを渡して初期化
+            uiModeManager.SetupScreen(currentMode);
+        }
+
+        if (timingBar != null)
+        {
+            timingBar.SetupTimingBar(currentLevel);
+        }
+
+        if (mashButton != null)
+        {
+            mashButton.SetupMashButton(currentLevel);
+        }
+
+        if (pointArea != null)
+        {
+            pointArea.SetupPointArea(currentLevel);
+        }
     }
 
     public void OnTimerFinished()
@@ -90,5 +148,4 @@ public class GameManager : MonoBehaviour
         float finalScore = ScoreManager.instance.GetScore();
         ScoreManager.instance.StartFinalScorePresentation();
     }
-
 }
