@@ -51,6 +51,11 @@ public class ScoreManager : MonoBehaviour
     {
         totalScore = GetScore();
         scoreController.StartPresentation(totalScore);
+        if(scoreController.CurrentSettings == null)
+        {
+            Debug.Log("CurrentSettings ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+            return;
+        }
         backGroundMover.StartMoving(scoreController.CurrentSettings.scrollSpeed, scoreController.CurrentSettings.decelerationRate);
     }
 }
