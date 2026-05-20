@@ -36,6 +36,6 @@ public class GalaxyBehavior : FlightBehavior
 {
     public void Execute(GameObject rocket)
     {
-        rocket.GetComponent<Rocket_Mover>().SpaceRocketMove();
+        rocket.GetComponent<Rocket_Mover>().GalaxyRocketMove();
     }
 }

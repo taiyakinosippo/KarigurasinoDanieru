@@ -4,6 +4,8 @@ using UnityEngine;
 /// <summary>
 /// ロケットの動きを制御するクラス。プレイヤーの状態に応じて、ロケットの動きを変える。
 /// </summary>
+using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Rocket_Mover : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class Rocket_Mover : MonoBehaviour
     [SerializeField] private float missMoveSpeed = 10f;
     [SerializeField] private float skyMoveSpeed = 10f;
     [SerializeField] private float spaceMoveSpeed = 10f;
+    [SerializeField] private float speed = 50f;
+    [SerializeField] RectTransform imageRect;      
 
     public void MissRocketMove()
     {
@@ -32,8 +36,12 @@ public class Rocket_Mover : MonoBehaviour
     {
         StartCoroutine(SpaceMoveRocketCoroutine());
     }
+    public void GalaxyRocketMove()
+    {
+        StartCoroutine(GalaxyMoveSpaceCoroution());
+    }
 
-    //0～500メートルのの時のロケットの動き
+    //0～1000メートルのの時のロケットの動き
     private IEnumerator MissRocketMoveCoroutine()
     {
         Vector2 uPtarget = new Vector2(transform.position.x, transform.position.y + missUpMove);
@@ -62,7 +70,7 @@ public class Rocket_Mover : MonoBehaviour
         }
     }
 
-    //
+    //1000～10000メートルまでの時のロケットの動き
     private IEnumerator SkyRocketMoveCoroutine()
     {
         Vector2 target = new Vector2(transform.position.x + skyMove, transform.position.y);
@@ -76,7 +84,7 @@ public class Rocket_Mover : MonoBehaviour
         }
     }
 
-
+    //10000～100000メートルのの時のロケットの動き
     private IEnumerator AtmosphereRocketMoveCoroutine()
     {
         while (true)
@@ -90,7 +98,7 @@ public class Rocket_Mover : MonoBehaviour
         }
     }
 
-
+ 
     private IEnumerator SpaceMoveRocketCoroutine()
     {
 
@@ -101,6 +109,27 @@ public class Rocket_Mover : MonoBehaviour
                     transform.position,
                     target,
                     spaceMoveSpeed * Time.deltaTime);
+            yield return null;
+
+        }
+    }
+
+    //100000メートル以上のの時のロケットの動き
+    private IEnumerator GalaxyMoveSpaceCoroution()
+    {
+        Vector2 target =
+            new Vector2(
+                imageRect.anchoredPosition.x,
+                0f);
+
+        while (imageRect.anchoredPosition != target)
+        {
+            imageRect.anchoredPosition =
+                Vector2.MoveTowards(
+                    imageRect.anchoredPosition,
+                    target,
+                    speed * Time.deltaTime);
+
             yield return null;
         }
     }
