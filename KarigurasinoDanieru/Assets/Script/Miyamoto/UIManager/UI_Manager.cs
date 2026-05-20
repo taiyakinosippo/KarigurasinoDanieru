@@ -14,6 +14,7 @@ public class UI_Manager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -21,7 +22,7 @@ public class UI_Manager : MonoBehaviour
         }
     }
     //スコアの更新
-    private void Start()
+    public void StartScoreEvent()
     {
         scoreController.OnScoreChanged +=
             UpdateScoreText;
@@ -68,6 +69,22 @@ public class UI_Manager : MonoBehaviour
     public void CloseUI(Canvas target)
     {
         target.enabled = false;
+    }
+
+    public void UIManagerGetComponents()
+    {
+        if(scoreManager == null)
+        {
+            scoreManager = FindAnyObjectByType<ScoreManager>();
+        }
+        if(scoreController == null)
+        {
+            scoreController = FindAnyObjectByType<ScoreController>();
+        }
+        if(scoreText == null)
+        {
+            scoreText = scoreText = GameObject.Find("ScoreText") .GetComponent<TextMeshProUGUI>();
+        }
     }
 }
 
