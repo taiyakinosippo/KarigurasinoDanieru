@@ -885,6 +885,53 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &390048685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 390048687}
+  - component: {fileID: 390048686}
+  m_Layer: 0
+  m_Name: UI_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &390048686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390048685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9fa05f775489e4297ca2d240b9a73b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
+  scoreManager: {fileID: 0}
+  scoreController: {fileID: 0}
+  scoreText: {fileID: 0}
+--- !u!4 &390048687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390048685}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.50933, y: -1.66239, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &395884064
 GameObject:
   m_ObjectHideFlags: 0
@@ -4344,7 +4391,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aada2e940a3222948bd73ecc0f4f678b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioSourceManager
-  seList: []
+  seList:
+  - seType: 1
+    audioClip: {fileID: 8300000, guid: cb71a2fb8cc21dc4084ea6768acdab6c, type: 3}
 --- !u!1 &1510146802
 GameObject:
   m_ObjectHideFlags: 0
@@ -5263,6 +5312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd7bd83124bcea84790569954c1e3931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreSender
+  isTestMode: 0
 --- !u!114 &1663138960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5555,7 +5605,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -5031945380614327119, guid: 9d2ef76bfbb64fe4c96babd786ba346a, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 2f3df4e1d9a7a8b4d9cf777078c130a7, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -5668,7 +5718,6 @@ GameObject:
   - component: {fileID: 1804795343}
   - component: {fileID: 1804795342}
   - component: {fileID: 1804795341}
-  - component: {fileID: 1804795345}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -5767,21 +5816,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1804795345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804795340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd9fa05f775489e4297ca2d240b9a73b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
-  scoreManager: {fileID: 0}
-  scoreController: {fileID: 0}
-  scoreText: {fileID: 0}
 --- !u!1 &1807479818
 GameObject:
   m_ObjectHideFlags: 0
@@ -6812,3 +6846,4 @@ SceneRoots:
   - {fileID: 1065923677}
   - {fileID: 395884066}
   - {fileID: 1663138953}
+  - {fileID: 390048687}
