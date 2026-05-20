@@ -40,11 +40,11 @@ public class ScoreManager : MonoBehaviour
 
     public float GetScore()
     {
-        if (scoreDebug.useDebugScore)
-        {
-            Debug.Log("デバッグスコア使用: " + scoreDebug.debugTotalScore);
-            return scoreDebug.debugTotalScore;
-        }
+        //if (scoreDebug.useDebugScore)
+        //{
+        //    Debug.Log("デバッグスコア使用: " + scoreDebug.debugTotalScore);
+        //    return scoreDebug.debugTotalScore;
+        //}
         Debug.Log("mashButtonScore:" + mashButtonScore);
         Debug.Log("timingBarScore:" + timingBarScore);
         Debug.Log("balanceBarScore" + balanceBarScore);
