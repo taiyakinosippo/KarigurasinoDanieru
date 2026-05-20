@@ -104,8 +104,9 @@ public class MainModeManager : MonoBehaviour
         CurrentRoomId = roomId;
         MultiPlayerName = playerName;
 
-        multiSync.BeginMultiSync();
         matchState.SetMyPlayer(playerName);
+        matchState.EnablePersistence();
+        multiSync.BeginMultiSync();
     }
 
     // =====================
@@ -242,10 +243,13 @@ public class MainModeManager : MonoBehaviour
 
         fade.FadeIn(1f);
 
-        yield return new WaitForSeconds(1.2f);
+        // ❌ ここをやめる
+        // yield return new WaitForSeconds(1.2f);
 
-        SceneManager.LoadScene(sceneName);
-    }
+        // ✅ Invokeに変更（重要）
+        Invoke(nameof(LoadNextScene), 1.2f);
+    
+}
 
     IEnumerator StartMatchingRoutine()
     {
@@ -266,4 +270,9 @@ public class MainModeManager : MonoBehaviour
             $"Name: {MultiPlayerName}";
     }
 
+    void LoadNextScene()
+    {
+        Debug.Log("[LOAD SCENE CALLED]");
+        SceneManager.LoadScene(nextSceneName);
+    }
 }

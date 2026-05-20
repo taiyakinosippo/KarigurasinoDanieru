@@ -28,64 +28,108 @@ public class Fade : MonoBehaviour
 {
 	IFade fade;
 
-	void Start ()
-	{
-		Init ();
-		fade.Range = cutoutRange;
-	}
+    void Start()
+    {
+        Init();
 
-	float cutoutRange;
+        if (fade != null)
+        {
+            fade.Range = cutoutRange;
+        }
+    }
 
-	void Init ()
-	{
-		fade = GetComponent<IFade> ();
-	}
+    float cutoutRange;
 
-	void OnValidate ()
-	{
-		Init ();
-		fade.Range = cutoutRange;
-	}
+    void Init()
+    {
+        fade = GetComponent<IFade>();
 
-	public void ImageFill()
+        if (fade == null)
+        {
+            Debug.LogError("[Fade ERROR] IFade missing on " + gameObject.name);
+            enabled = false; // ← これ超重要
+        }
+    }
+
+    void OnValidate()
+    {
+        Init();
+
+        if (fade != null)
+        {
+            fade.Range = cutoutRange;
+        }
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
+    public void ImageFill()
 	{
 	    cutoutRange = 1f;
 		fade.Range = cutoutRange;
     }
 	IEnumerator FadeoutCoroutine (float time, System.Action action)
 	{
-		ImageFill();
+
+        if (!isActiveAndEnabled || fade == null)
+            yield break;
+
+        ImageFill();
 
         float endTime = Time.timeSinceLevelLoad + time * (cutoutRange);
 
 		var endFrame = new WaitForEndOfFrame ();
 
-		while (Time.timeSinceLevelLoad <= endTime) {
-			cutoutRange = (endTime - Time.timeSinceLevelLoad) / time;
-			fade.Range = cutoutRange;
-			yield return endFrame;
-		}
-		cutoutRange = 0;
-		fade.Range = cutoutRange;
+        while (Time.timeSinceLevelLoad <= endTime)
+        {
+            if (this == null || fade == null) yield break; // ✅ 追加
 
-		if (action != null) {
+            cutoutRange = (endTime - Time.timeSinceLevelLoad) / time;
+            fade.Range = cutoutRange;
+
+            yield return endFrame;
+        }
+        cutoutRange = 0;
+
+        if (this != null && fade != null)
+        {
+            fade.Range = cutoutRange;
+        }
+
+        if (action != null) {
 			action ();
 		}
 	}
 
 	IEnumerator FadeinCoroutine (float time, System.Action action)
 	{
-		float endTime = Time.timeSinceLevelLoad + time * (1 - cutoutRange);
+
+        if (!isActiveAndEnabled || fade == null)
+            yield break;
+
+        float endTime = Time.timeSinceLevelLoad + time * (1 - cutoutRange);
 		
 		var endFrame = new WaitForEndOfFrame ();
 
-		while (Time.timeSinceLevelLoad <= endTime) {
-			cutoutRange = 1 - ((endTime - Time.timeSinceLevelLoad) / time);
-			fade.Range = cutoutRange;
-			yield return endFrame;
-		}
-		cutoutRange = 1;
-		fade.Range = cutoutRange;
+        while (Time.timeSinceLevelLoad <= endTime)
+        {
+            if (this == null || fade == null) yield break; // ✅ 追加
+
+            cutoutRange = 1 - ((endTime - Time.timeSinceLevelLoad) / time);
+            fade.Range = cutoutRange;
+
+            yield return endFrame;
+        }
+        cutoutRange = 1;
+
+        if (this != null && fade != null)
+        {
+            fade.Range = cutoutRange;
+        }
+
 
 		if (action != null) {
 			action ();

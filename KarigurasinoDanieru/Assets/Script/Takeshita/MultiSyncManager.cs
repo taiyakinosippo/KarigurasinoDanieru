@@ -39,8 +39,6 @@ public class MultiSyncManager : MonoBehaviour
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";
        
         MainmodeManager = FindObjectOfType<MainModeManager>();
-
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -67,18 +65,33 @@ public class MultiSyncManager : MonoBehaviour
     ====================== */
     public void BeginMultiSync()
     {
+        DontDestroyOnLoad(gameObject);
+        StartCoroutine(BeginMultiSyncCoroutine());
+    }
+
+    IEnumerator BeginMultiSyncCoroutine()
+    {
         enabled = true;
 
         roomId = MainModeManager.CurrentRoomId;
-        playerName = MainModeManager.MultiPlayerName;
 
-        if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
+        // ✅ 名前がセットされるまで待つ
+        while (matchState == null || string.IsNullOrEmpty(matchState.MyName))
         {
-            Debug.LogError("[SYNC INIT ERROR] roomId or playerName is NULL!");
-            return;
+            matchState = FindObjectOfType<MatchState>();
+            yield return null;
         }
 
-    
+        playerName = matchState.MyName;
+
+        Debug.Log($"[SYNC START] player={playerName}");
+
+        if (string.IsNullOrEmpty(roomId))
+        {
+            Debug.LogError("[SYNC INIT ERROR] roomId NULL!");
+            yield break;
+        }
+
         matched = false;
         lastEnemyScore = -1;
 
@@ -88,6 +101,7 @@ public class MultiSyncManager : MonoBehaviour
         SendState();
         InvokeRepeating(nameof(FetchState), 0.5f, 0.5f);
     }
+
 
     /* ======================
        完全停止
@@ -217,6 +231,8 @@ public class MultiSyncManager : MonoBehaviour
             opponentScore = ps.score;
 
             matchState.SetEnemy(ps.player_name, ps.score);
+
+            Debug.Log($"[ENEMY] {opponentName} / score={opponentScore}");
 
             Debug.Log($"[ENEMY FOUND] {opponentName}");
         }
@@ -356,14 +372,13 @@ public class MultiSyncManager : MonoBehaviour
         lastEnemyScore = -1;
     }
 
-   
-
     public void SendScoreIfHigher(int currentTotalScore)
     {
-        // 前回送信より大きければ送信
+        Debug.Log($"[CHECK SEND] current={currentTotalScore}, last={lastSentScore}");
+
         if (currentTotalScore <= lastSentScore)
         {
-            Debug.Log($"[MULTI SKIP] current={currentTotalScore}, lastSent={lastSentScore}");
+            Debug.Log("[SKIP SEND]");
             return;
         }
 

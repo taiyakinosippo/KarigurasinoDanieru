@@ -17,8 +17,6 @@ public class MatchState : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        DontDestroyOnLoad(gameObject); // ✅
     }
 
     public void SetMyPlayer(string name)
@@ -45,5 +43,10 @@ public class MatchState : MonoBehaviour
         EnemyName = "";
         EnemyScore = 0;
         IsMatched = false;
+    }
+
+    public void EnablePersistence()
+    {
+        DontDestroyOnLoad(gameObject);
     }
 }
