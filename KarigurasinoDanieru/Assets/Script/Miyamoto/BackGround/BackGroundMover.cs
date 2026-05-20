@@ -1,9 +1,11 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+
+//背景を動かすクラス
 public class BackGroundMover : MonoBehaviour
 {
-    [SerializeField]private ScoreController scoreController;
+    [SerializeField]private ScoreController scoreController;   //スコアの変化を受け取るためのスコアコントローラー
     [SerializeField]private StageManager stageManager;
     [SerializeField]private RectTransform[] images;
     [SerializeField] private float imageHeight = 540f;
@@ -28,6 +30,8 @@ public class BackGroundMover : MonoBehaviour
 
         scoreController.OnEndSpeedEnd +=
             StopMove;
+
+        //初期の背景画像をランダムに設定
         foreach (var image in images)
         {
             Sprite sprite =stageManager.GetRandomBackground(0);
@@ -95,6 +99,7 @@ public class BackGroundMover : MonoBehaviour
     private void StartSlowDown()
     {
         isSlowDown = true;
+        speed *= 0.5f;
         Debug.Log("背景減速");
     }
 
@@ -110,7 +115,7 @@ public class BackGroundMover : MonoBehaviour
     }
 
     // ========================================
-    // 背景が下まで下がったかの判定と下に下がった場合の位置のリセット
+    // 背景が下まで下がったかの判定と下に下がった場合一番上にある画像の位置の取得してその上に下がった画像を移動させる
     // ========================================
 
     private void LoopBackground()
@@ -131,11 +136,11 @@ public class BackGroundMover : MonoBehaviour
         }
 
     }
-    
 
-    /// <summary>
+
+    // ========================================
     /// 最も下にある背景画像を取得する
-    /// </summary>
+     // ========================================
     private RectTransform GetLowest()
     {
         RectTransform result = images[0];
@@ -152,9 +157,9 @@ public class BackGroundMover : MonoBehaviour
         return result;
     }
 
-    /// <summary>
+    // ========================================
     /// 最も上にある背景画像を取得する
-    /// </summary>
+    // ========================================
     private RectTransform GetHighest()
     {
         RectTransform result =images[0];

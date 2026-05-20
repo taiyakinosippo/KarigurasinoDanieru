@@ -6,11 +6,11 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private StageManager stageManager;
     [SerializeField] private BackGroundMover backGroundMover;
     [SerializeField] private ScoreController scoreController;
+    [SerializeField] private ScoreDebug scoreDebug;
     private float totalScore = 0;
     private float balanceBarScore = 0;
     private int timingBarScore = 0;
     private int mashButtonScore = 0;
-
 
     void Awake()
     {
@@ -40,6 +40,11 @@ public class ScoreManager : MonoBehaviour
 
     public float GetScore()
     {
+        if (scoreDebug.useDebugScore)
+        {
+            Debug.Log("デバッグスコア使用: " + scoreDebug.debugTotalScore);
+            return scoreDebug.debugTotalScore;
+        }
         Debug.Log("mashButtonScore:" + mashButtonScore);
         Debug.Log("timingBarScore:" + timingBarScore);
         Debug.Log("balanceBarScore" + balanceBarScore);
