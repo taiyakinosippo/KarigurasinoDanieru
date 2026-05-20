@@ -20,18 +20,17 @@ public class ResultManager : MonoBehaviour
     [SerializeField] private GameObject soloResultObject; // 表示させるリザルトのImageオブジェクト
     [SerializeField] private TextMeshProUGUI soloResultScoreText;
     [SerializeField] private TextMeshProUGUI soloResultTitleText;
-    [SerializeField] private Animator soloAnimator;
 
     [Header("リザルトUI(マルチ用)")]
     [SerializeField] private GameObject multiResultObject;
     [SerializeField] private TextMeshProUGUI multiResultScoreText;
     [SerializeField] private TextMeshProUGUI multiResultTitleText;
-    [SerializeField] private Animator multiAnimator;
-
-    [SerializeField] private TitleRank[] titleSettings;
 
     [Header("アニメーション設定")]
+    [SerializeField] private Animator rootAnimator;
     [SerializeField] private string showTriggerName = "Show";
+
+    [SerializeField] private TitleRank[] titleSettings;
 
     private bool isScoreFinished = false;
     private bool isBackgroundFinished = false;
@@ -94,7 +93,6 @@ public class ResultManager : MonoBehaviour
         float finalScore = ScoreManager.instance.GetScore();
         string scoreStr = finalScore.ToString("F2") + "m";
         string finalTitle = GetTitle(finalScore);
-        Animator targetAnimator = isMulti ? multiAnimator : soloAnimator;
 
         // 現在のモードに応じて、捜査対象のUIセットを決定
         GameObject targetObject         = isMulti ? multiResultObject : soloResultObject;
@@ -106,18 +104,10 @@ public class ResultManager : MonoBehaviour
         if (targetScoreText != null) targetScoreText.text = scoreStr;
         if (targetTitleText != null) targetTitleText.text = finalTitle;
 
-        TriggerAnimation(targetAnimator);
-    }
-
-    private void TriggerAnimation(Animator animator)
-    {
-        if (animator != null)
+        // アニメーション再生
+        if (rootAnimator != null && rootAnimator.gameObject.activeInHierarchy)
         {
-            // Animatorがアクティブであることを確認してトリガーを引く
-            if (animator.gameObject.activeInHierarchy)
-            {
-                animator.CrossFade("Show", 0.1f);
-            }
+            rootAnimator.SetTrigger(showTriggerName);
         }
     }
 
