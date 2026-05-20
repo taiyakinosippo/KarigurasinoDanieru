@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class GameManager : MonoBehaviour
     public GameLevel currentLevel;
 
     private bool isGameOver = false;
+
+    [Header("演出設定")]
+    [SerializeField] private float presentationDelay = 2.5f; // ゲーム終了からロケット発射までの待機時間
+
     public void Awake()
     {
         QualitySettings.vSyncCount = 0;
@@ -146,7 +151,22 @@ public class GameManager : MonoBehaviour
         {
             pointArea.StopPointArea();
         }
-        float finalScore = ScoreManager.instance.GetScore();
-        ScoreManager.instance.StartFinalScorePresentation();
+
+        // 待機処理を開始
+        StartCoroutine(DelayScorePresentationRoutine());
+    }
+
+    // 待機してからロケットを発射するコルーチン
+    private IEnumerator DelayScorePresentationRoutine()
+    {
+        // インスペクターで設定した秒数待機する
+        yield return new WaitForSeconds(presentationDelay);
+
+        // 待機完了後、ロケットを発射
+        if (ScoreManager.instance != null)
+        {
+            float finalScore = ScoreManager.instance.GetScore();
+            ScoreManager.instance.StartFinalScorePresentation();
+        }
     }
 }

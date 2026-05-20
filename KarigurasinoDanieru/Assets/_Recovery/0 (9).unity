@@ -3136,6 +3136,7 @@ GameObject:
   - component: {fileID: 1245181072}
   - component: {fileID: 1245181071}
   - component: {fileID: 1245181070}
+  - component: {fileID: 1245181073}
   m_Layer: 0
   m_Name: MultiSyncManager
   m_TagString: Untagged
@@ -3188,6 +3189,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1245181073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245181069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd7bd83124bcea84790569954c1e3931, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreSender
+  isTestMode: 0
 --- !u!1 &1257886439
 GameObject:
   m_ObjectHideFlags: 0
@@ -5502,7 +5516,6 @@ GameObject:
   - component: {fileID: 1663138955}
   - component: {fileID: 1663138954}
   - component: {fileID: 1663138960}
-  - component: {fileID: 1663138961}
   m_Layer: 0
   m_Name: MainModeManager
   m_TagString: Untagged
@@ -5586,19 +5599,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722068a7ed8e64140a0195f016cb0cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalRankingManager
---- !u!114 &1663138961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663138951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd7bd83124bcea84790569954c1e3931, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScoreSender
-  isTestMode: 0
 --- !u!1 &1711796186
 GameObject:
   m_ObjectHideFlags: 0

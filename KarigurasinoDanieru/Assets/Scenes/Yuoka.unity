@@ -370,16 +370,40 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -1398568056793896232, guid: e0f631df1295c6b40a8eaa6477e2c3b3, type: 3}
+    - target: {fileID: 1728086819004714771, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2640118625788295884, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -1398568056793896232, guid: e0f631df1295c6b40a8eaa6477e2c3b3, type: 3}
+    - target: {fileID: 2876353982923938319, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0ae82138463f34941ad2998decf4ee92, type: 2}
     - target: {fileID: 3129727120146217672, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_Name
       value: GameCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 3129727120146217672, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4138186036030654567, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_text
+      value: Title
+      objectReference: {fileID: 0}
+    - target: {fileID: 5100641210722242051, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4470588
+      objectReference: {fileID: 0}
+    - target: {fileID: 5100641210722242051, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Color.g
+      value: 0.7946375
+      objectReference: {fileID: 0}
+    - target: {fileID: 5100641210722242051, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5748486234227576745, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
@@ -466,6 +490,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7586966008092222280, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8425412502833120544, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_text
+      value: Title
+      objectReference: {fileID: 0}
+    - target: {fileID: 8751312317576825115, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0ae82138463f34941ad2998decf4ee92, type: 2}
     - target: {fileID: 9120347365751101997, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: scoreManger
       value: 
