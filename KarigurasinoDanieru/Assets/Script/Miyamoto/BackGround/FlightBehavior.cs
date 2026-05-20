@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface FlightBehavior
 {
-    void Execute(GameObject rocket) ;
+    void Execute(Rocket_Mover rocket) ;
 }

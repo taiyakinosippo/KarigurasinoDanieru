@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// =============================================
+///スコアに応じてロケットの演出を切り替える管理スクリプト
+/// =============================================
 public class Player_State_Result : MonoBehaviour
 {
-    [SerializeField]private StageManager stageManager;
-    [SerializeField]private GameObject rocket;
+    [SerializeField]private StageManager stageManager; 
+    [SerializeField]private Rocket_Mover rocket;
     public Action<FlightState> state;
     private FlightState currentState;
     private Dictionary<FlightState, FlightBehavior> behaviors;

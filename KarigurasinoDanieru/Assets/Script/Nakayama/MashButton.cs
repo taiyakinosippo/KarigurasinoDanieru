@@ -71,7 +71,6 @@ public class MashButton : MonoBehaviour
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Debug.Log("杉");
             Vector2 mousePos = Mouse.current.position.ReadValue();
 
             if (RectTransformUtility.RectangleContainsScreenPoint(

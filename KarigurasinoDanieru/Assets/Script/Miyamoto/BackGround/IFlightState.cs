@@ -1,5 +1,8 @@
 using UnityEngine;
-//飛行状態のインターフェース
+/// <summary>
+/// 飛行状態のインターフェース
+/// </summary>
+
 public interface IFlightState
 {
     void Enter(ScoreController controller);
