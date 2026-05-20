@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MashButton : MonoBehaviour
 {
     public int baseScore = 10;//一回クリックのポイント
-
+    public Camera camera;//カメラ
     bool isHardMode = false;//ハードモード切り替え
     public Image targetImage;//透明度を下げる画像
     public float fadeDuration = 5f;
@@ -56,7 +56,6 @@ public class MashButton : MonoBehaviour
     void Update()
     {
         if (isGameOver) return;
-
         if (isHardMode)
         {
             timerw -= Time.deltaTime;
@@ -72,19 +71,20 @@ public class MashButton : MonoBehaviour
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            Debug.Log("杉");
             Vector2 mousePos = Mouse.current.position.ReadValue();
 
             if (RectTransformUtility.RectangleContainsScreenPoint(
                 buttonRect,
                 mousePos,
-                null))
+                camera))
             {
                 clickCount++;
                 score = clickCount * baseScore;
                 PlaySound();
                 ShowImage();
+                Debug.Log("Click! Count:" + clickCount);
 
-                
             }
             ScoreManager.instance.MashButtonScore(score);
         }

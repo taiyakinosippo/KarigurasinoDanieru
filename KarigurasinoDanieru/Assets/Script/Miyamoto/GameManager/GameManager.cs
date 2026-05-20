@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         if (scene.name == "Main")
         {
             InitializeInGame();
+            UI_Manager.instance.UIManagerGetComponents();
         }
     }
 

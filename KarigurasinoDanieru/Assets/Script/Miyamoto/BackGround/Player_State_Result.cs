@@ -17,7 +17,8 @@ public class Player_State_Result : MonoBehaviour
           { FlightState.Miss, new MissBehavior() },
           { FlightState.Sky, new SkyBehavior() },
           { FlightState. Atmosphere, new  AtmosphereBehavior() },
-          { FlightState.Space, new SpaceBehavior() }
+          { FlightState.Space, new SpaceBehavior() },
+          {FlightState.Galaxy, new GalaxyBehavior() }
         };
         state += PlayerEffect;
 
