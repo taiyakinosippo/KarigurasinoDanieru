@@ -4,7 +4,7 @@ public class MissBehavior : FlightBehavior
 {
     public void Execute(GameObject rocket)
     {
-       Debug.Log("さぼったな");
+        rocket.GetComponent<Rocket_Mover>().MissRocketMove();
     }
 }
 
@@ -12,7 +12,7 @@ public class SkyBehavior : FlightBehavior
 {
     public void Execute(GameObject rocket)
     {
-        Debug.Log("まだまだやな");
+        rocket.GetComponent<Rocket_Mover>().MissRocketMove();
     }
 }
 
@@ -20,7 +20,7 @@ public class AtmosphereBehavior : FlightBehavior
 {
     public void Execute(GameObject rocket)
     {
-        Debug.Log("大気圏突破！");
+        rocket.GetComponent<Rocket_Mover>().SkyRocketMove();
     }
 }
 
@@ -28,6 +28,14 @@ public class SpaceBehavior : FlightBehavior
 {
     public void Execute(GameObject rocket)
     {
-        Debug.Log("宇宙到達！");
+        rocket.GetComponent<Rocket_Mover>().AtmosphereRocketMove();
+    }
+}
+
+public class GalaxyBehavior : FlightBehavior
+{
+    public void Execute(GameObject rocket)
+    {
+        rocket.GetComponent<Rocket_Mover>().GalaxyRocketMove();
     }
 }
