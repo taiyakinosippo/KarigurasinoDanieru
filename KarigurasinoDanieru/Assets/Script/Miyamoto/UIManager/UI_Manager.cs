@@ -5,7 +5,6 @@ using System;
 public class UI_Manager : MonoBehaviour
 {
    public static UI_Manager instance;
-   [SerializeField] private ScoreManager scoreManager; //スコアの情報を保持している
    [SerializeField] private ScoreController scoreController; //スコアのプレゼンテーションを管理している
    [SerializeField] private TextMeshProUGUI scoreText;                 //スコアのテキスト
     public static Action OnCountFinished;
@@ -48,8 +47,9 @@ public class UI_Manager : MonoBehaviour
 
     private void FinishText()
     {
-        scoreText.text = scoreController
-            .GetCurrentScore()
+        Debug.Log("スコアのプレゼンテーションが終了しました。");
+        scoreText.text = ScoreManager.instance
+            .GetScore()
             .ToString("N2")
             + "m";
             OnCountFinished?.Invoke();
@@ -73,10 +73,7 @@ public class UI_Manager : MonoBehaviour
 
     public void UIManagerGetComponents()
     {
-        if(scoreManager == null)
-        {
-            scoreManager = FindAnyObjectByType<ScoreManager>();
-        }
+        
         if(scoreController == null)
         {
             scoreController = FindAnyObjectByType<ScoreController>();
