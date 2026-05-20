@@ -10,6 +10,15 @@ public class MatchState : MonoBehaviour
 
     public bool IsMatched { get; private set; }
 
+    void Awake()
+    {
+        if (FindObjectsOfType<MatchState>().Length > 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
     public void SetMyPlayer(string name)
     {
         MyName = name;
@@ -34,5 +43,10 @@ public class MatchState : MonoBehaviour
         EnemyName = "";
         EnemyScore = 0;
         IsMatched = false;
+    }
+
+    public void EnablePersistence()
+    {
+        DontDestroyOnLoad(gameObject);
     }
 }
