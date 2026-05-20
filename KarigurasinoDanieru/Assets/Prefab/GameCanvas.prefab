@@ -823,7 +823,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5229553287543145033}
-  - component: {fileID: 8751312317576825115}
   m_Layer: 0
   m_Name: MultiResult
   m_TagString: Untagged
@@ -852,28 +851,6 @@ Transform:
   - {fileID: 2332782591881328031}
   m_Father: {fileID: 8107916147991822223}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &8751312317576825115
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1728086819004714771}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 78a0622c268115346b8ec42874431f5e, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2021401367804351597
 GameObject:
   m_ObjectHideFlags: 0
@@ -2110,6 +2087,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8107916147991822223}
+  - component: {fileID: 2840736008740284923}
   m_Layer: 0
   m_Name: UI_Root
   m_TagString: Untagged
@@ -2126,7 +2104,7 @@ Transform:
   m_GameObject: {fileID: 5175366437970507667}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2134,6 +2112,28 @@ Transform:
   - {fileID: 5229553287543145033}
   m_Father: {fileID: 1221736863140078702}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2840736008740284923
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5175366437970507667}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf94f79857f64554190d9f3d0cb24022, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5276409586151283048
 GameObject:
   m_ObjectHideFlags: 0
@@ -2976,11 +2976,11 @@ MonoBehaviour:
   soloResultObject: {fileID: 7586966008092222280}
   soloResultScoreText: {fileID: 6523324882868633631}
   soloResultTitleText: {fileID: 7960321034099090787}
-  soloAnimator: {fileID: 2876353982923938319}
   multiResultObject: {fileID: 1728086819004714771}
   multiResultScoreText: {fileID: 7095855581249082043}
   multiResultTitleText: {fileID: 1637161261729136917}
-  multiAnimator: {fileID: 8751312317576825115}
+  rootAnimator: {fileID: 2840736008740284923}
+  showTriggerName: Show
   titleSettings:
   - titleName: seibifuryou
     minScore: 0
@@ -2997,7 +2997,6 @@ MonoBehaviour:
   - titleName: ginga
     minScore: 100001
     maxScore: 9999999
-  showTriggerName: Show
 --- !u!1 &6925275814374384521
 GameObject:
   m_ObjectHideFlags: 0
@@ -3132,7 +3131,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1855712584869196383}
-  - component: {fileID: 2876353982923938319}
   m_Layer: 0
   m_Name: SoloResult
   m_TagString: Untagged
@@ -3160,28 +3158,6 @@ Transform:
   - {fileID: 3155679430584411100}
   m_Father: {fileID: 8107916147991822223}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &2876353982923938319
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7586966008092222280}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 78a0622c268115346b8ec42874431f5e, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7665013539238073632
 GameObject:
   m_ObjectHideFlags: 0
@@ -4085,7 +4061,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Go
+  m_text: Title
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
