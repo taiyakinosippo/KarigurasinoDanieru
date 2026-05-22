@@ -31,15 +31,6 @@ public class BackGroundMover : MonoBehaviour
         scoreController.OnEndSpeedEnd +=
             StopMove;
 
-        //‰Šú‚Ì”wŒi‰æ‘œ‚ğƒ‰ƒ“ƒ_ƒ€‚Éİ’è
-        foreach (var image in images)
-        {
-            Sprite sprite =stageManager.GetRandomBackground(0);
-            if (sprite != null)
-            {
-                image.GetComponent<Image>().sprite = sprite;
-            }
-        }
     }
 
     // ========================================

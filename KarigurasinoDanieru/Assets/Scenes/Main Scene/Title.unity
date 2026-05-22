@@ -334,6 +334,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 70608245}
   m_CullTransparentMesh: 1
+--- !u!1 &76705358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 76705360}
+  - component: {fileID: 76705359}
+  m_Layer: 0
+  m_Name: UI_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &76705359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76705358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9fa05f775489e4297ca2d240b9a73b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
+  scoreController: {fileID: 0}
+  scoreText: {fileID: 0}
+--- !u!4 &76705360
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76705358}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 176.33362, y: 408.8926, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &88842546
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,6 +967,7 @@ MonoBehaviour:
   mashButton: {fileID: 0}
   currentMode: 0
   currentLevel: 0
+  presentationDelay: 2.5
 --- !u!4 &395884066
 Transform:
   m_ObjectHideFlags: 0
@@ -1488,8 +1535,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1828097350}
-  - {fileID: 1152679221}
   - {fileID: 70608246}
+  - {fileID: 1152679221}
   - {fileID: 709935098}
   - {fileID: 218573164}
   m_Father: {fileID: 571953029}
@@ -1680,7 +1727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -3068,7 +3115,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -413.71, y: 169.2}
+  m_AnchoredPosition: {x: -177, y: -46}
   m_SizeDelta: {x: 72.5748, y: 61.6047}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1152679223
@@ -4496,7 +4543,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -413.71002, y: 169.20001}
+  m_AnchoredPosition: {x: -413.71, y: 169.2}
   m_SizeDelta: {x: 72.5748, y: 61.6047}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1465079707
@@ -5992,7 +6039,6 @@ GameObject:
   - component: {fileID: 1804795343}
   - component: {fileID: 1804795342}
   - component: {fileID: 1804795341}
-  - component: {fileID: 1804795345}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -6091,21 +6137,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1804795345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804795340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd9fa05f775489e4297ca2d240b9a73b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
-  scoreManager: {fileID: 0}
-  scoreController: {fileID: 0}
-  scoreText: {fileID: 0}
 --- !u!1 &1807479818
 GameObject:
   m_ObjectHideFlags: 0
@@ -6332,7 +6363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -7242,3 +7273,4 @@ SceneRoots:
   - {fileID: 395884066}
   - {fileID: 1663138953}
   - {fileID: 1245181072}
+  - {fileID: 76705360}
