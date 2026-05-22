@@ -4,14 +4,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler ,IPointerDownHandler, IPointerUpHandler
-{    public string sceneName;
+public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+{
     private Image _button;
     private Color _defaultColor;
-    private bool isPointerDown = false;
+  
 
-    [SerializeField]public Color highlightColor = new Color(1.2f, 1.2f, 1.2f, 1f);
-    [SerializeField] Fade fade;
+    [SerializeField] public Color highlightColor = new Color(1.2f, 1.2f, 1.2f, 1f);
     [SerializeField] private MainModeManager modeManager;
 
     public void Start()
@@ -25,19 +24,15 @@ public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler ,IPointerDow
         _button.color = highlightColor;
     }
 
+    public void OnPointerUp(PointerEventData eventData)
+    {
+      
+         _button.color = _defaultColor;
+        
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         AudioSourceManager.instance.PlaySE(SEType.clickSE);
-        _button.color = _defaultColor;
-
         modeManager.OnGoButtonPressed();
     }
-     public void OnPointerUp(PointerEventData eventData)
-     {
-        if(!isPointerDown)
-        {
-            _button.color = _defaultColor;
-        }
-     }
-
 }
