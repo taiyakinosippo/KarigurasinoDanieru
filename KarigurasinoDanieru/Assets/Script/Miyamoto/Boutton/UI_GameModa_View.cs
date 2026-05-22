@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class UI_GameModa_View : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Image _button;
+    public Image blockInput;
     public Canvas target;
     private Color _defaultColor;
     [SerializeField] private GameMode gameMode;
@@ -29,14 +30,13 @@ public class UI_GameModa_View : MonoBehaviour, IPointerClickHandler, IPointerDow
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Button clicked");
         GameManager.instance.GameModeSelect(gameMode);
-        Debug.Log("Button clicked1");
-        AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
+        SESourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         switch (action)
         {
             case UIAction.Show:
                 UI_Manager.instance.ShowUI(target);
+                blockInput.enabled = true;
                 break;
 
             case UIAction.Close:

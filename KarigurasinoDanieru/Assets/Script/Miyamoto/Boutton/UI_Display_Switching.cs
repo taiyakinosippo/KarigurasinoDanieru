@@ -10,7 +10,7 @@ public class UI_Display_Switching : MonoBehaviour, IPointerEnterHandler, IPointe
     public void OnPointerEnter(PointerEventData eventData)
     {
         _image.SetActive(true);
-       AudioSourceManager.instance.PlaySE(SEType.indicatorSE);
+       SESourceManager.instance.PlaySE(SEType.indicatorSE);
     }
 
     public void OnPointerExit(PointerEventData eventData)

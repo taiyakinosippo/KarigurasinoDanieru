@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class AudioSourceManager : MonoBehaviour
+public class SESourceManager : MonoBehaviour
 {
-    public static AudioSourceManager instance;          //インスタンス化
+    public static SESourceManager instance;          //インスタンス化
     private AudioSource _audioSource;　　　　　　　    
     [Header("SE一覧")]
     [SerializeField] private List<SEData> seList;　    //SEのリストをインスペクターで設定するための変数
