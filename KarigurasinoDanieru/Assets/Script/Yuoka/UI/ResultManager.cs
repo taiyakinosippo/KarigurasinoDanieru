@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Collections;
 
 public class ResultManager : MonoBehaviour
 {
@@ -32,9 +33,15 @@ public class ResultManager : MonoBehaviour
 
     [SerializeField] private TitleRank[] titleSettings;
 
+    [Header("リザルト表示の待機時間設定")]
+    [SerializeField] private float normalDelay = 3f;
+    [SerializeField] private float highScoreDelay = 10f;
+    private float highScoreThreshold = 100000f;
+
     private bool isScoreFinished = false;
     private bool isBackgroundFinished = false;
     private bool isMulti;
+    private bool isDelaying = false;
 
     private void Start()
     {
@@ -79,10 +86,36 @@ public class ResultManager : MonoBehaviour
 
     private void CheckAndShowResult()
     {
-        if (isScoreFinished && isBackgroundFinished)
+        if (isScoreFinished && isBackgroundFinished && !isDelaying)
         {
-            ShowResult();
+            StartCoroutine(DelayShowResultRoutine());
         }
+    }
+
+    // スコアに応じて待機時間を変えるコルーチン
+    private IEnumerator DelayShowResultRoutine()
+    {
+        isDelaying = true;
+
+        // デフォルトの待機時間を設定
+        float currentDelay = normalDelay;
+
+        // ScoreManagerからスコアを取得して条件分岐
+        if (ScoreManager.instance != null)
+        {
+            float currentScore = ScoreManager.instance.GetScore();
+
+            if (currentScore > highScoreThreshold)
+            {
+                currentDelay = highScoreDelay;
+            }
+        }
+
+        // 設定された秒数待機
+        yield return new WaitForSeconds(currentDelay);
+
+        // リザルトを表示
+        ShowResult();
     }
 
     private void ShowResult()
