@@ -34,7 +34,10 @@ public class MatchState : MonoBehaviour
         EnemyName = name;
         EnemyScore = score;
         IsMatched = true;
+
+        Debug.Log($"[MATCH SET] Enemy={name}, Score={score}");
     }
+
 
     public void ResetState()
     {
