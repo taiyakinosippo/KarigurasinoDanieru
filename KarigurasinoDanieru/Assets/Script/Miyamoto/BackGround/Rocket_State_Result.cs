@@ -24,7 +24,7 @@ public class Rocket_State_Result : MonoBehaviour
         };
         state += PlayerEffect;
 
-        UI_Manager.OnCountFinished += SelectBackground;
+        UI_Manager.instance.OnCountFinished += SelectBackground;
     }
 
 

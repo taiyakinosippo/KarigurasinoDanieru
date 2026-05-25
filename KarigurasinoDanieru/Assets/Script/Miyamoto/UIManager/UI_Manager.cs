@@ -7,17 +7,13 @@ public class UI_Manager : MonoBehaviour
    public static UI_Manager instance;
    [SerializeField] private ScoreController scoreController; //スコアのプレゼンテーションを管理している
    [SerializeField] private TextMeshProUGUI scoreText;                 //スコアのテキスト
-    public static Action OnCountFinished;
+    public Action OnCountFinished;
+
     private void Awake()
-   {
+    {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
     //スコアの更新
@@ -71,17 +67,5 @@ public class UI_Manager : MonoBehaviour
         target.enabled = false;
     }
 
-    public void UIManagerGetComponents()
-    {
-        
-        if(scoreController == null)
-        {
-            scoreController = FindAnyObjectByType<ScoreController>();
-        }
-        if(scoreText == null)
-        {
-            scoreText = scoreText = GameObject.Find("ScoreText") .GetComponent<TextMeshProUGUI>();
-        }
-    }
 }
 

@@ -92,7 +92,7 @@ public class Rocket_Mover : MonoBehaviour
             transform.Rotate(
                 0,
                 0,
-                360f * Time.deltaTime);
+                atmosphereRotate * Time.deltaTime);
 
             yield return null;
         }
