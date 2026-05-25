@@ -1,13 +1,20 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using System;
 
 public class UI_Manager : MonoBehaviour
 {
    public static UI_Manager instance;
-   [SerializeField] private ScoreController scoreController; //ƒXƒRƒA‚ÌƒvƒŒƒ[ƒ“ƒe[ƒVƒ‡ƒ“‚ğŠÇ—‚µ‚Ä‚¢‚é
-   [SerializeField] private TextMeshProUGUI scoreText;                 //ƒXƒRƒA‚ÌƒeƒLƒXƒg
-    public Action OnCountFinished;
+   [SerializeField] private ScoreController scoreController; //ã‚¹ã‚³ã‚¢ã®ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ç®¡ç†ã—ã¦ã„ã‚‹
+   [SerializeField] private TextMeshProUGUI scoreText;                 //ã‚¹ã‚³ã‚¢ã®ãƒ†ã‚­ã‚¹ãƒˆ
+    [SerializeField] private TextMeshProUGUI enemyScoreText;
+    private float progress = 0f;
+    public static Action OnCountFinished;
+
+    private float displayMyScore = 0f;
+    private float displayEnemyScore = 0f;
+
+     private MatchState matchState;
 
     private void Awake()
     {
@@ -16,7 +23,18 @@ public class UI_Manager : MonoBehaviour
             instance = this;
         }
     }
-    //ƒXƒRƒA‚ÌXV
+
+
+    void Start()
+    {
+        if (GameManager.instance.currentMode == GameMode.Multi)
+        {
+            matchState = FindObjectOfType<MatchState>();
+        }
+    }
+
+
+    //ã‚¹ã‚³ã‚¢ã®æ›´æ–°
     public void StartScoreEvent()
     {
         scoreController.OnScoreChanged +=
@@ -27,32 +45,92 @@ public class UI_Manager : MonoBehaviour
     }
 
     // ========================================
-    // ‚±‚±‚Å‚ÍƒXƒRƒA‚ÌƒeƒLƒXƒg‚ÌXV‚ğs‚¤
+    // ã“ã“ã§ã¯ã‚¹ã‚³ã‚¢ã®ãƒ†ã‚­ã‚¹ãƒˆã®æ›´æ–°ã‚’è¡Œã†
     // ========================================
-
     private void UpdateScoreText(float score)
     {
-        scoreText.text =
-            score.ToString("N2")
-            + "m";
+        //ã‚·ãƒ³ã‚°ãƒ«
+        if (GameManager.instance.currentMode != GameMode.Multi)
+        {
+            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+            scoreText.text = displayMyScore.ToString("N2") + "m";
+            Debug.Log($"score={score}");
+            return;
+        }
+
+        // ãƒãƒ«ãƒ
+        if (matchState == null)
+        {
+            matchState = FindObjectOfType<MatchState>();
+            return;
+        }
+
+        // âœ… è‡ªåˆ†ã¯scoreãƒ™ãƒ¼ã‚¹
+        displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+
+        // âœ… æ•µã¯MatchState
+        displayEnemyScore = Mathf.Lerp(displayEnemyScore, matchState.EnemyScore, Time.deltaTime * 5f);
+
+        if (scoreText != null)
+            scoreText.text = displayMyScore.ToString("N2") + "m";
+
+        if (enemyScoreText != null)
+            enemyScoreText.text = displayEnemyScore.ToString("N2") + "m";
+
+        //Debug.Log($"[SELF SCORE] score={score}");
+        Debug.Log($"[MATCH STATE] My={matchState?.MyScore}, Enemy={matchState?.EnemyScore}");
+
     }
 
     // ========================================
-    // “®‚«‚ªI—¹‚µ‚½‚Æ‚«‚ÌƒeƒLƒXƒg‚ÌXV
+    // å‹•ããŒçµ‚äº†ã—ãŸã¨ãã®ãƒ†ã‚­ã‚¹ãƒˆã®æ›´æ–°
     // ========================================
+
 
     private void FinishText()
     {
-        Debug.Log("ƒXƒRƒA‚ÌƒvƒŒƒ[ƒ“ƒe[ƒVƒ‡ƒ“‚ªI—¹‚µ‚Ü‚µ‚½B");
-        scoreText.text = ScoreManager.instance
-            .GetScore()
-            .ToString("N2")
-            + "m";
+        progress = 1f;
+        if (GameManager.instance.currentMode != GameMode.Multi)
+        {
+            scoreText.text = ScoreManager.instance
+                .GetScore()
+                .ToString("N2") + "m";
+
             OnCountFinished?.Invoke();
+            return;
+        }
+
+        if (matchState == null)
+        {
+            matchState = FindObjectOfType<MatchState>();
+            return;
+        }
+
+        if (matchState.MyScore <= 0 || matchState.EnemyScore <= 0)
+        {
+            Debug.Log("[WAIT] ã‚¹ã‚³ã‚¢æœªç¢ºå®š");
+            return;
+        }
+
+
+        displayMyScore = ScoreManager.instance.GetScore();
+        displayEnemyScore = matchState.EnemyScore;
+
+
+        if (scoreText != null)
+            scoreText.text = displayMyScore.ToString("N2") + "m";
+
+        if (enemyScoreText != null)
+            enemyScoreText.text = displayEnemyScore.ToString("N2") + "m";
+
+        OnCountFinished?.Invoke();
+
     }
 
+
+
     /// <summary>
-    /// UI‚ğ•\¦‚·‚é
+    /// UIã‚’è¡¨ç¤ºã™ã‚‹
     ///</summary>
     public void ShowUI(Canvas target)
     {
@@ -60,12 +138,28 @@ public class UI_Manager : MonoBehaviour
     }
 
     /// <summary>
-    /// UI‚ğ”ñ•\¦‚É‚·‚é
+    /// UIã‚’éè¡¨ç¤ºã«ã™ã‚‹
     ///</summary>
     public void CloseUI(Canvas target)
     {
         target.enabled = false;
     }
 
+
+    public void UIManagerGetComponents()
+    {
+        if (scoreController == null)
+        {
+            scoreController = FindAnyObjectByType<ScoreController>();
+        }
+
+        scoreText = GameObject.Find("ScoreText")
+            ?.GetComponent<TextMeshProUGUI>();
+
+        enemyScoreText = GameObject.Find("EnemyScoreText")
+            ?.GetComponent<TextMeshProUGUI>();
+    }
 }
+
+
 
