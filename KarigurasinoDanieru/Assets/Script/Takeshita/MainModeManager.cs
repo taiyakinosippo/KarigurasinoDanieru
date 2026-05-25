@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+
 public class MainModeManager : MonoBehaviour
 {
     [Header("UI")]
@@ -24,10 +25,10 @@ public class MainModeManager : MonoBehaviour
 
     public static string CurrentRoomId;
     public static string MultiPlayerName;
-
     public GameManager GM => GameManager.instance;
 
     private bool matchHandled = false;
+
 
     void Start()
     {
@@ -212,7 +213,6 @@ public class MainModeManager : MonoBehaviour
         fade.FadeIn(1f);
 
         yield return new WaitForSeconds(1f);
-
         SceneManager.LoadScene(nextSceneName);
     }
     void StartMatchingAndWait()

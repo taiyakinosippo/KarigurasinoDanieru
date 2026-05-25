@@ -14,7 +14,7 @@ public class StartSpeedState : IFlightState
 
         controller.SetScoreSpeed(speed);
 
-        controller .OnStartSpeedStart ?.Invoke();
+        controller.OnStartSpeedStart ?.Invoke();
 
         Debug.Log("çÇë¨äJén");
     }

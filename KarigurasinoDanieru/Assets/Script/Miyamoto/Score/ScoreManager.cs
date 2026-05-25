@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -62,6 +63,7 @@ public class ScoreManager : MonoBehaviour
             Debug.Log("CurrentSettings ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
             return;
         }
+        BGM_Manager.Instance.PlayRocketBGM();
         backGroundMover.StartMoving(scoreController.CurrentSettings.scrollSpeed, scoreController.CurrentSettings.decelerationRate);
     }
 }
