@@ -180,8 +180,7 @@ public class MultiSyncManager : MonoBehaviour
                 yield break;
             }
 
-            // ✅ 生データ確認
-            Debug.Log("[RAW JSON] " + req.downloadHandler.text);
+             Debug.Log("[RAW JSON] " + req.downloadHandler.text);
 
             if (string.IsNullOrEmpty(req.downloadHandler.text))
             {
@@ -190,11 +189,31 @@ public class MultiSyncManager : MonoBehaviour
                 yield break;
             }
 
-            // ✅ パース
-            PlayerState[] states =
-                JsonHelper.FromJson<PlayerState>(req.downloadHandler.text);
 
-            // ✅ ★これ追加（最重要）
+            string json = req.downloadHandler.text;
+
+            Debug.Log("[RAW JSON] >>>" + json + "<<<");
+
+            // ✅ 空防止
+            if (string.IsNullOrEmpty(json) || json.Trim() == "")
+            {
+                Debug.LogWarning("[JSON EMPTY]");
+                isFetching = false;
+                yield break;
+            }
+
+            // ✅ JSONっぽくない時防止
+            if (!json.Trim().StartsWith("["))
+            {
+                Debug.LogError("[JSON INVALID FORMAT]");
+                isFetching = false;
+                yield break;
+            }
+
+            PlayerState[] states =
+                JsonHelper.FromJson<PlayerState>(json);
+
+
             if (states == null || states.Length == 0)
             {
                 Debug.LogWarning("[MULTI] states null or empty");
@@ -235,6 +254,7 @@ public class MultiSyncManager : MonoBehaviour
             Debug.Log($"[ENEMY] {opponentName} / score={opponentScore}");
 
             Debug.Log($"[ENEMY FOUND] {opponentName}");
+            Debug.Log($"[ENEMY UPDATE] name={ps.player_name}, score={ps.score}");
         }
 
         if (!enemyFound && enemyPreviouslyPresent)
@@ -246,6 +266,7 @@ public class MultiSyncManager : MonoBehaviour
         }
 
         Debug.Log($"[STATE] enemyFound={enemyFound} / opponent={opponentName}");
+      
     }
 
     /* ======================
@@ -374,7 +395,7 @@ public class MultiSyncManager : MonoBehaviour
 
     public void SendScoreIfHigher(int currentTotalScore)
     {
-        Debug.Log($"[CHECK SEND] current={currentTotalScore}, last={lastSentScore}");
+        //Debug.Log($"[CHECK SEND] current={currentTotalScore}, last={lastSentScore}");
 
         if (currentTotalScore <= lastSentScore)
         {
@@ -385,7 +406,7 @@ public class MultiSyncManager : MonoBehaviour
         lastSentScore = currentTotalScore;
         currentScore = currentTotalScore;
 
-        Debug.Log($"[MULTI SEND] new high score = {currentScore}");
+        //Debug.Log($"[MULTI SEND] new high score = {currentScore}");
         StartCoroutine(SendStateCoroutine());
     }
 }
