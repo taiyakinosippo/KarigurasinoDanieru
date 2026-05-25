@@ -13,14 +13,14 @@ public class UI_Judge : MonoBehaviour
             case JudgeType.Miss:
                 judge_text.text = "Miss";
                 judge_text.color = Color.red;
-                AudioSourceManager.instance.PlaySE(SEType.missSE);
+                SESourceManager.instance.PlaySE(SEType.missSE);
                 score += timing_bar_Logic.MissScore;
                 break;
                 
             case JudgeType.Good:
                 judge_text.text = "Good";
                 judge_text.color = Color.green;
-                AudioSourceManager.instance.PlaySE(SEType.goodSE);
+                SESourceManager.instance.PlaySE(SEType.goodSE);
                 score += timing_bar_Logic.GoodScore;
 
                 break;
@@ -28,13 +28,13 @@ public class UI_Judge : MonoBehaviour
             case JudgeType.Great:
                 judge_text.text = "Great";
                 judge_text.color = Color.yellow;
-                AudioSourceManager.instance.PlaySE(SEType.greatSE);
+                SESourceManager.instance.PlaySE(SEType.greatSE);
                 score += timing_bar_Logic.GreatScore;
                 break;
             case JudgeType.Perfect:
                 judge_text.text = "Perfect";
                 judge_text.color = Color.orange;
-                AudioSourceManager.instance.PlaySE(SEType.perfectSE);
+                SESourceManager.instance.PlaySE(SEType.perfectSE);
                 score += timing_bar_Logic.PerfectScore;
                 break;
         }

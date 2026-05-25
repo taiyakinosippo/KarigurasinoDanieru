@@ -32,7 +32,7 @@ public class UI_Scene_Changer : MonoBehaviour, IPointerClickHandler, IPointerDow
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        AudioSourceManager.instance.PlaySE(SEType.clickSE);
+        SESourceManager.instance.PlaySE(SEType.clickSE);
         modeManager.OnGoButtonPressed();
     }
 }

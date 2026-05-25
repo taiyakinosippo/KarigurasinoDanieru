@@ -17,15 +17,10 @@ public class UI_Manager : MonoBehaviour
      private MatchState matchState;
 
     private void Awake()
-   {
+    {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 
