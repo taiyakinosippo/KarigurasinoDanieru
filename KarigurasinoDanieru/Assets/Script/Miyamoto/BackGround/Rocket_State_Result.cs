@@ -4,7 +4,7 @@ using UnityEngine;
 /// =============================================
 ///スコアに応じてロケットの演出を切り替える管理スクリプト
 /// =============================================
-public class Player_State_Result : MonoBehaviour
+public class Rocket_State_Result : MonoBehaviour
 {
     [SerializeField]private StageManager stageManager; 
     [SerializeField]private Rocket_Mover rocket;
