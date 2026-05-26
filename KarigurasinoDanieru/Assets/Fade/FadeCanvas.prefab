@@ -115,4 +115,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fade_Out
   fade: {fileID: 11491604}
-  timer: {fileID: 0}
