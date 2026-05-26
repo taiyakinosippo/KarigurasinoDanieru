@@ -90,10 +90,6 @@ public class ScoreController : MonoBehaviour
         {
             currentScore = TargetScore;
         }
-        if(OnScoreChanged == null)
-        {
-            Debug.Log("ƒCƒxƒ“ƒg‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
-        }
         OnScoreChanged?.Invoke(currentScore);
     }
 
