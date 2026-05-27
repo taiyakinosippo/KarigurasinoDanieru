@@ -737,6 +737,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7150380810840452374, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8712272064969430154, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: camera
       value: 
@@ -930,7 +934,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreSender
   isTestMode: 0
-  ScoreView_text: {fileID: 0}
 --- !u!4 &1104311432
 Transform:
   m_ObjectHideFlags: 0
@@ -1028,7 +1031,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI_Manager
   scoreController: {fileID: 1219785986}
   scoreText: {fileID: 837796786}
-  enemyScoreText: {fileID: 1543123140}
 --- !u!4 &1344835110
 Transform:
   m_ObjectHideFlags: 0
@@ -1550,7 +1552,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fade_Out
   fade: {fileID: 2060168017}
-  timer: {fileID: 0}
 --- !u!114 &2060168017 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}

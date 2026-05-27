@@ -137,9 +137,6 @@ public class ResultManager : MonoBehaviour
         if (targetScoreText != null) targetScoreText.text = scoreStr;
         if (targetTitleText != null) targetTitleText.text = finalTitle;
 
-        //BGM再生
-        BGM_Manager.Instance.PlayResultBGM();
-
         // アニメーション再生
         if (rootAnimator != null && rootAnimator.gameObject.activeInHierarchy)
         {

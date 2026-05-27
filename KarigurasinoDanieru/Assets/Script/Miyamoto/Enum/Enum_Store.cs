@@ -19,14 +19,6 @@ public enum GameLevel
     Normal = 0,
     Hard = 1,
 }
-// BGM‚ÌŽí—Þ‚ð’è‹`‚·‚é—ñ‹“Œ^
-public enum BGMType
-{
-    Title,
-    Game,
-    RocketFly,
-    Result
-}
 // SE‚ÌŽí—Þ‚ð’è‹`‚·‚é—ñ‹“Œ^
 public enum SEType
 {

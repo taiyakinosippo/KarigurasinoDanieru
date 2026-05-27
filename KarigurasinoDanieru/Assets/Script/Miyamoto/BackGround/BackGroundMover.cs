@@ -163,6 +163,4 @@ public class BackGroundMover : MonoBehaviour
         }
         return result;
     }
-
-
 }

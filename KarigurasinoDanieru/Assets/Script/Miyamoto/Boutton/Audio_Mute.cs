@@ -28,7 +28,7 @@ public class Audio_Mute : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler,
     {
         audioSource.mute = !audioSource.mute;
         if (audioSource.mute == true) return;
-        SESourceManager.instance.PlaySE(SEType.SelectbuttonSE);
+        AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         
     }
 
