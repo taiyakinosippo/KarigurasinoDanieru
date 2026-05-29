@@ -641,6 +641,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 383519667125017221, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 2060168017}
     - target: {fileID: 2539695778684084922, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: scoreDebug
       value: 
@@ -737,6 +741,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7150380810829778590, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7150380810829778590, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: cutoutRange
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7150380810840452374, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -746,7 +758,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 514209874}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7150380810840452374, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5817929739058850197, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       insertIndex: -1
@@ -1426,6 +1439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FadeCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 141186, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 11486218, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1529,35 +1546,14 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 141186, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2060168016}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
---- !u!1 &2060168014 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 141186, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
-  m_PrefabInstance: {fileID: 2060168013}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2060168016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060168014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1a73e2e8a3d34e4899ed88e6beb7d42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fade_Out
-  fade: {fileID: 2060168017}
 --- !u!114 &2060168017 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
   m_PrefabInstance: {fileID: 2060168013}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060168014}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d416d1715bbc06d4789612d1211da8d4, type: 3}
