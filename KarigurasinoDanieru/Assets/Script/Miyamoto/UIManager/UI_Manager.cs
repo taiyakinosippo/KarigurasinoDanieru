@@ -1,13 +1,16 @@
 using TMPro;
 using UnityEngine;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 public class UI_Manager : MonoBehaviour
 {
    public static UI_Manager instance;
-   [SerializeField] private ScoreController scoreController; //ƒXƒRƒA‚ÌƒvƒŒƒ[ƒ“ƒe[ƒVƒ‡ƒ“‚ğŠÇ—‚µ‚Ä‚¢‚é
-   [SerializeField] private TextMeshProUGUI scoreText;                 //ƒXƒRƒA‚ÌƒeƒLƒXƒg
+   [SerializeField] private ScoreController scoreController; //ï¿½Xï¿½Rï¿½Aï¿½Ìƒvï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½eï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç—ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
+   [SerializeField] private TextMeshProUGUI scoreText;                 //ï¿½Xï¿½Rï¿½Aï¿½Ìƒeï¿½Lï¿½Xï¿½g
     public static Action OnCountFinished;
+    private readonly Dictionary<Canvas, int> _pendingCloseRequests = new Dictionary<Canvas, int>();
     private void Awake()
    {
         if (instance == null)
@@ -20,7 +23,7 @@ public class UI_Manager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    //ƒXƒRƒA‚ÌXV
+    //ï¿½Xï¿½Rï¿½Aï¿½ÌXï¿½V
     public void StartScoreEvent()
     {
         scoreController.OnScoreChanged +=
@@ -31,7 +34,7 @@ public class UI_Manager : MonoBehaviour
     }
 
     // ========================================
-    // ‚±‚±‚Å‚ÍƒXƒRƒA‚ÌƒeƒLƒXƒg‚ÌXV‚ğs‚¤
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ÍƒXï¿½Rï¿½Aï¿½Ìƒeï¿½Lï¿½Xï¿½gï¿½ÌXï¿½Vï¿½ï¿½ï¿½sï¿½ï¿½
     // ========================================
 
     private void UpdateScoreText(float score)
@@ -42,12 +45,12 @@ public class UI_Manager : MonoBehaviour
     }
 
     // ========================================
-    // “®‚«‚ªI—¹‚µ‚½‚Æ‚«‚ÌƒeƒLƒXƒg‚ÌXV
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ìƒeï¿½Lï¿½Xï¿½gï¿½ÌXï¿½V
     // ========================================
 
     private void FinishText()
     {
-        Debug.Log("ƒXƒRƒA‚ÌƒvƒŒƒ[ƒ“ƒe[ƒVƒ‡ƒ“‚ªI—¹‚µ‚Ü‚µ‚½B");
+        Debug.Log("ï¿½Xï¿½Rï¿½Aï¿½Ìƒvï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½eï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B");
         scoreText.text = ScoreManager.instance
             .GetScore()
             .ToString("N2")
@@ -56,19 +59,44 @@ public class UI_Manager : MonoBehaviour
     }
 
     /// <summary>
-    /// UI‚ğ•\¦‚·‚é
+    /// UIï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     ///</summary>
     public void ShowUI(Canvas target)
     {
-        target.enabled =true;
+        _pendingCloseRequests.Remove(target);
+        target.enabled = true;
     }
 
     /// <summary>
-    /// UI‚ğ”ñ•\¦‚É‚·‚é
+    /// UIï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½
     ///</summary>
     public void CloseUI(Canvas target)
     {
+        _pendingCloseRequests.Remove(target);
         target.enabled = false;
+    }
+
+    public void ScheduleCloseUI(Canvas target, float delay)
+    {
+        int requestId = 1;
+        if (_pendingCloseRequests.TryGetValue(target, out int existingId))
+        {
+            requestId = existingId + 1;
+        }
+
+        _pendingCloseRequests[target] = requestId;
+        StartCoroutine(CloseUIAfterDelay(target, delay, requestId));
+    }
+
+    private IEnumerator CloseUIAfterDelay(Canvas target, float delay, int requestId)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (_pendingCloseRequests.TryGetValue(target, out int currentId) && currentId == requestId)
+        {
+            _pendingCloseRequests.Remove(target);
+            target.enabled = false;
+        }
     }
 
     public void UIManagerGetComponents()

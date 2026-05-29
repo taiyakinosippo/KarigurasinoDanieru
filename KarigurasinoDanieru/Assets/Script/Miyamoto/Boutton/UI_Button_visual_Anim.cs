@@ -45,8 +45,8 @@ public class UI_Button_visual_Anim : MonoBehaviour, IPointerClickHandler, IPoint
     private IEnumerator PlayCloseAnimation()
     {
         animator.CrossFade("Close", 0f, 0, 0f);
-        yield return new WaitForSeconds(1.0f);
-        UI_Manager.instance.CloseUI(target);
+        UI_Manager.instance.ScheduleCloseUI(target, 1.0f);
+        yield break;
     }
 
     private IEnumerator PlayShowAnimation()
