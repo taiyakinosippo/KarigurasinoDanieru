@@ -3,12 +3,16 @@ using System;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager instance;
+    public static ScoreManager instance;        
     [SerializeField] private StageManager stageManager;
-    [SerializeField] private BackGroundMover backGroundMover;
-    [SerializeField] private ScoreController scoreController;
+    [SerializeField] private BackGroundMover soloBackGroundMover;
+    [SerializeField] private BackGroundMover multiBackGroundMover;
+    [SerializeField]private ScoreController soloScoreController;
+    [SerializeField]private ScoreController multiScoreController;
     [SerializeField] private ScoreDebug scoreDebug;
+    [SerializeField] private MatchState matchState;
     private float totalScore = 0;
+    private float multiTotalScore = 0;
     private float balanceBarScore = 0;
     private int timingBarScore = 0;
     private int mashButtonScore = 0;
@@ -19,7 +23,11 @@ public class ScoreManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
-        Debug.Log("ScoreManager instance is set.");
+
+        if (GameManager.instance.currentMode == GameMode.Multi)
+        {
+            matchState = FindFirstObjectByType<MatchState>();
+        }
     }
 
 
@@ -39,7 +47,7 @@ public class ScoreManager : MonoBehaviour
         balanceBarScore = meterValue * baseScore * multiplier;
     }
 
-    public float GetScore()
+    public float SoloResultScore()
     {
         //if (scoreDebug.useDebugScore)
         //{
@@ -53,17 +61,30 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("score:" + totalScore);
         return totalScore;
     }
-
-    public void StartFinalScorePresentation()
+    public float MultiResultScore()
     {
-        totalScore = GetScore();
-        scoreController.StartPresentation(totalScore);
-        if(scoreController.CurrentSettings == null)
+        if (matchState != null)
         {
-            Debug.Log("CurrentSettings ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
-            return;
+            multiTotalScore = 0;
+            Debug.Log("Matchstate‚ª‚ ‚è‚Ü‚¹‚ñ");
+            return 0;
         }
-        BGM_Manager.Instance.PlayRocketBGM();
-        backGroundMover.StartMoving(scoreController.CurrentSettings.scrollSpeed, scoreController.CurrentSettings.decelerationRate);
+        multiTotalScore = matchState.EnemyScore;
+        return multiTotalScore;
     }
+    public void StartSoloFinalScorePresentation()
+    {
+        totalScore = SoloResultScore();
+        soloScoreController.StartPresentation(totalScore);
+        BGM_Manager.Instance.PlayRocketBGM();
+        soloBackGroundMover.StartMoving(soloScoreController.CurrentSettings.scrollSpeed, soloScoreController.CurrentSettings.decelerationRate);
+    }
+
+    public void StartMultiFinalScorePresentation()
+    {
+        multiTotalScore = MultiResultScore();
+        multiScoreController.StartPresentation(multiTotalScore);
+        multiBackGroundMover.StartMoving(multiScoreController.CurrentSettings.scrollSpeed, multiScoreController.CurrentSettings.decelerationRate);
+    }
+
 }

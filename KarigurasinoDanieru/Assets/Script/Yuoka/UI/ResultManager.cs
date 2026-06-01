@@ -103,7 +103,7 @@ public class ResultManager : MonoBehaviour
         // ScoreManagerからスコアを取得して条件分岐
         if (ScoreManager.instance != null)
         {
-            float currentScore = ScoreManager.instance.GetScore();
+            float currentScore = ScoreManager.instance.SoloResultScore();
 
             if (currentScore > highScoreThreshold)
             {
@@ -123,7 +123,7 @@ public class ResultManager : MonoBehaviour
         if (ScoreManager.instance == null) return;
 
         // スコアと称号のデータを取得
-        float finalScore = ScoreManager.instance.GetScore();
+        float finalScore = ScoreManager.instance.SoloResultScore();
         string scoreStr = finalScore.ToString("F2") + "m";
         string finalTitle = GetTitle(finalScore);
 

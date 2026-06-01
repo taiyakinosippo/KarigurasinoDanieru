@@ -1638,9 +1638,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   stageManager: {fileID: 8674972253883362822}
-  backGroundMover: {fileID: 1032555520694219453}
-  scoreController: {fileID: 8984319816332538975}
+  soloBackGroundMover: {fileID: 0}
+  multiBackGroundMover: {fileID: 0}
+  soloScoreController: {fileID: 0}
+  multiScoreController: {fileID: 0}
   scoreDebug: {fileID: 0}
+  matchState: {fileID: 0}
 --- !u!1 &6270109674641059452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1822,7 +1825,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rocket_State_Result
   stageManager: {fileID: 8674972253883362822}
-  rocket: {fileID: 3208811982815574957}
+  SoloRocket: {fileID: 0}
+  MultiRocket: {fileID: 0}
 --- !u!114 &3208811982815574957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2821,7 +2825,7 @@ PrefabInstance:
     - target: {fileID: 2850870265570511160, guid: 6abf07d28ba10ba48b635179835b8cc6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1433003150768781840}
+      objectReference: {fileID: 0}
     - target: {fileID: 2850870265570511160, guid: 6abf07d28ba10ba48b635179835b8cc6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangeScene
@@ -2853,7 +2857,7 @@ PrefabInstance:
     - target: {fileID: 4698870671967055811, guid: 6abf07d28ba10ba48b635179835b8cc6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7996909503991738617}
+      objectReference: {fileID: 0}
     - target: {fileID: 4698870671967055811, guid: 6abf07d28ba10ba48b635179835b8cc6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangeScene
@@ -2985,28 +2989,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5521442147217661750, guid: 6abf07d28ba10ba48b635179835b8cc6, type: 3}
   m_PrefabInstance: {fileID: 6653049568050133848}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1433003150768781840 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5744180318251188552, guid: 6abf07d28ba10ba48b635179835b8cc6, type: 3}
-  m_PrefabInstance: {fileID: 6653049568050133848}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 974337768b5d3d643a68b33fe143fa97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
---- !u!114 &7996909503991738617 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3652097717471988641, guid: 6abf07d28ba10ba48b635179835b8cc6, type: 3}
-  m_PrefabInstance: {fileID: 6653049568050133848}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 974337768b5d3d643a68b33fe143fa97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
 --- !u!1001 &8872929399071857282
 PrefabInstance:
   m_ObjectHideFlags: 0

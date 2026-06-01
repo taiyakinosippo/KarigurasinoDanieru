@@ -1,29 +1,37 @@
-﻿using TMPro;
+﻿using System;
+using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
-using System;
+using UnityEngine.SceneManagement;
 
 public class UI_Manager : MonoBehaviour
 {
-   public static UI_Manager instance;
-   [SerializeField] private ScoreController scoreController; //スコアのプレゼンテーションを管理している
-   [SerializeField] private TextMeshProUGUI scoreText;                 //スコアのテキスト
-    [SerializeField] private TextMeshProUGUI enemyScoreText;
+    public static UI_Manager instance;
+    [SerializeField] private ScoreController soloScoreController;      //スコアのプレゼンテーションを管理している
+    [SerializeField] private ScoreController multiScoreController;     //スコアのプレゼンテーションを管理している
+    [SerializeField] private TextMeshProUGUI soloScoreText;            //スコアのテキスト
+    [SerializeField] private TextMeshProUGUI multiScoreText;
+    private MatchState matchState;                                     //マルチの状態を管理している
     private float progress = 0f;
-    public static Action OnCountFinished;
+    public static Action OnSoloCountFinished;
+    public static Action OnMultiScoreFinished;
 
     private float displayMyScore = 0f;
     private float displayEnemyScore = 0f;
-
-     private MatchState matchState;
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-    }
+        else
+        {
+            Destroy(gameObject);
+        }
 
+    }
 
     void Start()
     {
@@ -32,54 +40,55 @@ public class UI_Manager : MonoBehaviour
             matchState = FindObjectOfType<MatchState>();
         }
     }
-
-
-    //スコアの更新
-    public void StartScoreEvent()
+    private void OnEnable()
     {
-        scoreController.OnScoreChanged +=
-            UpdateScoreText;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-        scoreController.OnFinished +=
-            FinishText;
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    //ソロの場合のスコアの更新
+    public void StartSoloScoreEvent()
+    {
+        soloScoreController.OnScoreChanged +=
+            UpdateSoloScoreText;
+
+        soloScoreController.OnFinished +=
+            FinishSoloText;
+    }
+
+    //マルチの場合のスコアの更新
+    public void StartMultiScoreEvent()
+    {
+        multiScoreController.OnScoreChanged +=
+            UpdateMultiScoreText;
+        multiScoreController.OnFinished +=
+            FinishMultiText;
+    }
+
+
+    // ========================================
+    // ここではソロのスコアのテキストの更新を行う
+    // ========================================
+    private void UpdateSoloScoreText(float score)
+    {
+       
+         displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+         soloScoreText.text = displayMyScore.ToString("N2") + "m";
+         Debug.Log($"score={score}");
     }
 
     // ========================================
-    // ここではスコアのテキストの更新を行う
+    // ここではマルチのスコアのテキストの更新を行う
     // ========================================
-    private void UpdateScoreText(float score)
+    private void UpdateMultiScoreText(float score)
     {
-        //シングル
-        if (GameManager.instance.currentMode != GameMode.Multi)
-        {
-            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
-            scoreText.text = displayMyScore.ToString("N2") + "m";
-            Debug.Log($"score={score}");
-            return;
-        }
-
-        // マルチ
-        if (matchState == null)
-        {
-            matchState = FindObjectOfType<MatchState>();
-            return;
-        }
-
-        // ✅ 自分はscoreベース
-        displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
-
-        // ✅ 敵はMatchState
-        displayEnemyScore = Mathf.Lerp(displayEnemyScore, matchState.EnemyScore, Time.deltaTime * 5f);
-
-        if (scoreText != null)
-            scoreText.text = displayMyScore.ToString("N2") + "m";
-
-        if (enemyScoreText != null)
-            enemyScoreText.text = displayEnemyScore.ToString("N2") + "m";
-
-        //Debug.Log($"[SELF SCORE] score={score}");
-        Debug.Log($"[MATCH STATE] My={matchState?.MyScore}, Enemy={matchState?.EnemyScore}");
-
+        displayEnemyScore = Mathf.Lerp(displayEnemyScore, score, Time.deltaTime * 5f);
+        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        Debug.Log($"score={score}");
     }
 
     // ========================================
@@ -87,47 +96,23 @@ public class UI_Manager : MonoBehaviour
     // ========================================
 
 
-    private void FinishText()
-    {
-        progress = 1f;
-        if (GameManager.instance.currentMode != GameMode.Multi)
-        {
-            scoreText.text = ScoreManager.instance
-                .GetScore()
-                .ToString("N2") + "m";
-
-            OnCountFinished?.Invoke();
-            return;
-        }
-
-        if (matchState == null)
-        {
-            matchState = FindObjectOfType<MatchState>();
-            return;
-        }
-
-        if (matchState.MyScore <= 0 || matchState.EnemyScore <= 0)
-        {
-            Debug.Log("[WAIT] スコア未確定");
-            return;
-        }
-
-
-        displayMyScore = ScoreManager.instance.GetScore();
-        displayEnemyScore = matchState.EnemyScore;
-
-
-        if (scoreText != null)
-            scoreText.text = displayMyScore.ToString("N2") + "m";
-
-        if (enemyScoreText != null)
-            enemyScoreText.text = displayEnemyScore.ToString("N2") + "m";
-
-        OnCountFinished?.Invoke();
-
+    private void FinishSoloText()
+    {    
+       soloScoreText.text = ScoreManager.instance
+       .SoloResultScore()
+       .ToString("N2") + "m";
+       OnSoloCountFinished?.Invoke();
     }
 
+    private void FinishMultiText()
+    {
+        multiScoreText.text = ScoreManager.instance
+        .MultiResultScore()
+        .ToString("N2") + "m";
+        OnMultiScoreFinished?.Invoke();
+     }
 
+     
 
     /// <summary>
     /// UIを表示する
@@ -145,20 +130,23 @@ public class UI_Manager : MonoBehaviour
         target.enabled = false;
     }
 
-
-    public void UIManagerGetComponents()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scoreController == null)
+        if (soloScoreController == null)
         {
-            scoreController = FindAnyObjectByType<ScoreController>();
+            soloScoreController = GameObject.Find("SoloScoreController")?.GetComponent<ScoreController>();
         }
-
-        scoreText = GameObject.Find("ScoreText")
+        if (GameManager.instance.currentMode == GameMode.Multi)
+        {
+            multiScoreController = GameObject.Find("MultiScoreController")?.GetComponent<ScoreController>();
+        }
+        soloScoreText = GameObject.Find("ScoreText")
             ?.GetComponent<TextMeshProUGUI>();
 
-        enemyScoreText = GameObject.Find("EnemyScoreText")
+        multiScoreText = GameObject.Find("MultiScoreText")
             ?.GetComponent<TextMeshProUGUI>();
     }
+  
 }
 
 

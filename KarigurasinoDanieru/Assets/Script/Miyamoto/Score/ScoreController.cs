@@ -62,7 +62,11 @@ public class ScoreController : MonoBehaviour
             Debug.Log("Settings ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
             return;
         }
-        UI_Manager.instance.StartScoreEvent();
+        UI_Manager.instance.StartSoloScoreEvent();
+        if(GameManager.instance.currentMode == GameMode.Multi)
+        {
+            UI_Manager.instance.StartMultiScoreEvent();
+        }
         ChangeState(new StartSpeedState());
     }
 

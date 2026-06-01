@@ -164,8 +164,12 @@ public class GameManager : MonoBehaviour
         // 待機完了後、ロケットを発射
         if (ScoreManager.instance != null)
         {
-            float finalScore = ScoreManager.instance.GetScore();
-            ScoreManager.instance.StartFinalScorePresentation();
+            float finalScore = ScoreManager.instance.SoloResultScore();
+            ScoreManager.instance.StartSoloFinalScorePresentation();
+            if (currentMode == GameMode.Multi)
+            {
+                ScoreManager.instance.StartMultiFinalScorePresentation();
+            }
         }
     }
 }

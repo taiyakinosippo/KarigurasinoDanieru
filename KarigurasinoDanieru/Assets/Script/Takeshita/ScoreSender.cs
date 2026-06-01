@@ -19,8 +19,6 @@ public class ScoreSender : MonoBehaviour
         {
             controller.OnFinished += OnScoreFinishedSend;
         }
-
-        ScoreView_text.text = "";
     }
 
     /// <summary>
@@ -79,7 +77,7 @@ public class ScoreSender : MonoBehaviour
 
     void OnScoreFinishedSend()
     {
-        int finalScore = Mathf.RoundToInt(ScoreManager.instance.GetScore());
+        int finalScore = Mathf.RoundToInt(ScoreManager.instance.SoloResultScore());
 
         var match = FindObjectOfType<MatchState>();
         var multi = FindObjectOfType<MultiSyncManager>();
