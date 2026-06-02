@@ -12,6 +12,7 @@ public class CountdownManager : MonoBehaviour
     [SerializeField] BalanceBarController balanceBar;
     [SerializeField] PointAreaController pointArea;
     [SerializeField] MashButton mashButton;
+ 
     public void StartCountdown()
     {
         StartCoroutine(CountdownRoutine());
@@ -55,5 +56,6 @@ public class CountdownManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
+        BGM_Manager.Instance.PlayGameBGM();   
     }
 }

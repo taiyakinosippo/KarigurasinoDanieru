@@ -1839,15 +1839,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed3b3f78cfe17243911b184b483bad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rocket_Mover
+  backGroundMover: {fileID: 0}
   missUpMove: 20
   missDownMove: 50
   skyMove: 100
-  spaceMove: 40
   atmosphereRotate: 360
   missMoveSpeed: 10
   skyMoveSpeed: 10
-  spaceMoveSpeed: 10
-  speed: 50
+  spaceSpeed: 100
   imageRect: {fileID: 5473916661700134336}
 --- !u!1 &6925275814374384521
 GameObject:
