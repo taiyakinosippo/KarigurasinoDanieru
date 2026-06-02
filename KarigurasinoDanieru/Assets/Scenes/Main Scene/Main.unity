@@ -755,6 +755,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 383519667125017221, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: fade
+      value: 
+      objectReference: {fileID: 2060168017}
     - target: {fileID: 2539695778684084922, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: scoreDebug
       value: 
@@ -1822,7 +1826,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fade_Out
   fade: {fileID: 2060168017}
-  timer: {fileID: 0}
 --- !u!114 &2060168017 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11491604, guid: 53c22e1773be7f84aad8ed8b7b58fa6e, type: 3}
