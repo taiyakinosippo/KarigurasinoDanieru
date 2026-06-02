@@ -52,7 +52,7 @@ public class CountdownManager : MonoBehaviour
         {
             mashButton.StartMashButton();
         }
-        BGM_Manager.Instance.PlayGameBGM();
+
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
     }

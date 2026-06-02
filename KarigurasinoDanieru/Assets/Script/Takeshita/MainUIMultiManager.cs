@@ -7,13 +7,14 @@ public class MainUIMultiManager : MonoBehaviour
 
     private MatchState matchState;
 
+    void Start()
+    {
+        matchState = FindObjectOfType<MatchState>();
+    }
+
     void Update()
     {
-       if (matchState == null)
-        {
-            matchState = FindObjectOfType<MatchState>();
-            return;
-        }
+        if (matchState == null) return;
 
         ScoreText.text =
             $"YOU: {matchState.MyScore}\n" +

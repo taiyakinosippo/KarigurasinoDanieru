@@ -28,7 +28,7 @@ public class UI_Button_visual : MonoBehaviour, IPointerClickHandler, IPointerDow
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        SESourceManager.instance.PlaySE(SEType.SelectbuttonSE);
+        AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         switch (action)
          {
             case UIAction.Show:

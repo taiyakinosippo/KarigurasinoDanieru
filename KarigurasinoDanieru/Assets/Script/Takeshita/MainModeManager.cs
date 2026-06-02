@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
-
+using UnityEditor;
 
 public class MainModeManager : MonoBehaviour
 {
@@ -25,10 +25,10 @@ public class MainModeManager : MonoBehaviour
 
     public static string CurrentRoomId;
     public static string MultiPlayerName;
+
     public GameManager GM => GameManager.instance;
 
     private bool matchHandled = false;
-
 
     void Start()
     {
@@ -213,6 +213,10 @@ public class MainModeManager : MonoBehaviour
         fade.FadeIn(1f);
 
         yield return new WaitForSeconds(1f);
+
+        PlayerPrefs.SetInt("TransitionState", 1);
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene(nextSceneName);
     }
     void StartMatchingAndWait()
@@ -245,6 +249,9 @@ public class MainModeManager : MonoBehaviour
 
         // ❌ ここをやめる
         // yield return new WaitForSeconds(1.2f);
+
+        PlayerPrefs.SetInt("TransitionState", 1);
+        PlayerPrefs.Save();
 
         // ✅ Invokeに変更（重要）
         Invoke(nameof(LoadNextScene), 1.2f);

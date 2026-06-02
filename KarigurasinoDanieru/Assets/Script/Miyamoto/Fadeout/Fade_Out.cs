@@ -3,20 +3,21 @@ using UnityEngine;
 public class Fade_Out : MonoBehaviour
 {
     [SerializeField] Fade fade;
-    [SerializeField] InGameTimer timer;
+    private float fadeTime = 1.0f;
+
     public void Start()
     {
-        if (timer != null)
-        {
-            timer.SetTimerRunning(false);
-        }
+        int state = PlayerPrefs.GetInt("TransitionState", 0);
 
-        fade.FadeOut(1f, () =>
+        if (state == 1)
         {
-            if (timer != null)
+            if (fade != null)
             {
-                //timer.SetTimerRunning(true);
+                fade.ImageFill();   // ˆêu‚Å‰æ–Ê‚ğ^‚ÁˆÃ‚É‚·‚é
+                fade.FadeOut(fadeTime); // 1•b‚©‚¯‚Ä–¾‚é‚­‚·‚é
             }
-        });
+            PlayerPrefs.SetInt("TransitionState", 0);
+            PlayerPrefs.Save();
+        }
     }
 }

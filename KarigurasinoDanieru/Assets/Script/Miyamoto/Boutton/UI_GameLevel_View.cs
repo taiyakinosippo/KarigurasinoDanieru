@@ -32,7 +32,7 @@ public class UI_GameLevel_View : MonoBehaviour,IPointerClickHandler, IPointerDow
     {
         GameManager.instance.GameLevelSelect(gameLevel);
         text.View();
-        SESourceManager.instance.PlaySE(SEType.SelectbuttonSE);
+        AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         switch (action)
         {
             case UIAction.Show:

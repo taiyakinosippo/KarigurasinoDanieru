@@ -8,7 +8,6 @@ public class UI_Button_visual_Anim : MonoBehaviour, IPointerClickHandler, IPoint
 {
     private Image _button;
     public Canvas target;
-    public Image blockInput;
     private Color _defaultColor;
     [SerializeField] private UIAction action;
     [SerializeField] private Animator animator;
@@ -32,7 +31,7 @@ public class UI_Button_visual_Anim : MonoBehaviour, IPointerClickHandler, IPoint
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        SESourceManager.instance.PlaySE(SEType.SelectbuttonSE);
+        AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         if (action == UIAction.Close)
         {
             StartCoroutine(PlayCloseAnimation());
@@ -45,17 +44,15 @@ public class UI_Button_visual_Anim : MonoBehaviour, IPointerClickHandler, IPoint
 
     private IEnumerator PlayCloseAnimation()
     {
-        blockInput.enabled = false;
-        animator.CrossFadeInFixedTime("Close", 0f, 0, 0f);
-        yield return new WaitForEndOfFrame();
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
-        UI_Manager.instance.CloseUI(target);
+        animator.CrossFade("Close", 0f, 0, 0f);
+        UI_Manager.instance.ScheduleCloseUI(target, 1.0f);
+        yield break;
     }
 
     private IEnumerator PlayShowAnimation()
-    {   
+    {
         UI_Manager.instance.ShowUI(target);
         animator.CrossFade("Show", 0f, 0, 0f);
-        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+        yield return new WaitForSeconds(1.0f);
     }
 }
