@@ -1,18 +1,43 @@
-using TMPro;
-using UnityEngine;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UI_Manager : MonoBehaviour
 {
-   public static UI_Manager instance;
-   [SerializeField] private ScoreController scoreController; //�X�R�A�̃v���[���e�[�V�������Ǘ����Ă���
-   [SerializeField] private TextMeshProUGUI scoreText;                 //�X�R�A�̃e�L�X�g
+    public static UI_Manager instance;
+    
+    // ソロ用
+    [SerializeField] private ScoreController soloScoreController;
+    [SerializeField] private TextMeshProUGUI soloScoreText;
+    
+    // マルチ用
+    [SerializeField] private ScoreController multiScoreController;
+    [SerializeField] private TextMeshProUGUI multiScoreText;
+    
+    // 汎用（main版から）
+    [SerializeField] private TextMeshProUGUI scoreText;
+    
+    private MatchState matchState;
+    private float progress = 0f;
+    
+    // イベント
+    public static Action OnSoloCountFinished;
+    public static Action OnMultiScoreFinished;
     public static Action OnCountFinished;
+    
+    // 表示用変数
+    private float displayMyScore = 0f;
+    private float displayEnemyScore = 0f;
+    
+    // UI遅延閉鎖管理
     private readonly Dictionary<Canvas, int> _pendingCloseRequests = new Dictionary<Canvas, int>();
+
     private void Awake()
-   {
+    {
         if (instance == null)
         {
             instance = this;
@@ -23,44 +48,103 @@ public class UI_Manager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    //�X�R�A�̍X�V
-    public void StartScoreEvent()
-    {
-        scoreController.OnScoreChanged +=
-            UpdateScoreText;
 
-        scoreController.OnFinished +=
-            FinishText;
+    void Start()
+    {
+        if (GameManager.instance.currentMode == GameMode.Solo)
+        {
+            StartSoloScoreEvent();
+        }
+        else if (GameManager.instance.currentMode == GameMode.Multi)
+        {
+            StartMultiScoreEvent();
+        }
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // ソロの場合のスコアの更新
+    public void StartSoloScoreEvent()
+    {
+        soloScoreController.OnScoreChanged += UpdateSoloScoreText;
+        soloScoreController.OnFinished += FinishSoloText;
+    }
+
+    // マルチの場合のスコアの更新
+    public void StartMultiScoreEvent()
+    {
+        multiScoreController.OnScoreChanged += UpdateMultiScoreText;
+        multiScoreController.OnFinished += FinishMultiText;
     }
 
     // ========================================
-    // �����ł̓X�R�A�̃e�L�X�g�̍X�V���s��
+    // ソロのスコアのテキストの更新
     // ========================================
+    private void UpdateSoloScoreText(float score)
+    {
+        displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+        soloScoreText.text = displayMyScore.ToString("N2") + "m";
+        Debug.Log($"score={score}");
+    }
 
+    // ========================================
+    // マルチのスコアのテキストの更新
+    // ========================================
+    private void UpdateMultiScoreText(float score)
+    {
+        displayEnemyScore = Mathf.Lerp(displayEnemyScore, score, Time.deltaTime * 5f);
+        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        Debug.Log($"score={score}");
+    }
+
+    // ========================================
+    // 汎用スコアのテキストの更新（main版）
+    // ========================================
     private void UpdateScoreText(float score)
     {
-        scoreText.text =
-            score.ToString("N2")
-            + "m";
+        scoreText.text = score.ToString("N2") + "m";
     }
 
     // ========================================
-    // �������I�������Ƃ��̃e�L�X�g�̍X�V
+    // 終了時のテキストの更新
     // ========================================
+
+    private void FinishSoloText()
+    {
+        soloScoreText.text = ScoreManager.instance
+            .SoloResultScore()
+            .ToString("N2") + "m";
+        OnSoloCountFinished?.Invoke();
+    }
+
+    private void FinishMultiText()
+    {
+        multiScoreText.text = ScoreManager.instance
+            .MultiResultScore()
+            .ToString("N2") + "m";
+        OnMultiScoreFinished?.Invoke();
+    }
 
     private void FinishText()
     {
-        Debug.Log("�X�R�A�̃v���[���e�[�V�������I�����܂����B");
+        Debug.Log("スコアのプレゼンテーションが終了しました。");
         scoreText.text = ScoreManager.instance
-            .GetScore()
-            .ToString("N2")
-            + "m";
-            OnCountFinished?.Invoke();
+            .SoloResultScore()
+            .ToString("N2") + "m";
+        OnCountFinished?.Invoke();
     }
 
     /// <summary>
-    /// UI��\������
-    ///</summary>
+    /// UIを表示する
+    /// </summary>
     public void ShowUI(Canvas target)
     {
         _pendingCloseRequests.Remove(target);
@@ -68,8 +152,8 @@ public class UI_Manager : MonoBehaviour
     }
 
     /// <summary>
-    /// UI���\���ɂ���
-    ///</summary>
+    /// UIを非表示にする
+    /// </summary>
     public void CloseUI(Canvas target)
     {
         _pendingCloseRequests.Remove(target);
@@ -99,17 +183,39 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UIManagerGetComponents();
+    }
+
     public void UIManagerGetComponents()
     {
-        
-        if(scoreController == null)
+        // ソロ用
+        if (soloScoreController == null)
         {
-            scoreController = FindAnyObjectByType<ScoreController>();
+            soloScoreController = GameObject.Find("SoloScoreController")
+                ?.GetComponent<ScoreController>();
         }
-        if(scoreText == null)
+
+        // マルチ用
+        if (GameManager.instance.currentMode == GameMode.Multi)
         {
-            scoreText = scoreText = GameObject.Find("ScoreText") .GetComponent<TextMeshProUGUI>();
+            multiScoreController = GameObject.Find("MultiScoreController")
+                ?.GetComponent<ScoreController>();
+        }
+
+        // テキスト取得
+        soloScoreText = GameObject.Find("ScoreText")
+            ?.GetComponent<TextMeshProUGUI>();
+
+        multiScoreText = GameObject.Find("MultiScoreText")
+            ?.GetComponent<TextMeshProUGUI>();
+
+        // 汎用テキスト（main版）
+        if (scoreText == null)
+        {
+            scoreText = GameObject.Find("ScoreText")
+                ?.GetComponent<TextMeshProUGUI>();
         }
     }
 }
-

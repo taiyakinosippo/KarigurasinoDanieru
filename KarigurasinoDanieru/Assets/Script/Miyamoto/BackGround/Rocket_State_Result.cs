@@ -7,8 +7,10 @@ using UnityEngine;
 public class Rocket_State_Result : MonoBehaviour
 {
     [SerializeField]private StageManager stageManager; 
-    [SerializeField]private Rocket_Mover rocket;
-    public Action<FlightState> state;
+    [SerializeField]private Rocket_Mover SoloRocket;
+    [SerializeField]private Rocket_Mover MultiRocket;
+    public Action<FlightState> soloState;
+    public Action<FlightState> multiState;
     private FlightState currentState;
     private Dictionary<FlightState, FlightBehavior> behaviors;
     int score = 0;
@@ -22,29 +24,52 @@ public class Rocket_State_Result : MonoBehaviour
           { FlightState.Space, new SpaceBehavior() },
           {FlightState.Galaxy, new GalaxyBehavior() }
         };
-        state += PlayerEffect;
+        soloState += SoloEffect;
+        multiState += MultiEffect;
 
-        UI_Manager.OnCountFinished += SelectBackground;
+        UI_Manager.OnSoloCountFinished += SoloSelectState;
+        if (GameManager.instance.currentMode == GameMode.Multi)
+        {
+            UI_Manager.OnMultiScoreFinished += MultiSelectState;
+        }
     }
 
 
-    void SelectBackground()
+    void SoloSelectState()
     {
-        score = (int)ScoreManager.instance.GetScore();
+        score = (int)ScoreManager.instance.SoloResultScore();
 
         FlightState newState = stageManager.GetFlightState(score);
 
         currentState = newState;
 
-        state?.Invoke(currentState);
+        soloState?.Invoke(currentState);
 
     }
 
-void PlayerEffect(FlightState state)
+    void MultiSelectState()
+    {
+        score = (int)ScoreManager.instance.MultiResultScore();
+        FlightState newState = stageManager.GetFlightState(score);
+        currentState = newState;
+        multiState?.Invoke(currentState);
+    }
+
+    void SoloEffect(FlightState state)
     {
         if (behaviors.ContainsKey(state))
         {
-            behaviors[state].Execute(rocket);
+            behaviors[state].Execute(SoloRocket);
         }
     }
+    
+    void MultiEffect(FlightState state)
+    {
+        if (behaviors.ContainsKey(state))
+        {
+            behaviors[state].Execute(MultiRocket);
+        }
+    }
+
+
 }

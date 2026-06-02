@@ -10,7 +10,7 @@ public class ResultWatcher : MonoBehaviour
 
         if (ScoreManager.instance == null) return;
 
-        float score = ScoreManager.instance.GetScore();
+        float score = ScoreManager.instance.SoloResultScore();
 
         if (score > 0.1f)
         {
