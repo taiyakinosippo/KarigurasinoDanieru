@@ -25,7 +25,7 @@ public class UIGameModeManager : MonoBehaviour
     public void SetupScreen(GameMode mode)
     {
 
-        mode = GameMode.Multi;
+        
         //ƒ}ƒ‹ƒ`‚©‚Ç‚¤‚©‚Ì”»’è
         isMulti = (mode == GameMode.Multi);
 
