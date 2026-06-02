@@ -137,7 +137,7 @@ public class UI_Manager : MonoBehaviour
     {
         Debug.Log("スコアのプレゼンテーションが終了しました。");
         scoreText.text = ScoreManager.instance
-            .GetScore()
+            .SoloResultScore()
             .ToString("N2") + "m";
         OnCountFinished?.Invoke();
     }
