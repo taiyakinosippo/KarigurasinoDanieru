@@ -33,7 +33,14 @@ public class Rocket_State_Result : MonoBehaviour
             UI_Manager.OnMultiScoreFinished += MultiSelectState;
         }
     }
+    private void OnDisable()
+    {
+        soloState -= SoloEffect;
+        multiState -= MultiEffect;
 
+        UI_Manager.OnSoloCountFinished -= SoloSelectState;
+        UI_Manager.OnMultiScoreFinished -= MultiSelectState;
+    }
 
     void SoloSelectState()
     {
