@@ -16,6 +16,7 @@ public class ResultManager : MonoBehaviour
 
     [SerializeField] private ScoreController scoreController;
     [SerializeField] private BackGroundMover backgroundMover;
+    [SerializeField] private ScoreManager scoreManager;
 
     [Header("リザルトUI(ソロ用)")]
     [SerializeField] private GameObject soloResultObject; // 表示させるリザルトのImageオブジェクト
@@ -121,7 +122,7 @@ public class ResultManager : MonoBehaviour
     private void ShowResult()
     {
         if (ScoreManager.instance == null) return;
-
+        BGM_Manager.Instance.PlayResultBGM();
         // スコアと称号のデータを取得
         float finalScore = ScoreManager.instance.SoloResultScore();
         string scoreStr = finalScore.ToString("F2") + "m";
@@ -142,6 +143,7 @@ public class ResultManager : MonoBehaviour
         {
             rootAnimator.SetTrigger(showTriggerName);
         }
+
     }
 
     private string GetTitle(float score)

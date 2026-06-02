@@ -9,16 +9,15 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Rocket_Mover : MonoBehaviour
 {
-    [SerializeField] private float missUpMove = 20f;
-    [SerializeField] private float missDownMove = 50f;
-    [SerializeField] private float skyMove = 100f;
-    [SerializeField] private float spaceMove = 40f;
-    [SerializeField] private float atmosphereRotate = 360f;
-    [SerializeField] private float missMoveSpeed = 10f;
-    [SerializeField] private float skyMoveSpeed = 10f;
-    [SerializeField] private float spaceMoveSpeed = 10f;
-    [SerializeField] private float speed = 50f;
-    [SerializeField] RectTransform imageRect;      
+    [SerializeField] private BackGroundMover backGroundMover;      //背景を動かすクラス
+    [SerializeField] private float missUpMove = 20f;               //0～1000メートルのの時のロケットの動き(上に飛ぶ)
+    [SerializeField] private float missDownMove = 50f;             //0～1000メートルのの時のロケットの動き(下に落ちる)
+    [SerializeField] private float skyMove = 100f;                 //1000～10000メートルまでの時のロケットの動き(右に飛ぶ) 
+    [SerializeField] private float atmosphereRotate = 360f;        //10000～100000メートルのの時のロケットの動き(回転する)
+    [SerializeField] private float missMoveSpeed = 10f;            //0～1000メートルのの時のロケットの動きの速さ
+    [SerializeField] private float skyMoveSpeed = 10f;             //1000～10000メートルまでの時のロケットの動きの速さ
+    [SerializeField] private float spaceSpeed = 100f;              //100000メートル以上の時の背景のスクロールの速さ
+    [SerializeField] RectTransform imageRect;                      //100000メートル以上の時の背景画像
 
     public void MissRocketMove()
     {
@@ -31,10 +30,6 @@ public class Rocket_Mover : MonoBehaviour
     public void AtmosphereRocketMove()
     {
         StartCoroutine(AtmosphereRocketMoveCoroutine());
-    }
-    public void SpaceRocketMove()
-    {
-        StartCoroutine(SpaceMoveRocketCoroutine());
     }
     public void GalaxyRocketMove()
     {
@@ -98,25 +93,17 @@ public class Rocket_Mover : MonoBehaviour
         }
     }
 
- 
-    private IEnumerator SpaceMoveRocketCoroutine()
-    {
-
-        Vector2 target = new Vector2(transform.position.x, transform.position.y - spaceMove);
-        while ((Vector2)transform.position != target)
-        {
-            transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    target,
-                    spaceMoveSpeed * Time.deltaTime);
-            yield return null;
-
-        }
-    }
 
     //100000メートル以上のの時のロケットの動き
     private IEnumerator GalaxyMoveSpaceCoroution()
     {
+        RectTransform lowest = backGroundMover.GetLowest();
+
+        imageRect.anchoredPosition =
+            new Vector2(
+                lowest.anchoredPosition.x,
+                lowest.anchoredPosition.y - imageRect.rect.height);
+
         Vector2 target =
             new Vector2(
                 imageRect.anchoredPosition.x,
@@ -124,11 +111,22 @@ public class Rocket_Mover : MonoBehaviour
 
         while (imageRect.anchoredPosition != target)
         {
+            Vector2 before = imageRect.anchoredPosition;
+
             imageRect.anchoredPosition =
                 Vector2.MoveTowards(
                     imageRect.anchoredPosition,
                     target,
-                    speed * Time.deltaTime);
+                    spaceSpeed * Time.deltaTime);
+
+            
+            Vector2 delta = imageRect.anchoredPosition - before;
+
+           
+            foreach (RectTransform image in backGroundMover._images)
+            {
+                image.anchoredPosition += delta;
+            }
 
             yield return null;
         }

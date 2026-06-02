@@ -8,6 +8,7 @@ public class BackGroundMover : MonoBehaviour
     [SerializeField]private ScoreController scoreController;   //スコアの変化を受け取るためのスコアコントローラー
     [SerializeField]private StageManager stageManager;
     [SerializeField]private RectTransform[] images;
+    public RectTransform[] _images => images;
     [SerializeField] private float imageHeight = 540f;
     private float deceleration;
     private float speed;
@@ -132,7 +133,7 @@ public class BackGroundMover : MonoBehaviour
     // ========================================
     /// 最も下にある背景画像を取得する
      // ========================================
-    private RectTransform GetLowest()
+    public RectTransform GetLowest()
     {
         RectTransform result = images[0];
 

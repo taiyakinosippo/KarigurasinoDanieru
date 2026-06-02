@@ -1824,15 +1824,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed3b3f78cfe17243911b184b483bad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rocket_Mover
+  backGroundMover: {fileID: 9120347365751101997}
   missUpMove: 20
   missDownMove: 50
   skyMove: 100
-  spaceMove: 40
   atmosphereRotate: 360
   missMoveSpeed: 10
   skyMoveSpeed: 10
-  spaceMoveSpeed: 10
-  speed: 50
+  spaceSpeed: 100
   imageRect: {fileID: 5523260312997730523}
 --- !u!1 &5833079163916250304
 GameObject:
@@ -2430,15 +2429,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed3b3f78cfe17243911b184b483bad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rocket_Mover
+  backGroundMover: {fileID: 1032555520694219453}
   missUpMove: 20
   missDownMove: 50
   skyMove: 100
-  spaceMove: 40
   atmosphereRotate: 360
   missMoveSpeed: 10
   skyMoveSpeed: 10
-  spaceMoveSpeed: 10
-  speed: 50
+  spaceSpeed: 100
   imageRect: {fileID: 5473916661700134336}
 --- !u!1 &6996761436094382000
 GameObject:
