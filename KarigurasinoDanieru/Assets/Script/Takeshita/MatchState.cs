@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class MatchState : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class MatchState : MonoBehaviour
     public int EnemyScore { get; private set; }
 
     public bool IsMatched { get; private set; }
+
+    public Action<string> OnMyNameSet;
 
     void Awake()
     {
@@ -22,6 +25,7 @@ public class MatchState : MonoBehaviour
     public void SetMyPlayer(string name)
     {
         MyName = name;
+        OnMyNameSet?.Invoke(MyName);
     }
 
     public void SetMyScore(int score)
