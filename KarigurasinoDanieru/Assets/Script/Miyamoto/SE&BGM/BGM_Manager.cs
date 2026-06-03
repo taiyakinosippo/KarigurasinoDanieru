@@ -30,23 +30,21 @@ public class BGM_Manager : MonoBehaviour
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
-    private void OnSceneLoaded(
-        Scene scene,
-        LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene,LoadSceneMode mode)
     {
         switch (scene.name)
         {
             case "Title":
-
                 PlayBGM(titleBGM);
-
                 break;
 
             default:
-
                 StopBGM();
-
                 break;
         }
     }
@@ -65,6 +63,7 @@ public class BGM_Manager : MonoBehaviour
     {
         PlayBGM(resultBGM);
     }
+
     private void StopBGM()
     {
         bgmSource.Stop();
@@ -80,6 +79,5 @@ public class BGM_Manager : MonoBehaviour
         bgmSource.clip = clip;
         bgmSource.Play();
     }
-
 
 }
