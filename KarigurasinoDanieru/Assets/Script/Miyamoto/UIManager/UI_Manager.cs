@@ -17,7 +17,8 @@ public class UI_Manager : MonoBehaviour
     // マルチ用
     [SerializeField] private ScoreController multiScoreController;
     [SerializeField] private TextMeshProUGUI multiScoreText;
-    
+    [SerializeField] private ScoreSender scoreSender;
+
     // 汎用（main版から）
     [SerializeField] private TextMeshProUGUI scoreText;
     
@@ -35,6 +36,7 @@ public class UI_Manager : MonoBehaviour
     
     // UI遅延閉鎖管理
     private readonly Dictionary<Canvas, int> _pendingCloseRequests = new Dictionary<Canvas, int>();
+
 
     private void Awake()
     {
@@ -57,8 +59,14 @@ public class UI_Manager : MonoBehaviour
         }
         else if (GameManager.instance.currentMode == GameMode.Multi)
         {
+            Debug.Log("aaa");
             StartMultiScoreEvent();
         }
+
+     
+            scoreSender.OnEnemyScoreChanged += ShowEnemyScore;
+        
+
     }
 
     private void OnEnable()
@@ -111,6 +119,16 @@ public class UI_Manager : MonoBehaviour
     private void UpdateScoreText(float score)
     {
         scoreText.text = score.ToString("N2") + "m";
+    }
+
+    private void ShowEnemyScore(int score)
+    {
+        Debug.Log($"👾 敵スコア表示: {score}");
+
+        if (multiScoreText != null)
+        {
+            multiScoreText.text = score.ToString("N2") + "m";
+        }
     }
 
     // ========================================
@@ -215,6 +233,12 @@ public class UI_Manager : MonoBehaviour
         if (scoreText == null)
         {
             scoreText = GameObject.Find("ScoreText")
+                ?.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (multiScoreText == null)
+        {
+            multiScoreText = GameObject.Find("multiScoreText")
                 ?.GetComponent<TextMeshProUGUI>();
         }
     }
