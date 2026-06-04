@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
@@ -18,23 +18,24 @@ public class ResultManager : MonoBehaviour
     [SerializeField] private BackGroundMover backgroundMover;
     [SerializeField] private ScoreManager scoreManager;
 
-    [Header("ƒŠƒUƒ‹ƒgUI(ƒ\ƒ—p)")]
-    [SerializeField] private GameObject soloResultObject; // •\¦‚³‚¹‚éƒŠƒUƒ‹ƒg‚ÌImageƒIƒuƒWƒFƒNƒg
+    [Header("ãƒªã‚¶ãƒ«ãƒˆUI(ã‚½ãƒ­ç”¨)")]
+    [SerializeField] private GameObject soloResultObject; // è¡¨ç¤ºã•ã›ã‚‹ãƒªã‚¶ãƒ«ãƒˆã®Imageã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     [SerializeField] private TextMeshProUGUI soloResultScoreText;
     [SerializeField] private TextMeshProUGUI soloResultTitleText;
 
-    [Header("ƒŠƒUƒ‹ƒgUI(ƒ}ƒ‹ƒ`—p)")]
+    [Header("ãƒªã‚¶ãƒ«ãƒˆUI(ãƒãƒ«ãƒç”¨)")]
     [SerializeField] private GameObject multiResultObject;
     [SerializeField] private TextMeshProUGUI multiResultScoreText;
     [SerializeField] private TextMeshProUGUI multiResultTitleText;
+    [SerializeField] private TextMeshProUGUI matchResultText;
 
-    [Header("ƒAƒjƒ[ƒVƒ‡ƒ“İ’è")]
+    [Header("ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®š")]
     [SerializeField] private Animator rootAnimator;
     [SerializeField] private string showTriggerName = "Show";
 
     [SerializeField] private TitleRank[] titleSettings;
 
-    [Header("ƒŠƒUƒ‹ƒg•\¦‚Ì‘Ò‹@ŠÔİ’è")]
+    [Header("ãƒªã‚¶ãƒ«ãƒˆè¡¨ç¤ºã®å¾…æ©Ÿæ™‚é–“è¨­å®š")]
     [SerializeField] private float normalDelay = 3f;
     [SerializeField] private float highScoreDelay = 10f;
     private float highScoreThreshold = 100000f;
@@ -46,17 +47,17 @@ public class ResultManager : MonoBehaviour
 
     private void Start()
     {
-        // ‰Šúó‘Ô‚Í‚Ç‚¿‚ç‚à”ñƒAƒNƒeƒBƒu
+        // åˆæœŸçŠ¶æ…‹ã¯ã©ã¡ã‚‰ã‚‚éã‚¢ã‚¯ãƒ†ã‚£ãƒ–
         if (soloResultObject != null) soloResultObject.SetActive(false);
         if (multiResultObject != null) multiResultObject.SetActive(false);
 
-        // ƒ‚[ƒh”»’è
+        // ãƒ¢ãƒ¼ãƒ‰åˆ¤å®š
         if (GameManager.instance != null)
         {
             isMulti = (GameManager.instance.currentMode == GameMode.Multi);
         }
 
-        // ƒCƒxƒ“ƒg“o˜^
+        // ã‚¤ãƒ™ãƒ³ãƒˆç™»éŒ²
         if (scoreController != null)
         {
             scoreController.OnFinished += OnScorePresentationFinished;
@@ -93,15 +94,15 @@ public class ResultManager : MonoBehaviour
         }
     }
 
-    // ƒXƒRƒA‚É‰‚¶‚Ä‘Ò‹@ŠÔ‚ğ•Ï‚¦‚éƒRƒ‹[ƒ`ƒ“
+    // ã‚¹ã‚³ã‚¢ã«å¿œã˜ã¦å¾…æ©Ÿæ™‚é–“ã‚’å¤‰ãˆã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³
     private IEnumerator DelayShowResultRoutine()
     {
         isDelaying = true;
 
-        // ƒfƒtƒHƒ‹ƒg‚Ì‘Ò‹@ŠÔ‚ğİ’è
+        // ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å¾…æ©Ÿæ™‚é–“ã‚’è¨­å®š
         float currentDelay = normalDelay;
 
-        // ScoreManager‚©‚çƒXƒRƒA‚ğæ“¾‚µ‚ÄğŒ•ªŠò
+        // ScoreManagerã‹ã‚‰ã‚¹ã‚³ã‚¢ã‚’å–å¾—ã—ã¦æ¡ä»¶åˆ†å²
         if (ScoreManager.instance != null)
         {
             float currentScore = ScoreManager.instance.SoloResultScore();
@@ -112,10 +113,10 @@ public class ResultManager : MonoBehaviour
             }
         }
 
-        // İ’è‚³‚ê‚½•b”‘Ò‹@
+        // è¨­å®šã•ã‚ŒãŸç§’æ•°å¾…æ©Ÿ
         yield return new WaitForSeconds(currentDelay);
 
-        // ƒŠƒUƒ‹ƒg‚ğ•\¦
+        // ãƒªã‚¶ãƒ«ãƒˆã‚’è¡¨ç¤º
         ShowResult();
     }
 
@@ -123,22 +124,46 @@ public class ResultManager : MonoBehaviour
     {
         if (ScoreManager.instance == null) return;
         BGM_Manager.Instance.PlayResultBGM();
-        // ƒXƒRƒA‚ÆÌ†‚Ìƒf[ƒ^‚ğæ“¾
+        // ã‚¹ã‚³ã‚¢ã¨ç§°å·ã®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
         float finalScore = ScoreManager.instance.SoloResultScore();
         string scoreStr = finalScore.ToString("F2") + "m";
         string finalTitle = GetTitle(finalScore);
 
-        // Œ»İ‚Ìƒ‚[ƒh‚É‰‚¶‚ÄA‘{¸‘ÎÛ‚ÌUIƒZƒbƒg‚ğŒˆ’è
+        // ç¾åœ¨ã®ãƒ¢ãƒ¼ãƒ‰ã«å¿œã˜ã¦ã€æœæŸ»å¯¾è±¡ã®UIã‚»ãƒƒãƒˆã‚’æ±ºå®š
         GameObject targetObject         = isMulti ? multiResultObject : soloResultObject;
         TextMeshProUGUI targetScoreText = isMulti ? multiResultScoreText : soloResultScoreText;
         TextMeshProUGUI targetTitleText = isMulti ? multiResultTitleText : soloResultTitleText;
 
-        // UI‚Éˆ—‚ğ“K—p
+        // UIã«å‡¦ç†ã‚’é©ç”¨
         if (targetObject    != null) targetObject.SetActive(true);
         if (targetScoreText != null) targetScoreText.text = scoreStr;
         if (targetTitleText != null) targetTitleText.text = finalTitle;
 
-        // ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+        if (isMulti && matchResultText != null)
+        {
+            int myScore = Mathf.RoundToInt(finalScore);
+
+            //æ•µã‚¹ã‚³ã‚¢å–å¾—ï¼ˆScoreSenderã‹ã‚‰ï¼‰
+            ScoreSender sender = FindObjectOfType<ScoreSender>();
+            int enemyScore = sender != null ? sender.enemyScore : 0;
+
+            Debug.Log($"ğŸ† å‹æ•—åˆ¤å®š: è‡ªåˆ†={myScore} æ•µ={enemyScore}");
+
+            if (myScore == enemyScore)
+            {
+                matchResultText.text = "DRAW";
+            }
+            else if (myScore > enemyScore)
+            {
+                matchResultText.text = "YOU WIN";
+            }
+            else
+            {
+                matchResultText.text = "YOU LOSE";
+            }
+        }
+
+        // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
         if (rootAnimator != null && rootAnimator.gameObject.activeInHierarchy)
         {
             rootAnimator.SetTrigger(showTriggerName);
@@ -155,6 +180,6 @@ public class ResultManager : MonoBehaviour
                 return setting.titleName;
             }
         }
-        return "”»’è•s”\";
+        return "åˆ¤å®šä¸èƒ½";
     }
 }
