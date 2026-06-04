@@ -174,10 +174,10 @@ public class MainModeManager : MonoBehaviour
 
     void PrintCurrentGameState()
 {
-    Debug.Log(
-        $"[DEBUG] Mode: {GameManager.instance.currentMode}, " +
-        $"Difficulty: {GameManager.instance.currentLevel}"
-    );
+    //Debug.Log(
+    //    $"[DEBUG] Mode: {GameManager.instance.currentMode}, " +
+    //    $"Difficulty: {GameManager.instance.currentLevel}"
+    //);
 }
 
     public void OnGoButtonPressed()
@@ -239,7 +239,7 @@ public class MainModeManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("[MATCH FOUND]");
+       // Debug.Log("[MATCH FOUND]");
 
         matchingText.text = $"VS {matchState.EnemyName}";
 
@@ -279,7 +279,7 @@ public class MainModeManager : MonoBehaviour
 
     void LoadNextScene()
     {
-        Debug.Log("[LOAD SCENE CALLED]");
+      //  Debug.Log("[LOAD SCENE CALLED]");
         SceneManager.LoadScene(nextSceneName);
     }
 }

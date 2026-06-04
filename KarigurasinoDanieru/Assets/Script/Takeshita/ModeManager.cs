@@ -418,7 +418,7 @@ public class ModeManager : MonoBehaviour
     {
         if (!int.TryParse(scoreInputField.text, out int value))
         {
-            Debug.LogWarning("Score input invalid");
+          //  Debug.LogWarning("Score input invalid");
             return;
         }
 

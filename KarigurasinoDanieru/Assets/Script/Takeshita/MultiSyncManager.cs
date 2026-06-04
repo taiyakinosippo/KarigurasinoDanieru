@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System;
 
 public class MultiSyncManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class MultiSyncManager : MonoBehaviour
     private int lastSentScore = 0;
 
     private bool enemyPreviouslyPresent = false;
+
+    public Action<int> OnEnemyScoreChanged;
 
     void Awake()
     {
@@ -84,11 +87,11 @@ public class MultiSyncManager : MonoBehaviour
 
         playerName = matchState.MyName;
 
-        Debug.Log($"[SYNC START] player={playerName}");
+       // Debug.Log($"[SYNC START] player={playerName}");
 
         if (string.IsNullOrEmpty(roomId))
         {
-            Debug.LogError("[SYNC INIT ERROR] roomId NULL!");
+         //   Debug.LogError("[SYNC INIT ERROR] roomId NULL!");
             yield break;
         }
 
@@ -132,7 +135,7 @@ public class MultiSyncManager : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("[MultiSync] Send error: " + req.error);
+              //  Debug.LogError("[MultiSync] Send error: " + req.error);
             }
         }
        // Debug.Log($"[SEND] room={roomId}, name={playerName}, score={currentScore}");
@@ -154,19 +157,16 @@ public class MultiSyncManager : MonoBehaviour
     {
         isFetching = true;
 
-        //Debug.Log("[FETCH] start");
-
+      
         string url =
-      $"{fetchUrl}?room_id={roomId}" +
-    $"&difficulty={GameManager.instance.currentLevel}" +
-      $"&player_name={playerName}";
-
+            $"{fetchUrl}?room_id={roomId}" +
+            $"&difficulty={GameManager.instance.currentLevel}" +
+            $"&player_name={playerName}";
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
             req.timeout = 10;
             yield return req.SendWebRequest();
-            //Debug.Log("[FETCH RAW RESPONSE] " + req.downloadHandler.text);
 
             if (req.result != UnityWebRequest.Result.Success)
             {
@@ -180,24 +180,35 @@ public class MultiSyncManager : MonoBehaviour
                 yield break;
             }
 
-            // ✅ 生データ確認
-            Debug.Log("[RAW JSON] " + req.downloadHandler.text);
+           // Debug.Log("[RAW JSON] " + req.downloadHandler.text);
 
             if (string.IsNullOrEmpty(req.downloadHandler.text))
             {
-                Debug.LogWarning("[FETCH] Empty response");
+               // Debug.LogWarning("[FETCH] Empty response");
                 isFetching = false;
                 yield break;
             }
 
-            // ✅ パース
             PlayerState[] states =
                 JsonHelper.FromJson<PlayerState>(req.downloadHandler.text);
 
-            // ✅ ★これ追加（最重要）
+          //  Debug.Log("===== PLAYER LIST =====");
+
+            foreach (var ps in states)
+            {
+                if (ps == null) continue;
+
+              //  Debug.Log(
+                //    $"name={ps.player_name}, score={ps.score}" +
+               //     (ps.player_name == playerName ? " ← YOU" : " ← ENEMY候補")
+             //   );
+            }
+
+         //   Debug.Log("=======================");
+
             if (states == null || states.Length == 0)
             {
-                Debug.LogWarning("[MULTI] states null or empty");
+              //  Debug.LogWarning("[MULTI] states null or empty");
                 isFetching = false;
                 yield break;
             }
@@ -213,40 +224,45 @@ public class MultiSyncManager : MonoBehaviour
     {
         bool enemyFound = false;
 
-        Debug.Log($"[ME] {playerName}");
-
         foreach (var ps in states)
         {
             if (ps == null) continue;
 
-            Debug.Log($"[SERVER] {ps.player_name}");
-
+            // 自分除外
             if (ps.player_name == playerName)
                 continue;
 
             enemyFound = true;
-            enemyPreviouslyPresent = true;
 
-            opponentName = ps.player_name;
-            opponentScore = ps.score;
+            // ✅ スコアが変わったときだけ更新
+            if (lastEnemyScore != ps.score)
+            {
+                lastEnemyScore = ps.score;
 
-            matchState.SetEnemy(ps.player_name, ps.score);
+                opponentName = ps.player_name;
+                opponentScore = ps.score;
 
-            Debug.Log($"[ENEMY] {opponentName} / score={opponentScore}");
+                matchState.SetEnemy(ps.player_name, ps.score);
 
-            Debug.Log($"[ENEMY FOUND] {opponentName}");
+                OnEnemyScoreChanged?.Invoke(ps.score);
+
+               // Debug.Log($"[REALTIME UPDATE] {opponentName} : {opponentScore}");
+            }
         }
 
+        // 敵いなくなった場合
         if (!enemyFound && enemyPreviouslyPresent)
         {
             enemyPreviouslyPresent = false;
-
             opponentName = "";
             opponentScore = 0;
         }
 
-        Debug.Log($"[STATE] enemyFound={enemyFound} / opponent={opponentName}");
+        enemyPreviouslyPresent = enemyFound;
+
+
     }
+
 
     /* ======================
        マッチ成立判定
@@ -290,7 +306,7 @@ public class MultiSyncManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
         {
-            Debug.LogError("[MULTI ERROR] roomId or playerName is NULL");
+          //  Debug.LogError("[MULTI ERROR] roomId or playerName is NULL");
             yield break;
         }
 
@@ -310,7 +326,7 @@ public class MultiSyncManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("[MultiSync] Join failed: " + req.error);
+              // Debug.LogError("[MultiSync] Join failed: " + req.error);
             }
         }
     }
@@ -321,7 +337,7 @@ public class MultiSyncManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(playerName))
         {
-            Debug.LogError("[SEND ERROR] roomId or playerName NULL!");
+         //   Debug.LogError("[SEND ERROR] roomId or playerName NULL!");
            return;
         }
 
@@ -350,9 +366,9 @@ public class MultiSyncManager : MonoBehaviour
         // ✅ MatchState を読むだけ
         currentScore = matchState.MyScore;
 
-        Debug.Log(
-            $"[MULTI SEND] name={matchState.MyName}, score={currentScore}"
-        );
+       // Debug.Log(
+          //  $"[MULTI SEND] name={matchState.MyName}, score={currentScore}"
+       // );
 
         StartCoroutine(SendScoreManuallyCoroutine());
     }
@@ -374,18 +390,18 @@ public class MultiSyncManager : MonoBehaviour
 
     public void SendScoreIfHigher(int currentTotalScore)
     {
-        Debug.Log($"[CHECK SEND] current={currentTotalScore}, last={lastSentScore}");
+      //  Debug.Log($"[CHECK SEND] current={currentTotalScore}, last={lastSentScore}");
 
         if (currentTotalScore <= lastSentScore)
         {
-            Debug.Log("[SKIP SEND]");
+         //  Debug.Log("[SKIP SEND]");
             return;
         }
 
         lastSentScore = currentTotalScore;
         currentScore = currentTotalScore;
 
-        Debug.Log($"[MULTI SEND] new high score = {currentScore}");
+      //  Debug.Log($"[MULTI SEND] new high score = {currentScore}");
         StartCoroutine(SendStateCoroutine());
     }
 }
