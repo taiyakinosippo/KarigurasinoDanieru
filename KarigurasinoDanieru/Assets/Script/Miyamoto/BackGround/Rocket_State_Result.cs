@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using YourNamespace;
 /// =============================================
 ///スコアに応じてロケットの演出を切り替える管理スクリプト
 /// =============================================
 public class Rocket_State_Result : MonoBehaviour
 {
-    [SerializeField]private StageManager stageManager; 
+    [SerializeField]private StageManager stageManager;    
     [SerializeField]private Rocket_Mover SoloRocket;
     [SerializeField]private Rocket_Mover MultiRocket;
+    [SerializeField]private VFX_FireController soloFireController;
+    [SerializeField]private VFX_FireController multiFireController;
     public Action<FlightState> soloState;
     public Action<FlightState> multiState;
     private FlightState currentState;
@@ -44,18 +47,17 @@ public class Rocket_State_Result : MonoBehaviour
 
     void SoloSelectState()
     {
+        soloFireController.StopFire();
         score = (int)ScoreManager.instance.SoloResultScore();
-
         FlightState newState = stageManager.GetFlightState(score);
-
         currentState = newState;
-
         soloState?.Invoke(currentState);
 
     }
 
     void MultiSelectState()
     {
+        multiFireController.StopFire();
         score = (int)ScoreManager.instance.MultiResultScore();
         FlightState newState = stageManager.GetFlightState(score);
         currentState = newState;

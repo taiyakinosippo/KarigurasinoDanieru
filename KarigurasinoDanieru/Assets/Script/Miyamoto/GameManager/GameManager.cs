@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private bool isGameOver = false;
 
     [Header("演出設定")]
-    [SerializeField] private float presentationDelay = 2.5f; // ゲーム終了からロケット発射までの待機時間
+    [SerializeField] private float presentationDelay = 3f; // ゲーム終了からロケット発射までの待機時間
 
     public void Awake()
     {
@@ -154,6 +154,8 @@ public class GameManager : MonoBehaviour
 
         // 待機処理を開始
         StartCoroutine(DelayScorePresentationRoutine());
+
+        AudioSourceManager.instance.PlaySE(SEType.countdownSE);
     }
 
     // 待機してからロケットを発射するコルーチン
