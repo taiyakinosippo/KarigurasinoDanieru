@@ -1,5 +1,6 @@
-Ôªøusing UnityEngine;
 using System;
+using UnityEngine;
+using YourNamespace;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]private ScoreController multiScoreController;
     [SerializeField] private ScoreDebug scoreDebug;
     [SerializeField] private MatchState matchState;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private VFX_FireController soloFireController;
+    [SerializeField] private VFX_FireController multiFireController;
+
     private float totalScore = 0;
     private float multiTotalScore = 0;
     private float balanceBarScore = 0;
@@ -51,7 +56,7 @@ public class ScoreManager : MonoBehaviour
     {
         //if (scoreDebug.useDebugScore)
         //{
-        //    Debug.Log("„Éá„Éê„ÉÉ„Ç∞„Çπ„Ç≥„Ç¢‰ΩøÁî®: " + scoreDebug.debugTotalScore);
+        //    Debug.Log("ÉfÉoÉbÉOÉXÉRÉAégóp: " + scoreDebug.debugTotalScore);
         //    return scoreDebug.debugTotalScore;
         //}
         Debug.Log("mashButtonScore:" + mashButtonScore);
@@ -63,14 +68,13 @@ public class ScoreManager : MonoBehaviour
     }
     public float MultiResultScore()
     {
-        if (matchState == null)
+        if (matchState != null)
         {
             multiTotalScore = 0;
-            Debug.Log("Matchstate„Åå„ÅÇ„Çä„Åæ„Åõ„Çì");
+            Debug.Log("MatchstateÇ™Ç†ÇËÇ‹ÇπÇÒ");
             return 0;
         }
         multiTotalScore = matchState.EnemyScore;
-        Debug.Log("„Éû„É´„ÉÅ„Çπ„Ç≥„Ç¢" + multiTotalScore);
         return multiTotalScore;
     }
     public void StartSoloFinalScorePresentation()
@@ -79,14 +83,15 @@ public class ScoreManager : MonoBehaviour
         soloScoreController.StartPresentation(totalScore);
         BGM_Manager.Instance.PlayRocketBGM();
         soloBackGroundMover.StartMoving(soloScoreController.CurrentSettings.scrollSpeed, soloScoreController.CurrentSettings.decelerationRate);
+        soloFireController.PlayFire();
     }
 
     public void StartMultiFinalScorePresentation()
     {
         multiTotalScore = MultiResultScore();
-        Debug.Log($"üî• Multi„Çø„Éº„Ç≤„ÉÉ„Éà: {multiTotalScore}");
         multiScoreController.StartPresentation(multiTotalScore);
         multiBackGroundMover.StartMoving(multiScoreController.CurrentSettings.scrollSpeed, multiScoreController.CurrentSettings.decelerationRate);
+        multiFireController.PlayFire();
     }
 
 }
