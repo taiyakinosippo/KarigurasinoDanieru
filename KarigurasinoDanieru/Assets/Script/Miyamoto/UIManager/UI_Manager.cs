@@ -69,21 +69,26 @@ public class UI_Manager : MonoBehaviour
 
     IEnumerator Start()
     {
-    
-        yield return new WaitForSeconds(0.2f); // ←超重要
+        IsScoreReady = false;
+
+        yield return new WaitForSeconds(0.2f); 
 
         scoreSender = FindObjectOfType<ScoreSender>();
 
-        if (scoreSender != null)
-        {
-            Debug.Log("✅ ScoreSender見つかった");
+        scoreSender.OnEnemyScoreChanged += ShowEnemyScore;
+    }
 
-            scoreSender.OnEnemyScoreChanged += ShowEnemyScore;
-        }
-        else
-        {
-            Debug.LogError("❌ ScoreSender見つからない");
-        }
+    private void Update()
+    {
+        if (GameManager.instance.currentMode != GameMode.Multi) return;
+
+        CheckStart(displayMyScore, targetEnemyScore);
+
+        if (!isStartText) return;
+
+        displayEnemyScore = Mathf.Lerp(displayEnemyScore, targetEnemyScore, Time.deltaTime * 1f);
+
+        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
     }
 
     private void OnEnable()
@@ -115,73 +120,33 @@ public class UI_Manager : MonoBehaviour
     // ========================================
     private void UpdateSoloScoreText(float score)
     {
-        //マルチ処理
+       //マルチ処理
         if (GameManager.instance.currentMode == GameMode.Multi)
         {
+         
+            float enemy = targetEnemyScore;
 
-            if (scoreSender == null)
-            {
-                Debug.LogWarning("❌ ScoreSenderがnull");
-                return;
-            }
-
-            int enemy = scoreSender.enemyScore;
-
-        //同時スタート制御
-            if (!isStartText)
-            {
-                if(score>0 && enemy > 0)
-                {
-                    isStartText = true;
-
-                    displayMyScore = 0f;
-                    displayEnemyScore = 0f;
-
-                    Debug.Log("🚀 同時スタート！");
-
-                }
-                else
-                {
-                    return;
-                }
-            }
+            //同時スタートチェック
+            if (!CheckStart(score, targetEnemyScore)) return;
 
             //自分のスコア更新
-                displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
-                soloScoreText.text = displayMyScore.ToString("N2") + "m";
-            isMyFinished = true;
+            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
 
-            // 敵スコア更新
-            if (!isEnemyFinished)
+            if (soloScoreText != null)
             {
-                targetEnemyScore = enemy;
-
-                if (displayEnemyScore < targetEnemyScore)
-                {
-                    float diff = targetEnemyScore - displayEnemyScore;
-
-                    float speed = diff * 0.5f; // 調整
-
-                    displayEnemyScore += speed * Time.deltaTime;
-
-                    if (displayEnemyScore >= targetEnemyScore)
-                    {
-                        displayEnemyScore = targetEnemyScore;
-                        isEnemyFinished = true;
-                        Debug.Log("✅ 敵スコア終了");
-                    }
-                }
-
-                multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+                soloScoreText.text = displayMyScore.ToString("N2") + "m";
             }
 
-            return;
+            isMyFinished = true;
+        }
+        else
+        {
+            //ソロ処理
+            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+            soloScoreText.text = displayMyScore.ToString("N2") + "m";
+            Debug.Log($"score={score}");
         }
 
-        //ソロ処理
-        displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
-        soloScoreText.text = displayMyScore.ToString("N2") + "m";
-        Debug.Log($"score={score}");
     }
 
     // ========================================
@@ -210,6 +175,52 @@ public class UI_Manager : MonoBehaviour
     }
 
     // ========================================
+    // マルチのスコアのテキストの更新(敵）
+    // ========================================
+    private void UpdateEnemyMultiScoreText(float enemyScore)
+    {
+        if (GameManager.instance.currentMode != GameMode.Multi) return;
+
+        float myScore = displayMyScore;
+
+        //同時スタートチェック
+        if (!CheckStart(myScore, enemyScore)) return;
+
+        
+            targetEnemyScore = enemyScore;
+
+            if (displayEnemyScore < targetEnemyScore)
+            {
+                float diff = targetEnemyScore - displayEnemyScore;
+                float speed = diff * 0.5f;
+
+                displayEnemyScore += speed * Time.deltaTime;
+
+                if (displayEnemyScore >= targetEnemyScore)
+                {
+                    displayEnemyScore = targetEnemyScore;
+                    isEnemyFinished = true;
+                    Debug.Log("敵表示更新: " + displayEnemyScore);
+                }
+            }
+
+        
+
+        if (multiScoreText != null)
+        {
+            Debug.Log("❌ multiScoreText NULL");
+
+        }
+
+        else
+        {
+            multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+            Debug.Log("✅ multiScoreText OK");
+        }
+
+    }
+
+    // ========================================
     // 汎用スコアのテキストの更新（main版）
     // ========================================
     private void UpdateScoreText(float score)
@@ -217,14 +228,35 @@ public class UI_Manager : MonoBehaviour
         scoreText.text = score.ToString("N2") + "m";
     }
 
-    private void ShowEnemyScore(int score)
+    private bool CheckStart(float myScore, float enemyScore)
+    {
+        if (isStartText) return true;
+
+        if (myScore > 0 && enemyScore > 0)
+        {
+            isStartText = true;
+            IsScoreReady = true;
+
+            displayMyScore = 0f;
+            displayEnemyScore = 0f;
+
+            Debug.Log("🚀 同時スタート！");
+            return true;
+        }
+
+        return false;
+    }
+
+    private void ShowEnemyScore(float score)
     {
         if (score <= 0) return;
 
-        IsScoreReady = true;
+        targetEnemyScore = score;
 
-        targetEnemyScore = score; 
+        Debug.Log($"targetEnemyScore{targetEnemyScore}");
+      
     }
+
 
     // ========================================
     // 終了時のテキストの更新
