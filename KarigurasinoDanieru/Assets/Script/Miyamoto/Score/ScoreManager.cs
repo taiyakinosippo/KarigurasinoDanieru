@@ -1,5 +1,6 @@
-using UnityEngine;
 using System;
+using UnityEngine;
+using YourNamespace;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]private ScoreController multiScoreController;
     [SerializeField] private ScoreDebug scoreDebug;
     [SerializeField] private MatchState matchState;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private VFX_FireController soloFireController;
+    [SerializeField] private VFX_FireController multiFireController;
+
     private float totalScore = 0;
     private float multiTotalScore = 0;
     private float balanceBarScore = 0;
@@ -78,6 +83,7 @@ public class ScoreManager : MonoBehaviour
         soloScoreController.StartPresentation(totalScore);
         BGM_Manager.Instance.PlayRocketBGM();
         soloBackGroundMover.StartMoving(soloScoreController.CurrentSettings.scrollSpeed, soloScoreController.CurrentSettings.decelerationRate);
+        soloFireController.PlayFire();
     }
 
     public void StartMultiFinalScorePresentation()
@@ -85,6 +91,7 @@ public class ScoreManager : MonoBehaviour
         multiTotalScore = MultiResultScore();
         multiScoreController.StartPresentation(multiTotalScore);
         multiBackGroundMover.StartMoving(multiScoreController.CurrentSettings.scrollSpeed, multiScoreController.CurrentSettings.decelerationRate);
+        multiFireController.PlayFire();
     }
 
 }
