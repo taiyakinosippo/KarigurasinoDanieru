@@ -921,34 +921,34 @@ MonoBehaviour:
     - {fileID: -1519539550322800608, guid: ba2be46310527214ab51723553265b96, type: 3}
     - {fileID: -8276815370914479480, guid: eae69a761ed98c14ea1696f264b3f63d, type: 3}
     minHeight: 500
-    maxHeight: 1000
+    maxHeight: 20000
   - state: 2
     group: 2
     visual:
     - {fileID: -3941833537143130527, guid: 39ed6e7b7416a37429ddde21cc2ac5dc, type: 3}
-    minHeight: 1000
-    maxHeight: 1100
+    minHeight: 20000
+    maxHeight: 20100
   - state: 2
     group: 3
     visual:
     - {fileID: 4869515291847653954, guid: f02f039dabec80742acecddd5a029ee8, type: 3}
     - {fileID: -5363108106952725378, guid: 389e39ba286503e4ba34a8054a8cdfaa, type: 3}
     - {fileID: 9122339811356038680, guid: be1865f1a5079e54f86fffc1ac821366, type: 3}
-    minHeight: 1100
-    maxHeight: 10000
+    minHeight: 20100
+    maxHeight: 50000
   - state: 3
     group: 4
     visual:
     - {fileID: 4887402217274223026, guid: 62b06663c01fa4a47a667c2e5373f136, type: 3}
-    minHeight: 10000
-    maxHeight: 11000
+    minHeight: 50100
+    maxHeight: 70000
   - state: 3
     group: 5
     visual:
     - {fileID: 1359871339220415564, guid: e9c496a7b3331714fa48de3ef92a4653, type: 3}
     - {fileID: 2552916706700359619, guid: c77c980d51204c2468e59c534f53b427, type: 3}
     - {fileID: 833267747185005304, guid: 5433c0c8c19a7b24ba855f228246de22, type: 3}
-    minHeight: 11000
+    minHeight: 70100
     maxHeight: 100000
   - state: 4
     group: 6
@@ -1995,6 +1995,9 @@ MonoBehaviour:
   multiScoreController: {fileID: 3571653345383904980}
   scoreDebug: {fileID: 0}
   matchState: {fileID: 0}
+  gameManager: {fileID: 0}
+  soloFireController: {fileID: 0}
+  multiFireController: {fileID: 0}
 --- !u!1 &6270109674641059452
 GameObject:
   m_ObjectHideFlags: 0
@@ -2256,6 +2259,8 @@ MonoBehaviour:
   stageManager: {fileID: 8674972253883362822}
   SoloRocket: {fileID: 8310565717584185307}
   MultiRocket: {fileID: 1973273077349925958}
+  soloFireController: {fileID: 0}
+  multiFireController: {fileID: 0}
 --- !u!1 &6925275814374384521
 GameObject:
   m_ObjectHideFlags: 0
