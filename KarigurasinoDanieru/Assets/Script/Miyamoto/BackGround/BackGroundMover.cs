@@ -14,8 +14,7 @@ public class BackGroundMover : MonoBehaviour
     private float speed;
     private bool isMoving;
     private bool isSlowDown;
-
-
+  
 
     // ========================================
     // èâä˙âª
@@ -51,6 +50,11 @@ public class BackGroundMover : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.currentMode == GameMode.Multi)
+        {
+            if (!UI_Manager.IsScoreReady) return;
+        }
+        
         if (!isMoving)
             return;
 

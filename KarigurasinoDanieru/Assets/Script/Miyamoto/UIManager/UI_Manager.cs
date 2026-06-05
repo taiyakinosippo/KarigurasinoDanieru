@@ -18,7 +18,7 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private ScoreController multiScoreController;
     [SerializeField] private TextMeshProUGUI multiScoreText;
     [SerializeField] private ScoreSender scoreSender;
-
+   
     // 汎用（main版から）
     [SerializeField] private TextMeshProUGUI scoreText;
     
@@ -33,7 +33,15 @@ public class UI_Manager : MonoBehaviour
     // 表示用変数
     private float displayMyScore = 0f;
     private float displayEnemyScore = 0f;
-    
+
+    private float targetEnemyScore = 0f;
+    private bool isMyFinished = false;
+    private bool isEnemyFinished = false;
+
+    public static bool IsScoreReady = false;
+
+     private bool isStartText = false;
+
     // UI遅延閉鎖管理
     private readonly Dictionary<Canvas, int> _pendingCloseRequests = new Dictionary<Canvas, int>();
 
@@ -49,24 +57,33 @@ public class UI_Manager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+
+        if (multiScoreText != null)
+        {
+            multiScoreText.text = "0.00m";
+        }
+
+
     }
 
-    void Start()
+    IEnumerator Start()
     {
-        if (GameManager.instance.currentMode == GameMode.Solo)
-        {
-            StartSoloScoreEvent();
-        }
-        else if (GameManager.instance.currentMode == GameMode.Multi)
-        {
-            Debug.Log("aaa");
-            StartMultiScoreEvent();
-        }
+    
+        yield return new WaitForSeconds(0.2f); // ←超重要
 
-     
+        scoreSender = FindObjectOfType<ScoreSender>();
+
+        if (scoreSender != null)
+        {
+            Debug.Log("✅ ScoreSender見つかった");
+
             scoreSender.OnEnemyScoreChanged += ShowEnemyScore;
-        
-
+        }
+        else
+        {
+            Debug.LogError("❌ ScoreSender見つからない");
+        }
     }
 
     private void OnEnable()
@@ -98,6 +115,70 @@ public class UI_Manager : MonoBehaviour
     // ========================================
     private void UpdateSoloScoreText(float score)
     {
+        //マルチ処理
+        if (GameManager.instance.currentMode == GameMode.Multi)
+        {
+
+            if (scoreSender == null)
+            {
+                Debug.LogWarning("❌ ScoreSenderがnull");
+                return;
+            }
+
+            int enemy = scoreSender.enemyScore;
+
+        //同時スタート制御
+            if (!isStartText)
+            {
+                if(score>0 && enemy > 0)
+                {
+                    isStartText = true;
+
+                    displayMyScore = 0f;
+                    displayEnemyScore = 0f;
+
+                    Debug.Log("🚀 同時スタート！");
+
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            //自分のスコア更新
+                displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+                soloScoreText.text = displayMyScore.ToString("N2") + "m";
+            isMyFinished = true;
+
+            // 敵スコア更新
+            if (!isEnemyFinished)
+            {
+                targetEnemyScore = enemy;
+
+                if (displayEnemyScore < targetEnemyScore)
+                {
+                    float diff = targetEnemyScore - displayEnemyScore;
+
+                    float speed = diff * 0.5f; // 調整
+
+                    displayEnemyScore += speed * Time.deltaTime;
+
+                    if (displayEnemyScore >= targetEnemyScore)
+                    {
+                        displayEnemyScore = targetEnemyScore;
+                        isEnemyFinished = true;
+                        Debug.Log("✅ 敵スコア終了");
+                    }
+                }
+
+                multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+            }
+
+            return;
+        }
+
+        //ソロ処理
         displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
         soloScoreText.text = displayMyScore.ToString("N2") + "m";
         Debug.Log($"score={score}");
@@ -108,9 +189,24 @@ public class UI_Manager : MonoBehaviour
     // ========================================
     private void UpdateMultiScoreText(float score)
     {
-        displayEnemyScore = Mathf.Lerp(displayEnemyScore, score, Time.deltaTime * 5f);
-        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
-        Debug.Log($"score={score}");
+        //if (GameManager.instance.currentMode != GameMode.Multi) return;
+        //if (scoreSender == null) return;
+        //if (!isStartText) return;
+        
+        //Debug.Log($"aaa:{targetEnemyScore},{score}");
+
+        //// ✅ 目標に向かって手動で増やす
+        //if (displayEnemyScore < targetEnemyScore)
+        //{
+        //    displayEnemyScore += enemyIncreaseSpeed * Time.deltaTime;
+
+        //    if (displayEnemyScore > targetEnemyScore)
+        //    {
+        //        displayEnemyScore = targetEnemyScore;
+        //    }
+        //}
+
+        //multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
     }
 
     // ========================================
@@ -123,12 +219,11 @@ public class UI_Manager : MonoBehaviour
 
     private void ShowEnemyScore(int score)
     {
-        Debug.Log($"👾 敵スコア表示: {score}");
+        if (score <= 0) return;
 
-        if (multiScoreText != null)
-        {
-            multiScoreText.text = score.ToString("N2") + "m";
-        }
+        IsScoreReady = true;
+
+        targetEnemyScore = score; 
     }
 
     // ========================================
@@ -145,6 +240,14 @@ public class UI_Manager : MonoBehaviour
 
     private void FinishMultiText()
     {
+        float score = ScoreManager.instance.MultiResultScore();
+
+        if (score <= 0)
+        {
+            Debug.Log("自分のスコア０");
+            return;
+        }
+
         multiScoreText.text = ScoreManager.instance
             .MultiResultScore()
             .ToString("N2") + "m";
@@ -226,8 +329,10 @@ public class UI_Manager : MonoBehaviour
         soloScoreText = GameObject.Find("ScoreText")
             ?.GetComponent<TextMeshProUGUI>();
 
-        multiScoreText = GameObject.Find("MultiScoreText")
+        multiScoreText = GameObject.Find("multiScoreText")
             ?.GetComponent<TextMeshProUGUI>();
+
+       
 
         // 汎用テキスト（main版）
         if (scoreText == null)
