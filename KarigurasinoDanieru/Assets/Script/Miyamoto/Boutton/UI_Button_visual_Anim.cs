@@ -2,31 +2,32 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+/// <summary>
+/// モードやレベル選択がない場合のUIのボタンにアニメーションをつけるクラス。
+/// </summary>
 
 public class UI_Button_visual_Anim : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    private Image _button;
-    public Canvas target;
-    private Color _defaultColor;
-    [SerializeField] private UIAction action;
-    [SerializeField] private Animator animator;
-    [SerializeField] Color _selectedColor = new Color(1.2f, 1.2f, 1.2f, 1f);
+    private Image  button;             　　　　　　 // ボタンのImageコンポーネント
+    public Canvas target;                           // ボタンを押したときに表示・非表示にするUIのCanvas
+    [SerializeField] private Sprite _button;        // ボタンの通常状態のスプライト
+    [SerializeField] private Sprite _downButton;    // ボタンの押下状態のスプライト
+    [SerializeField] private UIAction action;       // ボタンのアクション（表示か非表示か）
+    [SerializeField] private Animator animator;     // アニメーションを制御するAnimatorコンポーネント
 
     void Start()
     {
-        _button = GetComponent<Image>();
-        _defaultColor = _button.color;
+        button = GetComponent<Image>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _button.color = _selectedColor;
+        button.sprite = _downButton;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _button.color = _defaultColor;
+        button.sprite = _button;
     }
 
     public void OnPointerClick(PointerEventData eventData)
