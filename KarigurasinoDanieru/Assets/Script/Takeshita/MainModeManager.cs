@@ -11,6 +11,8 @@ public class MainModeManager : MonoBehaviour
     [SerializeField] public GameObject roomIdInputFieldObj;
     [SerializeField] public GameObject goButton;
     [SerializeField] public InputField roomIdInputField;
+    [SerializeField] private TMP_InputField playerNameField;
+    [SerializeField] public GameObject NameInputFieldObj;
     [SerializeField] private TextMeshProUGUI matchingText;
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private string nextSceneName;
@@ -41,9 +43,15 @@ public class MainModeManager : MonoBehaviour
         matchingText.gameObject.SetActive(false);
     }
 
-    void Awake()
+    private void Awake()
     {
-        roomIdInputField.onValueChanged.AddListener(OnRoomIdChanged);
+        roomIdInputField.onValueChanged.AddListener(_ => UpdateGoButtonState());
+
+        if (playerNameField != null)
+        {
+            playerNameField.onValueChanged.AddListener(OnNameChanged);
+            playerNameField.onValueChanged.AddListener(_ => UpdateGoButtonState());
+        }
     }
 
     // =====================
@@ -53,17 +61,19 @@ public class MainModeManager : MonoBehaviour
     {
         goButton.SetActive(true);
         roomIdInputFieldObj.SetActive(false);
+        NameInputFieldObj.SetActive(true);
         GM.GameModeSelect(GameMode.Solo);
-        PrintCurrentGameState();
+        UpdateGoButtonState();
         UpdateRoomIdUI();
     }
 
     public void OnClickMulti()
     {
         roomIdInputFieldObj.SetActive(true);
+        NameInputFieldObj.SetActive(true);
         goButton.SetActive(false);
         GM.GameModeSelect(GameMode.Multi);
-        PrintCurrentGameState();
+        UpdateGoButtonState();
         UpdateRoomIdUI();
     }
 
@@ -86,15 +96,7 @@ public class MainModeManager : MonoBehaviour
         bool isMulti = GameManager.instance.currentMode == GameMode.Multi;
 
         roomIdInputFieldObj.SetActive(isMulti);
-    }
-
-    void OnRoomIdChanged(string input)
-    {
-        if (GM.currentMode == GameMode.Multi)
-        {
-            // ✅ 入力あればボタン表示
-            goButton.SetActive(input.Length > 0);
-        }
+      
     }
 
     // =====================
@@ -180,31 +182,68 @@ public class MainModeManager : MonoBehaviour
     //);
 }
 
+    private string FilterPlayerName(string input)
+    {
+        // 英数字のみ許可
+        return System.Text.RegularExpressions.Regex.Replace(input, @"[^a-zA-Z0-9]", "");
+    }
+
+    private void OnNameChanged(string input)
+    {
+        string filtered = FilterPlayerName(input);
+
+        if (input != filtered)
+        {
+            playerNameField.text = filtered;
+        }
+    }
+
     public void OnGoButtonPressed()
     {
+        string name = playerNameField.text;
+
+        if (string.IsNullOrEmpty(name))
+        {
+            Debug.LogError("名前未入力");
+            return;
+        }
+
+        MultiPlayerName = name;
+
         if (GM.currentMode == GameMode.Multi)
         {
             CurrentRoomId = roomIdInputField.text;
 
-            if (string.IsNullOrEmpty(CurrentRoomId))
-            {
-                Debug.LogError("[ERROR] roomId empty");
-                return;
-            }
-
-            MultiPlayerName = string.IsNullOrEmpty(playerNameInput)
-                ? "PLAYER"
-                : playerNameInput;
-
-            MultiPlayerName += "_" + Random.Range(1000, 9999);
             UpdatePlayerInfoUI();
 
-            // ✅ コールバック無しに変更
             StartCoroutine(StartMatchingRoutine());
         }
         else
         {
+           if (matchState != null)
+            {
+                matchState.SetMyPlayer(name);
+            }
+
             StartCoroutine(LoadSingleRoutine());
+        }
+        Debug.Log($"🔥 最終名前: {matchState.MyName}");
+    }
+
+    void UpdateGoButtonState()
+    {
+        bool hasName = playerNameField != null && playerNameField.text.Length > 0;
+
+        if (GM.currentMode == GameMode.Multi)
+        {
+            bool hasRoomId = roomIdInputField != null && roomIdInputField.text.Length > 0;
+
+            goButton.SetActive(hasName && hasRoomId);
+        }
+        else
+        {
+            // ✅ シングルは名前だけでOK
+            goButton.SetActive(hasName);
         }
     }
 

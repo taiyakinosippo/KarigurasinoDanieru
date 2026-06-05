@@ -123,15 +123,22 @@ public class ScoreSender : MonoBehaviour
             {
                 if (ps.player_name == playerName) continue;
 
+                // ✅ 0は無視
+                if (ps.score <= 0)
+                {
+                    Debug.Log("⛔ 敵スコア0なので無視");
+                    continue;
+                }
+
                 if (enemyScore != ps.score)
                 {
                     enemyScore = ps.score;
 
-                    Debug.Log($"👾 敵スコア更新: {enemyScore}");
-
+                   
                     OnEnemyScoreChanged?.Invoke(enemyScore);
                 }
             }
+
         }
     }
 
@@ -143,7 +150,7 @@ public class ScoreSender : MonoBehaviour
         int finalScore = Mathf.RoundToInt(ScoreManager.instance.SoloResultScore());
         myScore = finalScore;
         
-        Debug.Log($"自分の最終スコア{myScore}");
+        Debug.Log($"自分の最終スコア:{myScore}");
 
         OnMyScoreChanged?.Invoke(myScore);
 
