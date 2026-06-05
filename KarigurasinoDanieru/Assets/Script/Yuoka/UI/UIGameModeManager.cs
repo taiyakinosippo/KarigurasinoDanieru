@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using JetBrains.Annotations;
+using UnityEngine.UIElements;
 
 public class UIGameModeManager : MonoBehaviour
 {
@@ -8,6 +10,10 @@ public class UIGameModeManager : MonoBehaviour
     [Header("画面分割用オブジェクト")]
     public RectTransform playerView; //自分のゲーム画面を表示する親要素
     public RectTransform enemyView;  //敵のゲーム画面を表示する親要素
+
+    [Header("ロケットオブジェクト")]
+    public RectTransform playerRocket; // 自分のロケット
+    public RectTransform enemyRocket;  // 敵のロケット
 
     [Header("登場・退場させるUIパネル")]
     public RectTransform balanceBarPanel; //バランスバーUI
@@ -18,14 +24,13 @@ public class UIGameModeManager : MonoBehaviour
     public float transitionDuration = 1.0f;//アニメーションにかかる時間
     public bool isMulti;
 
+    private const float SCREEN_WIDTH = 130f;
 
     /// <summary>
     /// 各オブジェクトの初期配置を行い、演出を開始する
     /// </summary>
     public void SetupScreen(GameMode mode)
-    {
-
-        
+    {   
         //マルチかどうかの判定
         isMulti = (mode == GameMode.Multi);
 
@@ -47,6 +52,9 @@ public class UIGameModeManager : MonoBehaviour
         ResetOffsets(playerView);
         ResetOffsets(enemyView);
 
+        // ロケットの位置を初期化
+        InitializeRocketPositions();
+
         // UIを画面外(初期位置)へ動かす
         balanceBarPanel.anchoredPosition = new Vector2(-500f, 0);
         mashButtonPanel.anchoredPosition = new Vector2(500f, 0);
@@ -55,6 +63,48 @@ public class UIGameModeManager : MonoBehaviour
 
         // 演出開始（共通のコルーチンを1つだけ呼ぶ。引数でマルチかどうかを伝える）
         StartCoroutine(StartGameTransition(isMulti));
+    }
+
+    /// <summary>
+    /// ゲーム開始時のロケット位置を初期化する
+    /// </summary>
+    private void InitializeRocketPositions()
+    {
+        if (isMulti)
+        {
+            if (enemyRocket != null) enemyRocket.gameObject.SetActive(true);
+
+            UpdateRocketPositions(0.5f);
+        }
+        else
+        {
+            if (enemyRocket != null) enemyRocket.gameObject.SetActive(false);
+
+            if (playerRocket != null)
+            {
+                playerRocket.anchoredPosition = Vector2.zero;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// edgeの値を元に、ロケットの位置を直接計算して動かす
+    /// </summary>
+    private void UpdateRocketPositions(float edge)
+    {
+        if (playerRocket != null)
+        {
+            float playerCenterAnchor = edge / 2f;
+            float playerPosX = (playerCenterAnchor - 0.5f) * SCREEN_WIDTH;
+            playerRocket.anchoredPosition = new Vector2(playerPosX, 0f);
+        }
+
+        if (isMulti && enemyRocket != null)
+        {
+            float enemyCenterAnchor = edge + 0.25f;
+            float enemyPosX = (enemyCenterAnchor - 0.5f) * SCREEN_WIDTH;
+            enemyRocket.anchoredPosition = new Vector2(enemyPosX, 0f);
+        }
     }
 
     /// <summary>
@@ -86,6 +136,8 @@ public class UIGameModeManager : MonoBehaviour
                 enemyView.anchorMax = new Vector2(edge + 0.5f, 1);
                 ResetOffsets(playerView);
                 ResetOffsets(enemyView);
+
+                UpdateRocketPositions(edge);
             }
 
             yield return null;
@@ -137,6 +189,8 @@ public class UIGameModeManager : MonoBehaviour
                 enemyView.anchorMax = new Vector2(edge + 0.5f, 1);
                 ResetOffsets(playerView);
                 ResetOffsets(enemyView);
+
+                UpdateRocketPositions(edge);
             }
             yield return null;
         }

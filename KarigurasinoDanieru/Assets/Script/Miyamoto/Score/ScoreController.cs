@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ public class ScoreController : MonoBehaviour
 {
     [SerializeField] private StageManager stageManager;
 
-    [Header("Speed Settings‚ğİ’è‚·‚é")]
+    [Header("Speed Settingsã‚’è¨­å®šã™ã‚‹")]
     [SerializeField] private List<SpeedSettings> settings;
 
     private SpeedSettings currentSettings;
@@ -31,7 +31,7 @@ public class ScoreController : MonoBehaviour
     private IFlightState currentState;
 
     // ========================================
-    // ƒCƒxƒ“ƒg‚ğ’è‹`
+    // ã‚¤ãƒ™ãƒ³ãƒˆã‚’å®šç¾©
     // ========================================
     public Action<float> OnScoreChanged;
 
@@ -47,7 +47,7 @@ public class ScoreController : MonoBehaviour
     public Action OnFinished;
 
     // ========================================
-    // ‰Šú‰»
+    // åˆæœŸåŒ–
     // ========================================
 
     public void StartPresentation(float targetScore)
@@ -59,7 +59,7 @@ public class ScoreController : MonoBehaviour
         currentSettings = GetSettings(newState);
         if (currentSettings == null)
         {
-            Debug.Log("Settings ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+            Debug.Log("Settings ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
             return;
         }
         UI_Manager.instance.StartSoloScoreEvent();
@@ -85,18 +85,18 @@ public class ScoreController : MonoBehaviour
     }
 
     // ========================================
-    // ƒXƒRƒA‚ÌXV
+    // ã‚¹ã‚³ã‚¢ã®æ›´æ–°
     // ========================================
     private void UpdateScore()
     {
-        currentScore +=@addScore * Time.deltaTime;
+        currentScore +=ã€€addScore * Time.deltaTime;
         if (currentScore >= TargetScore)
         {
             currentScore = TargetScore;
         }
         if(OnScoreChanged == null)
         {
-            Debug.Log("ƒCƒxƒ“ƒg‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.Log("ã‚¤ãƒ™ãƒ³ãƒˆãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“");
         }
         OnScoreChanged?.Invoke(currentScore);
     }
@@ -107,7 +107,7 @@ public class ScoreController : MonoBehaviour
     }
 
     // ========================================
-    // ƒXƒs[ƒh‚ğó‘Ô‚ğ•ÏX‚·‚é
+    // ã‚¹ãƒ”ãƒ¼ãƒ‰ã‚’çŠ¶æ…‹ã‚’å¤‰æ›´ã™ã‚‹
     // ========================================
 
     public void ChangeState(
@@ -121,7 +121,7 @@ public class ScoreController : MonoBehaviour
     }
 
     // ========================================
-    // I‚í‚Á‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚ê‚é
+    // çµ‚ã‚ã£ãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œã‚‹
     // ========================================
 
     public void StopPresentation()
@@ -131,7 +131,7 @@ public class ScoreController : MonoBehaviour
     }
 
     // ========================================
-    // “¾‚½ƒXƒRƒA‚ğ•Ô‚·
+    // å¾—ãŸã‚¹ã‚³ã‚¢ã‚’è¿”ã™
     // ========================================
 
     public float GetCurrentScore()
