@@ -9,8 +9,9 @@ namespace YourNamespace
         [SerializeField] private Color fireColor = Color.red;
         [SerializeField, Range(0f, 2f)] private float fireIntensity = 1f;
         [SerializeField] private Vector3 fireWindDirection = Vector3.zero;
-
+        
         private ParticleSystem[] fireParticleSystems;
+
         private float[] defaultFireRateValues;        // Valeurs par défaut du spawn rate (Emission)
         private float[] defaultFireStartSizeValues;     // Valeurs par défaut de la taille (Main > startSize)
         private Light fireLight; // Adding reference to Light component for intensity control
@@ -142,5 +143,28 @@ namespace YourNamespace
         public Color GetFireColor() { return fireColor; }
         public float GetFireIntensity() { return fireIntensity; }
         public Vector3 GetFireWindDirection() { return fireWindDirection; }
+
+
+        public void PlayFire()
+        {
+            foreach (var ps in fireParticleSystems)
+            {
+                if (ps != null)
+                {
+                    ps.Play();
+                }
+            }
+        }
+
+        public void StopFire()
+        {
+            foreach (var ps in fireParticleSystems)
+            {
+                if (ps != null)
+                {
+                    ps.Stop();
+                }
+            }
+        }
     }
 }

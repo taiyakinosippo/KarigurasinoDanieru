@@ -204,11 +204,24 @@ public class MainModeManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(name))
         {
-            Debug.LogError("名前未入力");
-            return;
+
+            int random = UnityEngine.Random.Range(1000, 9999);
+            name = $"PLAYER_{random}";
+
+            Debug.Log($"⚠ 名前未入力 → 自動生成: {name}");
+
         }
 
         MultiPlayerName = name;
+
+        // ✅ ★ここが最重要（マルチもシングルも必ず通る）
+        if (matchState != null)
+        {
+            matchState.SetMyPlayer(name);
+            matchState.EnablePersistence(); // ← 念のため（超安全）
+        }
+
+        Debug.Log($"🔥 最終名前: {matchState?.MyName}");
 
         if (GM.currentMode == GameMode.Multi)
         {
@@ -220,14 +233,8 @@ public class MainModeManager : MonoBehaviour
         }
         else
         {
-           if (matchState != null)
-            {
-                matchState.SetMyPlayer(name);
-            }
-
             StartCoroutine(LoadSingleRoutine());
         }
-        Debug.Log($"🔥 最終名前: {matchState.MyName}");
     }
 
     void UpdateGoButtonState()
@@ -238,13 +245,9 @@ public class MainModeManager : MonoBehaviour
         {
             bool hasRoomId = roomIdInputField != null && roomIdInputField.text.Length > 0;
 
-            goButton.SetActive(hasName && hasRoomId);
+            goButton.SetActive(hasRoomId);
         }
-        else
-        {
-            // ✅ シングルは名前だけでOK
-            goButton.SetActive(hasName);
-        }
+      
     }
 
     IEnumerator LoadSingleRoutine()

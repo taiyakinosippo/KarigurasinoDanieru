@@ -193,16 +193,12 @@ public class ScoreSender : MonoBehaviour
     /// </summary>
     public void SendScore(string name, int score, string mode)
     {
-      
-        if (isTestMode)
-        {
-            name = "TEST";
-          //  Debug.Log("[TEST MODE ENABLED]");
-        }
 
-       // Debug.Log(
-         //   $"[SEND DEBUG] name='{name}', score={score}, mode='{mode}'"
-     //   );
+        Debug.Log($"🔥 送信名前: [{name}] スコア: {score} モード: {mode}");
+
+        // Debug.Log(
+        //   $"[SEND DEBUG] name='{name}', score={score}, mode='{mode}'"
+        //   );
 
         StartCoroutine(PostScoreCoroutine(name, score, mode));
     }

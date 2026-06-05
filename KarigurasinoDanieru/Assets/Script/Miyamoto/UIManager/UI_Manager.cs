@@ -232,9 +232,10 @@ public class UI_Manager : MonoBehaviour
 
     private void FinishSoloText()
     {
+        Debug.Log("ソロスコアのプレゼンテーションが終了しました。");
         soloScoreText.text = ScoreManager.instance
             .SoloResultScore()
-            .ToString("N2") + "m";
+            .ToString("N2") + "m"; 
         OnSoloCountFinished?.Invoke();
     }
 
