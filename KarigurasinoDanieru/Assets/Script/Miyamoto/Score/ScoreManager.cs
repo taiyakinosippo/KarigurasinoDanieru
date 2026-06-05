@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using System;
 
 public class ScoreManager : MonoBehaviour
@@ -51,7 +51,7 @@ public class ScoreManager : MonoBehaviour
     {
         //if (scoreDebug.useDebugScore)
         //{
-        //    Debug.Log("ÉfÉoÉbÉOÉXÉRÉAégóp: " + scoreDebug.debugTotalScore);
+        //    Debug.Log("„Éá„Éê„ÉÉ„Ç∞„Çπ„Ç≥„Ç¢‰ΩøÁî®: " + scoreDebug.debugTotalScore);
         //    return scoreDebug.debugTotalScore;
         //}
         Debug.Log("mashButtonScore:" + mashButtonScore);
@@ -63,13 +63,14 @@ public class ScoreManager : MonoBehaviour
     }
     public float MultiResultScore()
     {
-        if (matchState != null)
+        if (matchState == null)
         {
             multiTotalScore = 0;
-            Debug.Log("MatchstateÇ™Ç†ÇËÇ‹ÇπÇÒ");
+            Debug.Log("Matchstate„Åå„ÅÇ„Çä„Åæ„Åõ„Çì");
             return 0;
         }
         multiTotalScore = matchState.EnemyScore;
+        Debug.Log("„Éû„É´„ÉÅ„Çπ„Ç≥„Ç¢" + multiTotalScore);
         return multiTotalScore;
     }
     public void StartSoloFinalScorePresentation()
@@ -83,6 +84,7 @@ public class ScoreManager : MonoBehaviour
     public void StartMultiFinalScorePresentation()
     {
         multiTotalScore = MultiResultScore();
+        Debug.Log($"üî• Multi„Çø„Éº„Ç≤„ÉÉ„Éà: {multiTotalScore}");
         multiScoreController.StartPresentation(multiTotalScore);
         multiBackGroundMover.StartMoving(multiScoreController.CurrentSettings.scrollSpeed, multiScoreController.CurrentSettings.decelerationRate);
     }

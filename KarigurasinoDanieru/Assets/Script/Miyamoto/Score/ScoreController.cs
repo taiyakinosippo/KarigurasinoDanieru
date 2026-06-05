@@ -34,6 +34,7 @@ public class ScoreController : MonoBehaviour
     // イベントを定義
     // ========================================
     public Action<float> OnScoreChanged;
+    public Action<float> OnMultiScoreChanged;
 
     public Action OnStartSpeedStart;
     public Action OnStartSpeedEnd;
@@ -62,11 +63,15 @@ public class ScoreController : MonoBehaviour
             Debug.Log("Settings が見つかりません");
             return;
         }
+
         UI_Manager.instance.StartSoloScoreEvent();
-        if(GameManager.instance.currentMode == GameMode.Multi)
+      
+        if (GameManager.instance.currentMode == GameMode.Multi)
         {
-            UI_Manager.instance.StartMultiScoreEvent();
+            UI_Manager.instance.StartSoloScoreEvent();
         }
+      
+
         ChangeState(new StartSpeedState());
     }
 
@@ -94,11 +99,19 @@ public class ScoreController : MonoBehaviour
         {
             currentScore = TargetScore;
         }
-        if(OnScoreChanged == null)
+        //if(OnScoreChanged == null)
+        //{
+        //    Debug.Log("イベントが登録されていません");
+        //}
+
+        if (GameManager.instance.currentMode == GameMode.Multi)
         {
-            Debug.Log("イベントが登録されていません");
+            OnScoreChanged?.Invoke(currentScore);
         }
-        OnScoreChanged?.Invoke(currentScore);
+        else
+        {
+            OnScoreChanged?.Invoke(currentScore);
+        }
     }
 
     public void SetScoreSpeed(float speed)
