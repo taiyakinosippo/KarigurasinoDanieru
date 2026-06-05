@@ -558,7 +558,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -265, y: 0}
+  m_AnchoredPosition: {x: -270, y: 0}
   m_SizeDelta: {x: 15.718, y: 450.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9014463945685512297
@@ -799,6 +799,8 @@ MonoBehaviour:
   countdownManager: {fileID: 7744745123760441486}
   playerView: {fileID: 7857147791271744573}
   enemyView: {fileID: 7505245957292434170}
+  playerRocket: {fileID: 2276884679409222270}
+  enemyRocket: {fileID: 6271893172769452921}
   balanceBarPanel: {fileID: 7742530000318579623}
   mashButtonPanel: {fileID: 4010913925160700868}
   timingBarPanel: {fileID: 6604760328773372277}
@@ -1732,27 +1734,31 @@ GameObject:
   - component: {fileID: 7971989786166706585}
   - component: {fileID: 1973273077349925958}
   m_Layer: 0
-  m_Name: Rocket (1)
+  m_Name: EnemyRocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6271893172769452921
-Transform:
+--- !u!224 &6271893172769452921
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5822266750523143561}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 90, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4786962577067175045}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 13.98, y: 17.07}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &7971989786166706585
 SpriteRenderer:
   serializedVersion: 2
@@ -2337,20 +2343,19 @@ GameObject:
   - component: {fileID: 5726059992447909899}
   - component: {fileID: 8310565717584185307}
   m_Layer: 0
-  m_Name: Rocket (2)
+  m_Name: PlayerRocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2276884679409222270
-Transform:
+--- !u!224 &2276884679409222270
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6951362317884501803}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -2358,6 +2363,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4786962577067175045}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 13.98, y: 17.07}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &5726059992447909899
 SpriteRenderer:
   serializedVersion: 2
