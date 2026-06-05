@@ -28,7 +28,8 @@ public enum SEType
     missSE,
     goodSE,
     greatSE,
-    perfectSE
+    perfectSE,
+    countdownSE,
 }
 //背景のステージを定義する列挙型
 public enum StageGroup
