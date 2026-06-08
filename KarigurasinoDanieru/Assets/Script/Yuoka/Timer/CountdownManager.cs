@@ -16,6 +16,7 @@ public class CountdownManager : MonoBehaviour
     public void StartCountdown()
     {
         StartCoroutine(CountdownRoutine());
+        AudioSourceManager.instance.PlaySE(SEType.countdownSE);
     }
 
     IEnumerator CountdownRoutine()
