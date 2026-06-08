@@ -5137,7 +5137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioSourceManager
   seList:
-  - seType: 0
+  - seType: 7
     audioClip: {fileID: 8300000, guid: b815c57428bd8b24d93ba2a47f8405c4, type: 3}
 --- !u!1 &1510146802
 GameObject:
