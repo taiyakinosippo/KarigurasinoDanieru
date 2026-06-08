@@ -82,6 +82,9 @@ public class UI_Manager : MonoBehaviour
     {
         if (GameManager.instance.currentMode != GameMode.Multi) return;
 
+        if (multiScoreText == null || multiScoreText.Equals(null))
+            return;
+
         CheckStart(displayMyScore, targetEnemyScore);
 
         if (!isStartText) return;
