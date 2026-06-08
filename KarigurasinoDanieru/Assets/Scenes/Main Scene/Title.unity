@@ -5136,7 +5136,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aada2e940a3222948bd73ecc0f4f678b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioSourceManager
-  seList: []
+  seList:
+  - seType: 0
+    audioClip: {fileID: 8300000, guid: b815c57428bd8b24d93ba2a47f8405c4, type: 3}
 --- !u!1 &1510146802
 GameObject:
   m_ObjectHideFlags: 0
@@ -6618,7 +6620,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BGM_Manager
   bgmSource: {fileID: 1797045521}
   titleBGM: {fileID: 8300000, guid: 2f3df4e1d9a7a8b4d9cf777078c130a7, type: 3}
-  gameBGM: {fileID: 8300000, guid: 2e6ff3a694dedd8499eaab3746947f66, type: 3}
+  waitingtimeBGM: {fileID: 8300000, guid: 8cf54e348a48f344ea0b446b17a8fbbd, type: 3}
+  gameBGM: {fileID: 8300000, guid: 3edfc7b3c40ed2644a4f3a727bfbffcd, type: 3}
   rocketFlyBGM: {fileID: 8300000, guid: b8c3ee25419ed834eba82b09d3b59791, type: 3}
   resultBGM: {fileID: 8300000, guid: f5706376939d26d43b5399dda6a9797e, type: 3}
 --- !u!1 &1804795340

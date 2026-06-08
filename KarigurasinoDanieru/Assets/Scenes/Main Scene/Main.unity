@@ -708,6 +708,34 @@ PrefabInstance:
       propertyPath: fade
       value: 
       objectReference: {fileID: 2060168017}
+    - target: {fileID: 496300947085345347, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 204.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 496300947085345347, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 6144
+      objectReference: {fileID: 0}
+    - target: {fileID: 1082489683486996191, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1082489683486996191, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1082489683486996191, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1982211890504815774, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 40.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 1982211890504815774, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 40960
+      objectReference: {fileID: 0}
     - target: {fileID: 2244593187435014360, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: matchResultText
       value: 
@@ -747,6 +775,22 @@ PrefabInstance:
     - target: {fileID: 3129727120146217672, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_Name
       value: GameCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291610958221575115, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 40.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291610958221575115, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 40960
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517076669145453846, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 204.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517076669145453846, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 6144
       objectReference: {fileID: 0}
     - target: {fileID: 3571653345383904980, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_Enabled
@@ -860,9 +904,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6488678527293832607, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 163.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 6488678527293832607, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 61440
+      objectReference: {fileID: 0}
+    - target: {fileID: 6709081062759684701, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 40.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 6709081062759684701, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 40960
+      objectReference: {fileID: 0}
     - target: {fileID: 6996761436094382000, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_Name
       value: SoloScoreController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7725762581068745992, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 40.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 7725762581068745992, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 40960
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791358410464783050, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 163.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791358410464783050, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 61440
       objectReference: {fileID: 0}
     - target: {fileID: 8310565717584185307, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: backGroundMover
