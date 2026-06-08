@@ -1,37 +1,37 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+/// <summary>
+/// ゲームモード選択のボタンのクラス。ボタンを押したときの処理を記述。
+/// </summary>
 public class UI_GameModa_View : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    private Image _button;
-    public Canvas target;
-    private Color _defaultColor;
-    [SerializeField] private GameMode gameMode;
-    [SerializeField] private UIAction action;
-    [SerializeField] private Animator animator;
-    [SerializeField] Color _selectedColor = new Color(1.2f, 1.2f, 1.2f, 1f);
+    private Image button;                       //ボタンのimageコンポーネント
+    public Canvas target;                       //押したことで表示させるUIのCanvas
+    [SerializeField] private Sprite _button;    //ボタンの通常時のスプライト
+    [SerializeField] private Sprite _downButton;//ボタンを押したときのスプライト
+    [SerializeField] private GameMode gameMode; //このボタンが選択するゲームモード
+    [SerializeField] private UIAction action;   //このボタンが押されたときのアクション
+    [SerializeField] private Animator animator; //ボタンを押したときのアニメーション
 
     void Start()
     {
-        _button = GetComponent<Image>();
-        _defaultColor = _button.color;
+        button = GetComponent<Image>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _button.color = _selectedColor;
+        button.sprite = _downButton;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _button.color = _defaultColor;
+        button.sprite = _button;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Button clicked");
         GameManager.instance.GameModeSelect(gameMode);
-        Debug.Log("Button clicked1");
         AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         switch (action)
         {
