@@ -7,6 +7,7 @@ public class BGM_Manager : MonoBehaviour
     public static BGM_Manager Instance;
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioClip titleBGM;
+    [SerializeField] private AudioClip waitingtimeBGM;
     [SerializeField] private AudioClip gameBGM;
     [SerializeField] private AudioClip rocketFlyBGM;
     public AudioClip RocketFlyBGM => rocketFlyBGM;
@@ -40,7 +41,11 @@ public class BGM_Manager : MonoBehaviour
         switch (scene.name)
         {
             case "Title":
-                PlayBGM(titleBGM);
+                PlayBGM(titleBGM, true);
+                break;
+
+            case "Main":
+                PlayWaitingtimeBGM();
                 break;
 
             default:
@@ -51,17 +56,22 @@ public class BGM_Manager : MonoBehaviour
 
     public void PlayGameBGM()
     {
-        PlayBGM(gameBGM);
+        PlayBGM(gameBGM, false);
+    }
+
+    public void PlayWaitingtimeBGM()
+    {
+        PlayBGM(waitingtimeBGM, true);
     }
 
     public void PlayRocketBGM()
     {
-        PlayBGM(rocketFlyBGM);
+        PlayBGM(rocketFlyBGM, true);
     }
 
     public void PlayResultBGM()
     {
-        PlayBGM(resultBGM);
+        PlayBGM(resultBGM, true);
     }
 
     private void StopBGM()
@@ -71,12 +81,13 @@ public class BGM_Manager : MonoBehaviour
         bgmSource.clip = null;
     }
 
-    private void PlayBGM(AudioClip clip)
+    private void PlayBGM(AudioClip clip, bool loop)
     {
-        if (bgmSource.clip == clip)
+        if (bgmSource.clip == clip && bgmSource.loop == loop)
             return;
 
         bgmSource.clip = clip;
+        bgmSource.loop = loop;
         bgmSource.Play();
     }
 
