@@ -10,5 +10,10 @@ public class UI_Text : MonoBehaviour
     {
         gameMode_text.text = "Mode : " + GameManager.instance.currentMode;
         gameLevel_text.text = "Level : " + GameManager.instance.currentLevel;
+
+        if (PlayerPrefs.GetInt("TutorialState") == 1)
+        {
+            gameLevel_text.text = "Level : Tutorial";
+        }
     }
 }

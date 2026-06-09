@@ -77,14 +77,29 @@ public class MainModeManager : MonoBehaviour
         UpdateRoomIdUI();
     }
 
+    public void OnClickTutorial()
+    {
+        PlayerPrefs.SetInt("TutorialState", 1);
+        PlayerPrefs.Save();
+
+        GM.GameLevelSelect(GameLevel.Normal);
+        PrintCurrentGameState();
+    }
+
     public void OnClickNormal()
     {
+        PlayerPrefs.SetInt("TutorialState", 0);
+        PlayerPrefs.Save();
+
         GM.GameLevelSelect(GameLevel.Normal);
         PrintCurrentGameState();
     }
 
     public void OnClickHard()
     {
+        PlayerPrefs.SetInt("TutorialState", 0);
+        PlayerPrefs.Save();
+
         GM.GameLevelSelect(GameLevel.Hard);
         PrintCurrentGameState();
     }
