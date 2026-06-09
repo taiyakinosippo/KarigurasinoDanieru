@@ -27,6 +27,8 @@ public class MultiSyncManager : MonoBehaviour
     [SerializeField] private MainModeManager MainmodeManager;
 
     public string opponentName = "";
+    public string playerId;
+
     public int opponentScore = 0;
     private int lastEnemyScore = -1;
     private int lastSentScore = 0;
@@ -35,8 +37,23 @@ public class MultiSyncManager : MonoBehaviour
 
     public Action<int> OnEnemyScoreChanged;
 
+    public static MultiSyncManager Instance;
+
     void Awake()
     {
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        playerId = System.Guid.NewGuid().ToString();
+
         updateUrl = ServerConfig.BaseUrl + "mp_update.php";
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";
@@ -127,6 +144,7 @@ public class MultiSyncManager : MonoBehaviour
         form.AddField("player_name", playerName);
         form.AddField("score", currentScore);
         form.AddField("difficulty", GameManager.instance.currentLevel.ToString());
+        form.AddField("player_id", playerId);
 
         using (UnityWebRequest req = UnityWebRequest.Post(updateUrl, form))
         {
@@ -157,11 +175,12 @@ public class MultiSyncManager : MonoBehaviour
     {
         isFetching = true;
 
-      
+
         string url =
-            $"{fetchUrl}?room_id={roomId}" +
-            $"&difficulty={GameManager.instance.currentLevel}" +
-            $"&player_name={playerName}";
+     $"{fetchUrl}?room_id={roomId}" +
+     $"&difficulty={GameManager.instance.currentLevel}" +
+     $"&player_name={playerName}" +
+     $"&player_id={playerId}";
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {

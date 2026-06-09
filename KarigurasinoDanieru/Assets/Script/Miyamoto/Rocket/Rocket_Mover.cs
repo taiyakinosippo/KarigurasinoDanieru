@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
@@ -19,9 +20,10 @@ public class Rocket_Mover : MonoBehaviour
     [SerializeField] private float missMoveSpeed = 10f;            //0～1000メートルのの時のロケットの動きの速さ
     [SerializeField] private float skyMoveSpeed = 10f;             //1000～10000メートルまでの時のロケットの動きの速さ
     [SerializeField] private float spaceSpeed = 100f;              //100000メートル以上の時の背景のスクロールの速さ
+    [SerializeField] private bool isMultiRocket = false;　　　　　 //マルチ用のスクリプトかどうか
     [SerializeField] RectTransform soloimageRect;                  //100000メートル以上の時のソロ用の背景画像
     [SerializeField] RectTransform malutyimageRect;                 //100000メートル以上の時のマルチ用の背景画像
-
+   
     public void MissRocketMove()
     {
        StartCoroutine(MissRocketMoveCoroutine());
@@ -36,7 +38,14 @@ public class Rocket_Mover : MonoBehaviour
     }
     public void GalaxyRocketMove()
     {
-        StartCoroutine(GalaxyMoveSpaceCoroution());
+        if (!isMultiRocket)
+        {
+            StartCoroutine(GalaxyMoveSpaceCoroution());
+        }
+        else 
+        {
+            StartCoroutine(MultiGalaxyMoveCoroutine());
+        }
     }
 
     //0～1000メートルのの時のロケットの動き
@@ -100,75 +109,69 @@ public class Rocket_Mover : MonoBehaviour
     //100000メートル以上のの時のロケットの動き
     private IEnumerator GalaxyMoveSpaceCoroution()
     {
-        //ソロ用の演出準備
-        RectTransform soloLowest = soloBackGroundMover.GetLowest();
+        RectTransform lowest = soloBackGroundMover.GetLowest();
 
         soloimageRect.anchoredPosition =
             new Vector2(
-                soloLowest.anchoredPosition.x,
-                soloLowest.anchoredPosition.y - soloimageRect.rect.height);
+                lowest.anchoredPosition.x,
+                lowest.anchoredPosition.y - soloimageRect.rect.height);
 
-        Vector2 soloTarget =
+        Vector2 target =
             new Vector2(
                 soloimageRect.anchoredPosition.x,
                 0f);
 
-        // マルチ用のいきつく先
-        Vector2 multiTarget = Vector2.zero;
-
-        //マルチ用の演出準備
-        if (GameManager.instance.currentMode == GameMode.Multi)
+        while (soloimageRect.anchoredPosition != target)
         {
-            RectTransform multiLowest = malutiBackGroundMover.GetLowest();
-
-            malutyimageRect.anchoredPosition =
-                new Vector2(
-                    multiLowest.anchoredPosition.x,
-                    multiLowest.anchoredPosition.y - malutyimageRect.rect.height);
-
-            multiTarget =
-                new Vector2(
-                    malutyimageRect.anchoredPosition.x,
-                    0f);
-        }
-
-        while (soloimageRect.anchoredPosition != soloTarget ||(GameManager.instance.currentMode == GameMode.Multi &&malutyimageRect.anchoredPosition != multiTarget))
-        {
-            // ソロ背景
-            Vector2 soloBefore = soloimageRect.anchoredPosition;
+            Vector2 before = soloimageRect.anchoredPosition;
 
             soloimageRect.anchoredPosition =
                 Vector2.MoveTowards(
                     soloimageRect.anchoredPosition,
-                    soloTarget,
+                    target,
                     spaceSpeed * Time.deltaTime);
 
-            Vector2 soloDelta =
-                soloimageRect.anchoredPosition - soloBefore;
+            Vector2 delta =
+                soloimageRect.anchoredPosition - before;
 
             foreach (RectTransform image in soloBackGroundMover._images)
             {
-                image.anchoredPosition += soloDelta;
+                image.anchoredPosition += delta;
             }
 
-            // マルチ背景
-            if (GameManager.instance.currentMode == GameMode.Multi)
+            yield return null;
+        }
+    }
+    private IEnumerator MultiGalaxyMoveCoroutine()
+    {
+        RectTransform lowest = malutiBackGroundMover.GetLowest();
+
+        malutyimageRect.anchoredPosition =
+            new Vector2(
+                lowest.anchoredPosition.x,
+                lowest.anchoredPosition.y - malutyimageRect.rect.height);
+
+        Vector2 target =
+            new Vector2(
+                malutyimageRect.anchoredPosition.x,
+                0f);
+
+        while (malutyimageRect.anchoredPosition != target)
+        {
+            Vector2 before = malutyimageRect.anchoredPosition;
+
+            malutyimageRect.anchoredPosition =
+                Vector2.MoveTowards(
+                    malutyimageRect.anchoredPosition,
+                    target,
+                    spaceSpeed * Time.deltaTime);
+
+            Vector2 delta =
+                malutyimageRect.anchoredPosition - before;
+
+            foreach (RectTransform image in malutiBackGroundMover._images)
             {
-                Vector2 multiBefore = malutyimageRect.anchoredPosition;
-
-                malutyimageRect.anchoredPosition =
-                    Vector2.MoveTowards(
-                        malutyimageRect.anchoredPosition,
-                        multiTarget,
-                        spaceSpeed * Time.deltaTime);
-
-                Vector2 multiDelta =
-                    malutyimageRect.anchoredPosition - multiBefore;
-
-                foreach (RectTransform image in malutiBackGroundMover._images)
-                {
-                    image.anchoredPosition += multiDelta;
-                }
+                image.anchoredPosition += delta;
             }
 
             yield return null;
