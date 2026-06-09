@@ -3474,6 +3474,16 @@ MonoBehaviour:
   _audioMixer: {fileID: 24100000, guid: 9d2ef76bfbb64fe4c96babd786ba346a, type: 2}
   _bgmSlider: {fileID: 2809609804152469654}
   _seSlider: {fileID: 6288599966033163530}
+  _bgmVolumeImage: {fileID: 7687887515976409744}
+  _seVolumeImage: {fileID: 4095364522886356844}
+  _bgmButtonMute: {fileID: 2632492244205709066}
+  _seButtonMute: {fileID: 8238221052830902669}
+  _volumeHighSprite: {fileID: 21300000, guid: 9f5c3402590ec614697cd59f343ad018, type: 3}
+  _volumeMiddleSprite: {fileID: 21300000, guid: befea5407ae1a2e45ad417aee7c753fb, type: 3}
+  _volumeLowSprite: {fileID: 21300000, guid: 9afae8ad2993457408a6d89993f785c2, type: 3}
+  _volumeMuteSprite: {fileID: 21300000, guid: 081a782938404be47a080fa651cf55d8, type: 3}
+  _seSampleType: 1
+  _seSampleCooldown: 0.08
 --- !u!95 &8544802994883995264
 Animator:
   serializedVersion: 7
@@ -3740,7 +3750,7 @@ RectTransform:
   m_GameObject: {fileID: 5489461289372007919}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6878340765754289087}
@@ -3801,6 +3811,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Audio_Mute
   audioSource: {fileID: 0}
+  bgmAudioUI: {fileID: 6416184848957717797}
+  isSE: 0
   _selectedColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &5611776141662439461
 GameObject:
@@ -3830,7 +3842,7 @@ RectTransform:
   m_GameObject: {fileID: 5611776141662439461}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6878340765754289087}
@@ -3891,6 +3903,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Audio_Mute
   audioSource: {fileID: 0}
+  bgmAudioUI: {fileID: 6416184848957717797}
+  isSE: 1
   _selectedColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &5776174918831731622
 GameObject:
