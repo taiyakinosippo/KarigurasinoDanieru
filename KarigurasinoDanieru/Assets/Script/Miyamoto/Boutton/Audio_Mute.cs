@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class Audio_Mute : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     public AudioSource audioSource;
+    public UI_Bgm_SE_Audio bgmAudioUI;
+    public bool isSE;
     private Image _button;
     private Color _defaultColor;
     [SerializeField] Color _selectedColor = new Color(1.2f, 1.2f, 1.2f, 1f);
@@ -27,10 +29,16 @@ public class Audio_Mute : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler,
     public void OnPointerClick(PointerEventData eventData)
     {
         audioSource.mute = !audioSource.mute;
+        if (isSE)
+        {
+            bgmAudioUI?.ToggleSeMuteImageState();
+        }
+        else
+        {
+            bgmAudioUI?.ToggleBgmMuteImageState();
+        }
+
         if (audioSource.mute == true) return;
         AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
-        
     }
-
-
 }
