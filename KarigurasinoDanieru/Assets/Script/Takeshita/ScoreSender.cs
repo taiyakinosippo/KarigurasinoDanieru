@@ -24,8 +24,8 @@ public class ScoreSender : MonoBehaviour
     public int enemyScore = 0;
     public int myScore;
 
-    public Action<int> OnEnemyScoreChanged;
-    public Action<int> OnMyScoreChanged;
+    public Action<float> OnEnemyScoreChanged;
+    public Action<float> OnMyScoreChanged;
 
     void Start()
     {
@@ -135,7 +135,7 @@ public class ScoreSender : MonoBehaviour
                     enemyScore = ps.score;
 
                    
-                    OnEnemyScoreChanged?.Invoke(enemyScore);
+                    OnEnemyScoreChanged?.Invoke((float)enemyScore);
                 }
             }
 
@@ -152,7 +152,7 @@ public class ScoreSender : MonoBehaviour
         
         Debug.Log($"自分の最終スコア:{myScore}");
 
-        OnMyScoreChanged?.Invoke(myScore);
+        OnMyScoreChanged?.Invoke((float)myScore);
 
      //   Debug.Log($"🔥 確定後スコア = {finalScore}");
 

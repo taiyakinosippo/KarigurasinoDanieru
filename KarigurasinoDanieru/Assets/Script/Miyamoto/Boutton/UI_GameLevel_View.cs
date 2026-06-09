@@ -3,29 +3,28 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class UI_GameLevel_View : MonoBehaviour,IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    private Image _button;
-    public Canvas target;
-    private Color _defaultColor;
-    [SerializeField] private GameLevel gameLevel;
+    private Image button;
+    [SerializeField] private Sprite _button;     // 通常のボタン画像
+    [SerializeField] private Sprite  downButton; // 押されたときのボタン画像
+    public Canvas target;                        // 対象のUIキャンバス
+    [SerializeField] private GameLevel gameLevel;// ゲームレベルの指定
     [SerializeField] private UIAction action;
     [SerializeField] private Animator animator;
-    [SerializeField] Color _selectedColor = new Color(1.2f, 1.2f, 1.2f, 1f);
     [SerializeField] private UI_Text text;
 
     void Start()
     {
-        _button = GetComponent<Image>();
-        _defaultColor = _button.color;
+        button = GetComponent<Image>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _button.color = _selectedColor;
+         button.sprite = downButton;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _button.color = _defaultColor;
+         button.sprite = _button;
     }
 
     public void OnPointerClick(PointerEventData eventData)
