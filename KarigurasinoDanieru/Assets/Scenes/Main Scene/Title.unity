@@ -703,8 +703,6 @@ MonoBehaviour:
   nextSceneName: Main
   playerNameInput: 
   fade: {fileID: 779262766}
-  multiSync: {fileID: 1245181071}
-  matchState: {fileID: 1245181070}
   rankingInputManager: {fileID: 1663138955}
   matchScoreManager: {fileID: 1663138954}
 --- !u!114 &1663138960
@@ -798,7 +796,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3783522196791968485, guid: ff2a836f40b4e4c42b35a22cf3560a3c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1213,6 +1211,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 147776293472566084, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 147776293472566084, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 509961218325106708, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1313,6 +1319,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1663138958}
+    - target: {fileID: 2620224497085559530, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620224497085559530, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2632492244205709066, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: audioSource
       value: 
@@ -1367,6 +1381,30 @@ PrefabInstance:
       objectReference: {fileID: 2120212806}
     - target: {fileID: 6635569779265186970, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6654831085952838255, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6654831085952838255, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954160724979550613, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954160724979550613, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954160724979550613, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_OverridePixelPerfect
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954160724979550613, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7409511150355105495, guid: 8e1a9052914209347806e6370d058b81, type: 3}
