@@ -1,16 +1,13 @@
 fileFormatVersion: 2
-guid: befea5407ae1a2e45ad417aee7c753fb
+guid: 0c93717ff782b3d4a86fcb1d555fd950
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8270719367360925090
-    second: Volume2_0
+      213: -2932513457500294362
+    second: Next_0
   - first:
-      213: 6482879626664284183
-    second: Volume2_1
-  - first:
-      213: -1531602268902388072
-    second: Volume2_2
+      213: 5636807534784629331
+    second: Next_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -103,19 +100,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -132,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Volume2_0
+      name: Next_0
       rect:
         serializedVersion: 2
-        x: 215
-        y: 528
-        width: 600
-        height: 992
+        x: 251
+        y: 483
+        width: 1546
+        height: 939
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e5232873e80883d80800000000000000
-      internalID: -8270719367360925090
+      spriteID: 62374aa2c8e9d47d0800000000000000
+      internalID: -2932513457500294362
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Volume2_1
+      name: Next_1
       rect:
         serializedVersion: 2
-        x: 825
-        y: 816
-        width: 175
-        height: 416
+        x: 580
+        y: 854
+        width: 888
+        height: 572
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,30 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71011f43ca0d7f950800000000000000
-      internalID: 6482879626664284183
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Volume2_2
-      rect:
-        serializedVersion: 2
-        x: 950
-        y: 700
-        width: 241
-        height: 648
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 89e04e8e9d7aebae0800000000000000
-      internalID: -1531602268902388072
+      spriteID: 35a451a7696f93e40800000000000000
+      internalID: 5636807534784629331
       vertices: []
       indices: 
       edges: []
@@ -201,7 +163,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -211,9 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Volume2_0: -8270719367360925090
-      Volume2_1: 6482879626664284183
-      Volume2_2: -1531602268902388072
+      Next_0: -2932513457500294362
+      Next_1: 5636807534784629331
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
