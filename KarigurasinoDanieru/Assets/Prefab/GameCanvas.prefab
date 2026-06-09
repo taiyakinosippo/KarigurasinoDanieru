@@ -1904,6 +1904,7 @@ MonoBehaviour:
   missMoveSpeed: 10
   skyMoveSpeed: 10
   spaceSpeed: 100
+  isMultiRocket: 0
   soloimageRect: {fileID: 0}
   malutyimageRect: {fileID: 5203769301419920627}
 --- !u!1 &5833079163916250304
@@ -2595,6 +2596,7 @@ MonoBehaviour:
   missMoveSpeed: 10
   skyMoveSpeed: 10
   spaceSpeed: 100
+  isMultiRocket: 0
   soloimageRect: {fileID: 5473916661700134336}
   malutyimageRect: {fileID: 0}
 --- !u!1 &6996761436094382000
@@ -3071,11 +3073,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 457671230112397505, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1310.72
+      value: 10485.76
       objectReference: {fileID: 0}
     - target: {fileID: 457671230112397505, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 1310720
+      value: 10000000
       objectReference: {fileID: 0}
     - target: {fileID: 988839751076887097, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: m_SortingLayer
@@ -3131,19 +3133,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3248476463663495497, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 6553.6
+      value: 52428.8
       objectReference: {fileID: 0}
     - target: {fileID: 3248476463663495497, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 196608
+      value: 1572864
       objectReference: {fileID: 0}
     - target: {fileID: 4665926127180379650, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1310.72
+      value: 10485.76
       objectReference: {fileID: 0}
     - target: {fileID: 4665926127180379650, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 1310720
+      value: 10000000
       objectReference: {fileID: 0}
     - target: {fileID: 5593216316620945924, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: m_SortingLayer
@@ -3155,11 +3157,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8213357944924456597, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 5242.88
+      value: 41943.04
       objectReference: {fileID: 0}
     - target: {fileID: 8213357944924456597, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 1966080
+      value: 10000000
       objectReference: {fileID: 0}
     - target: {fileID: 8550347841338926600, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: fireIntensity
@@ -3200,11 +3202,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 457671230112397505, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1310.72
+      value: 10485.76
       objectReference: {fileID: 0}
     - target: {fileID: 457671230112397505, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 1310720
+      value: 10000000
       objectReference: {fileID: 0}
     - target: {fileID: 988839751076887097, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: m_SortingLayer
@@ -3260,19 +3262,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3248476463663495497, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 6553.6
+      value: 52428.8
       objectReference: {fileID: 0}
     - target: {fileID: 3248476463663495497, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 196608
+      value: 1572864
       objectReference: {fileID: 0}
     - target: {fileID: 4665926127180379650, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1310.72
+      value: 10485.76
       objectReference: {fileID: 0}
     - target: {fileID: 4665926127180379650, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 1310720
+      value: 10000000
       objectReference: {fileID: 0}
     - target: {fileID: 5593216316620945924, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: m_SortingLayer
@@ -3284,11 +3286,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8213357944924456597, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 5242.88
+      value: 41943.04
       objectReference: {fileID: 0}
     - target: {fileID: 8213357944924456597, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 1966080
+      value: 10000000
       objectReference: {fileID: 0}
     - target: {fileID: 8550347841338926600, guid: aa9300c048314dcd92786b6ab7919da4, type: 3}
       propertyPath: fireIntensity

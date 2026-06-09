@@ -570,9 +570,17 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1973273077349925958, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: isMultiRocket
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1973273077349925958, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: soloimageRect
+      value: 
+      objectReference: {fileID: 837796785}
     - target: {fileID: 1982211890504815774, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 1982211890504815774, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
@@ -582,6 +590,14 @@ PrefabInstance:
       propertyPath: matchResultText
       value: 
       objectReference: {fileID: 1007233106}
+    - target: {fileID: 2244593187435014360, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: soloScoreController
+      value: 
+      objectReference: {fileID: 837796787}
+    - target: {fileID: 2244593187435014360, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: multiScoreController
+      value: 
+      objectReference: {fileID: 837796784}
     - target: {fileID: 2539695778684084922, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: scoreDebug
       value: 
@@ -618,6 +634,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3221720566680212306, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3291610958221575115, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.1
@@ -628,7 +648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3517076669145453846, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3517076669145453846, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
@@ -657,7 +677,7 @@ PrefabInstance:
     - target: {fileID: 4586042786190237676, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: MultiRocket
       value: 
-      objectReference: {fileID: 1388499936}
+      objectReference: {fileID: 0}
     - target: {fileID: 4586042786190237676, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: soloFireController
       value: 
@@ -768,7 +788,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6709081062759684701, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 6709081062759684701, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
@@ -796,11 +816,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7791358410464783050, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7791358410464783050, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 10000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8310565717584185307, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: isMultiRocket
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8310565717584185307, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: backGroundMover
@@ -823,8 +847,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -3252272711308388855, guid: 69fb7a43ff740f442a5facbfc090b9c8, type: 3}
     m_RemovedComponents:
-    - {fileID: 3208811982815574957, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
-    - {fileID: 584581559650685333, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5817929739058850197, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
@@ -859,6 +883,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4ee31f46d813b45975a52f2bb0d030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreController
+--- !u!224 &837796785 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5473916661700134336, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+  m_PrefabInstance: {fileID: 837796781}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &837796786 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9120347365751101997, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
@@ -892,17 +921,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!114 &1388499936 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1973273077349925958, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
-  m_PrefabInstance: {fileID: 837796781}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ed3b3f78cfe17243911b184b483bad3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Rocket_Mover
 --- !u!1 &1759853334
 GameObject:
   m_ObjectHideFlags: 0
