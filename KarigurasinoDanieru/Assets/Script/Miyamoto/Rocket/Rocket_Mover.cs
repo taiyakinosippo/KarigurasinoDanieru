@@ -144,6 +144,7 @@ public class Rocket_Mover : MonoBehaviour
     }
     private IEnumerator MultiGalaxyMoveCoroutine()
     {
+        Debug.Log("ƒ}ƒ‹ƒ`”wŒi");
         RectTransform lowest = malutiBackGroundMover.GetLowest();
 
         malutyimageRect.anchoredPosition =
