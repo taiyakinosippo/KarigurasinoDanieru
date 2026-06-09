@@ -11,6 +11,15 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        if (PlayerPrefs.GetInt("TutorialState") != 1)
+        {
+            PlayerPrefs.SetInt("TransitionState", 0);
+            PlayerPrefs.Save();
+
+            Destroy(gameObject);
+            yield break;
+        }
+
         // 1•b‘Ò‚Â
         yield return new WaitForSecondsRealtime(1f);
 
