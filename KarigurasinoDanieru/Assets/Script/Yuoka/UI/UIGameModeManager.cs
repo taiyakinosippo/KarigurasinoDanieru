@@ -62,7 +62,7 @@ public class UIGameModeManager : MonoBehaviour
 
 
         // 演出開始（共通のコルーチンを1つだけ呼ぶ。引数でマルチかどうかを伝える）
-        StartCoroutine(StartGameTransition(isMulti));
+        StartGameTransitionAfterTutorial();
     }
 
     /// <summary>
@@ -104,6 +104,15 @@ public class UIGameModeManager : MonoBehaviour
             float enemyCenterAnchor = edge + 0.25f;
             float enemyPosX = (enemyCenterAnchor - 0.5f) * SCREEN_WIDTH;
             enemyRocket.anchoredPosition = new Vector2(enemyPosX, 0f);
+        }
+    }
+
+    public void StartGameTransitionAfterTutorial()
+    {
+        if (PlayerPrefs.GetInt("TutorialState") != 1)
+        {
+            // 演出開始（共通のコルーチンを1つだけ呼ぶ。引数でマルチかどうかを伝える）
+            StartCoroutine(StartGameTransition(isMulti));
         }
     }
 
