@@ -20,8 +20,6 @@ public class MainModeManager : MonoBehaviour
     [SerializeField] private Fade fade;
 
     [Header("Managers")]
-    [SerializeField] private MultiSyncManager multiSync;
-    [SerializeField] private MatchState matchState;
     [SerializeField] private RankingInputManager rankingInputManager;
     [SerializeField] private MatchScoreManager matchScoreManager;
 
@@ -85,14 +83,29 @@ public class MainModeManager : MonoBehaviour
         UpdateRoomIdUI();
     }
 
+    public void OnClickTutorial()
+    {
+        PlayerPrefs.SetInt("TutorialState", 1);
+        PlayerPrefs.Save();
+
+        GM.GameLevelSelect(GameLevel.Normal);
+        PrintCurrentGameState();
+    }
+
     public void OnClickNormal()
     {
+        PlayerPrefs.SetInt("TutorialState", 0);
+        PlayerPrefs.Save();
+
         GM.GameLevelSelect(GameLevel.Normal);
         PrintCurrentGameState();
     }
 
     public void OnClickHard()
     {
+        PlayerPrefs.SetInt("TutorialState", 0);
+        PlayerPrefs.Save();
+
         GM.GameLevelSelect(GameLevel.Hard);
         PrintCurrentGameState();
     }
@@ -115,9 +128,8 @@ public class MainModeManager : MonoBehaviour
         CurrentRoomId = roomId;
         MultiPlayerName = playerName;
 
-        matchState.SetMyPlayer(playerName);
-        matchState.EnablePersistence();
-        multiSync.BeginMultiSync();
+        MatchState.Instance.SetMyPlayer(playerName);
+        MultiSyncManager.Instance.BeginMultiSync();
     }
 
     // =====================
@@ -145,7 +157,13 @@ public class MainModeManager : MonoBehaviour
 
         if (GM.currentMode == GameMode.Multi)
         {
-            multiSync.StopMultiSync();
+            MultiSyncManager.Instance.StopMultiSync();
+        }
+
+        var sender = FindObjectOfType<ScoreSender>();
+        if (sender != null)
+        {
+            sender.StopFetching();
         }
 
         matchHandled = false;
@@ -159,7 +177,7 @@ public class MainModeManager : MonoBehaviour
         if (GM.currentMode == GameMode.Multi)
         {
             matchScoreManager.SetScore(value);
-            multiSync.SendScoreIfHigher(matchScoreManager.CurrentScore);
+            MultiSyncManager.Instance.SendScoreIfHigher(matchScoreManager.CurrentScore);
         }
         else
         {
@@ -175,7 +193,7 @@ public class MainModeManager : MonoBehaviour
         int finalScore = ScoreHolder.instance.FinalScore;
 
         rankingInputManager.SendScore(
-            matchState.MyName,
+           MatchState.Instance.MyName,
             finalScore,
             GM.currentLevel.ToString().ToLower()
         );
@@ -244,14 +262,9 @@ public class MainModeManager : MonoBehaviour
 
         MultiPlayerName = name;
 
-        // ✅ ★ここが最重要（マルチもシングルも必ず通る）
-        if (matchState != null)
-        {
-            matchState.SetMyPlayer(name);
-            matchState.EnablePersistence(); // ← 念のため（超安全）
-        }
+        MatchState.Instance.SetMyPlayer(name);
 
-        Debug.Log($"🔥 最終名前: {matchState?.MyName}");
+        Debug.Log($"🔥 最終名前: {MatchState.Instance.MyName}");
 
         if (GM.currentMode == GameMode.Multi)
         {
@@ -306,14 +319,14 @@ public class MainModeManager : MonoBehaviour
 
     private IEnumerator WaitForMatchAndLoad(string sceneName)
     {
-        while (!matchState.IsMatched)
+        while (!MatchState.Instance.IsMatched)
         {
             yield return null;
         }
 
        // Debug.Log("[MATCH FOUND]");
 
-        matchingText.text = $"VS {matchState.EnemyName}";
+        matchingText.text = $"VS {MatchState.Instance.EnemyName}";
 
         yield return new WaitForSeconds(0.5f);
 
