@@ -40,7 +40,12 @@ public class UI_Manager : MonoBehaviour
 
     public static bool IsScoreReady = false;
 
-     private bool isStartText = false;
+    private bool isStartText = false;
+
+    private float soloFinalScore = 0f;
+    private float multiFinalScore = 0f;
+    private string soloText;
+    private string multiText;
 
     // UI遅延閉鎖管理
     private readonly Dictionary<Canvas, int> _pendingCloseRequests = new Dictionary<Canvas, int>();
@@ -259,7 +264,7 @@ public class UI_Manager : MonoBehaviour
         Debug.Log($"targetEnemyScore{targetEnemyScore}");
       
     }
-
+  
 
     // ========================================
     // 終了時のテキストの更新
@@ -267,26 +272,21 @@ public class UI_Manager : MonoBehaviour
 
     private void FinishSoloText()
     {
+        float finalScore = ScoreManager.instance.SoloResultScore();
+       
+        Debug.Log(finalScore + "が表示されました");
+       
+        soloText = finalScore.ToString("N2") + "m";
+        soloScoreText.text = soloText;
         Debug.Log("ソロスコアのプレゼンテーションが終了しました。");
-        soloScoreText.text = ScoreManager.instance
-            .SoloResultScore()
-            .ToString("N2") + "m"; 
         OnSoloCountFinished?.Invoke();
     }
 
     private void FinishMultiText()
     {
-        float score = ScoreManager.instance.MultiResultScore();
-
-        if (score <= 0)
-        {
-            Debug.Log("自分のスコア０");
-            return;
-        }
- 
-        multiScoreText.text = ScoreManager.instance
-            .MultiResultScore()
-            .ToString("N2") + "m";
+        float finalScore = ScoreManager.instance.MultiResultScore();
+        multiText = finalScore.ToString("N2") + "m";
+        multiScoreText.text = multiText;
         OnMultiScoreFinished?.Invoke();
     }
 
