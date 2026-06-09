@@ -56,13 +56,24 @@ public class ScoreController : MonoBehaviour
         currentScore = 0;
         TargetScore = targetScore;
         FlightState newState = stageManager.GetFlightState(targetScore);
-        isPlaying = true;
         currentSettings = GetSettings(newState);
         if (currentSettings == null)
         {
             Debug.Log("Settings が見つかりません");
             return;
         }
+        if (TargetScore <= 0)
+        {
+            UI_Manager.instance.StartSoloScoreEvent();
+
+            if (GameManager.instance.currentMode == GameMode.Multi)
+            {
+                UI_Manager.instance.StartSoloScoreEvent();
+            }
+            ChangeState(new FinishState());
+            return;
+        }
+        isPlaying = true;
 
         UI_Manager.instance.StartSoloScoreEvent();
       

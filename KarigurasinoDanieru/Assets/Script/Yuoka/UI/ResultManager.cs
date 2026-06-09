@@ -100,7 +100,12 @@ public class ResultManager : MonoBehaviour
 
     private void CheckAndShowResult()
     {
+        float finalScore = ScoreManager.instance.SoloResultScore();
         if (isScoreFinished && isBackgroundFinished && !isDelaying)
+        {
+            StartCoroutine(DelayShowResultRoutine());
+        }
+        else if(isScoreFinished && finalScore == 0 && !isDelaying)
         {
             StartCoroutine(DelayShowResultRoutine());
         }
