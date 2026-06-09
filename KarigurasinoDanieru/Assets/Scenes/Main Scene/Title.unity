@@ -1327,6 +1327,10 @@ PrefabInstance:
       propertyPath: modeManager
       value: 
       objectReference: {fileID: 1663138958}
+    - target: {fileID: 4589722319566609810, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4725518490729353936, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1349,6 +1353,10 @@ PrefabInstance:
       objectReference: {fileID: 2120212806}
     - target: {fileID: 6635569779265186970, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6654831085952838255, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7409511150355105495, guid: 8e1a9052914209347806e6370d058b81, type: 3}
