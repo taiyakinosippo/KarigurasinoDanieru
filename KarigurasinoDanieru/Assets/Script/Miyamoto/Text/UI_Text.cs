@@ -8,7 +8,7 @@ public class UI_Text : MonoBehaviour
 
     public void View()
     {
-        gameMode_text.text = "Mode : " + GameManager.instance.currentMode;
-        gameLevel_text.text = "Level : " + GameManager.instance.currentLevel;
+        gameMode_text.text = "ゲームモード : " + GameManager.instance.currentMode;
+        gameLevel_text.text = "ゲーム難易度 : " + GameManager.instance.currentLevel;
     }
 }
