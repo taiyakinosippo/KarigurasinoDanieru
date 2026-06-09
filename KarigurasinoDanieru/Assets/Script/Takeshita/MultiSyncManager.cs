@@ -35,8 +35,21 @@ public class MultiSyncManager : MonoBehaviour
 
     public Action<int> OnEnemyScoreChanged;
 
+    public static MultiSyncManager Instance;
+
     void Awake()
     {
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         updateUrl = ServerConfig.BaseUrl + "mp_update.php";
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
         joinUrl = ServerConfig.BaseUrl + "mp_join.php";

@@ -16,6 +16,7 @@ public class ScoreSender : MonoBehaviour
     private float stableTimer = 0f;
 
     private bool alreadyFinished = false;
+    bool enemyFound = false;
 
     [DllImport("__Internal")]
     private static extern void sendMultiScore(string roomId, string playerName, int score, string difficulty);
@@ -31,6 +32,8 @@ public class ScoreSender : MonoBehaviour
     void Start()
     {
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
+
+        alreadyFinished = false;
 
         var match = FindObjectOfType<MatchState>();
 
@@ -82,7 +85,17 @@ public class ScoreSender : MonoBehaviour
 
     void FetchEnemyScore()
     {
-        if (GameManager.instance.currentMode != GameMode.Multi) return;
+        if (GameManager.instance.currentMode != GameMode.Multi)
+        {
+            enemyScore = 0;
+            return;
+        }
+
+        if (!MatchState.Instance.IsMatched)
+        {
+            enemyScore = 0;
+            return;
+        }
 
         StartCoroutine(FetchEnemyScoreCoroutine());
     }
@@ -120,11 +133,13 @@ public class ScoreSender : MonoBehaviour
             PlayerState[] states =
                 JsonHelper.FromJson<PlayerState>(req.downloadHandler.text);
 
+
             foreach (var ps in states)
             {
                 if (ps.player_name == playerName) continue;
 
-                // ✅ 0は無視
+                enemyFound = true;
+
                 if (ps.score <= 0)
                 {
                     Debug.Log("⛔ 敵スコア0なので無視");
@@ -139,6 +154,14 @@ public class ScoreSender : MonoBehaviour
                 }
             }
 
+            // ✅ 敵がいなかったら強制リセット
+            if (!enemyFound)
+            {
+                enemyScore = 0;
+                OnEnemyScoreChanged?.Invoke(0);
+            }
+
+
         }
     }
 
@@ -146,15 +169,15 @@ public class ScoreSender : MonoBehaviour
     IEnumerator SendScoreNextFrame()
     {
         yield return new WaitForSeconds(0.2f);
-
+  
         int finalScore = Mathf.RoundToInt(ScoreManager.instance.SoloResultScore());
         myScore = finalScore;
         
         Debug.Log($"自分の最終スコア:{myScore}");
 
         OnMyScoreChanged?.Invoke((float)myScore);
-
-     //   Debug.Log($"🔥 確定後スコア = {finalScore}");
+        alreadyFinished = true;
+        //   Debug.Log($"🔥 確定後スコア = {finalScore}");
 
         var match = FindObjectOfType<MatchState>();
         var multi = FindObjectOfType<MultiSyncManager>();
@@ -262,4 +285,22 @@ public class ScoreSender : MonoBehaviour
         SendScore(name, finalScore, "normal");
 
     }
+
+    public void StopFetching()
+    {
+        CancelInvoke(nameof(FetchEnemyScore));
+    }
+
+    public void ResetMultiState()
+    {
+        enemyScore = 0;
+        myScore = 0;
+
+        CancelInvoke(nameof(FetchEnemyScore));
+        StopAllCoroutines();
+        alreadyFinished = false;
+
+        Debug.Log("✅ ScoreSender リセット完了");
+    }
+
 }
