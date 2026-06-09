@@ -365,7 +365,7 @@ public class UI_Manager : MonoBehaviour
         soloScoreText = GameObject.Find("ScoreText")
             ?.GetComponent<TextMeshProUGUI>();
 
-        multiScoreText = GameObject.Find("multiScoreText")
+        multiScoreText = GameObject.Find("EnemyScoreText")
             ?.GetComponent<TextMeshProUGUI>();
 
        
@@ -379,7 +379,7 @@ public class UI_Manager : MonoBehaviour
 
         if (multiScoreText == null)
         {
-            multiScoreText = GameObject.Find("multiScoreText")
+            multiScoreText = GameObject.Find("EnemyScoreText")
                 ?.GetComponent<TextMeshProUGUI>();
         }
     }

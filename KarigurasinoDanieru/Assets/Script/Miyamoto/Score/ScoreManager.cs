@@ -11,8 +11,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]private ScoreController soloScoreController;
     [SerializeField]private ScoreController multiScoreController;
     [SerializeField] private ScoreDebug scoreDebug;
-    [SerializeField] private MatchState matchState;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private ScoreSender scoreSender;
     [SerializeField] private VFX_FireController soloFireController;
     [SerializeField] private VFX_FireController multiFireController;
 
@@ -31,10 +30,24 @@ public class ScoreManager : MonoBehaviour
 
         if (GameManager.instance.currentMode == GameMode.Multi)
         {
-            matchState = FindFirstObjectByType<MatchState>();
+            scoreSender = FindFirstObjectByType<ScoreSender>();
         }
     }
 
+    private void Start()
+    {
+        if(scoreSender != null)
+        {
+            scoreSender.GetMultiScore += GetMultiScore;
+        }
+    }
+    private void OnDestroy()
+    {
+        if (scoreSender != null)
+        {
+            scoreSender.GetMultiScore -= GetMultiScore;
+        }
+    }
 
     public void MashButtonScore(int baseScore)
     {
@@ -66,17 +79,30 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("score:" + totalScore);
         return totalScore;
     }
-    public float MultiResultScore()
+    /// <summary>
+    /// 相手のスコアを取得する関数
+    /// </summary>
+
+    private void GetMultiScore(float totalScore)
     {
-        if (matchState != null)
+        if (scoreSender == null)
         {
             multiTotalScore = 0;
             Debug.Log("Matchstateがありません");
-            return 0;
         }
-        multiTotalScore = matchState.EnemyScore;
+        multiTotalScore = totalScore;
+    }
+
+    /// <summary>
+    /// 取得した値をほかのスクリプトに渡すための関数
+    /// </summary>
+
+    public float MultiResultScore()
+    {
+        Debug.Log("敵スコア受信:" + totalScore);
         return multiTotalScore;
     }
+
     public void StartSoloFinalScorePresentation()
     {
         totalScore = SoloResultScore();

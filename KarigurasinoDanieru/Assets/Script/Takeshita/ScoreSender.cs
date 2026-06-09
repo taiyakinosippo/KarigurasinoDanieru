@@ -26,6 +26,7 @@ public class ScoreSender : MonoBehaviour
 
     public Action<float> OnEnemyScoreChanged;
     public Action<float> OnMyScoreChanged;
+    public Action<float> GetMultiScore;
 
     void Start()
     {
@@ -133,8 +134,7 @@ public class ScoreSender : MonoBehaviour
                 if (enemyScore != ps.score)
                 {
                     enemyScore = ps.score;
-
-                   
+                    GetMultiScore?.Invoke((float)enemyScore);
                     OnEnemyScoreChanged?.Invoke((float)enemyScore);
                 }
             }
@@ -259,6 +259,5 @@ public class ScoreSender : MonoBehaviour
 
         SendScore(name, finalScore, "normal");
 
-   
     }
 }
