@@ -4,6 +4,8 @@ using System.Collections;
 
 public class TutorialManager : MonoBehaviour
 {
+    [SerializeField] UIGameModeManager gameModeManager;
+
     [SerializeField] private GameObject[] tutorialImages;
 
     private int currentIndex = 0;
@@ -23,7 +25,6 @@ public class TutorialManager : MonoBehaviour
         // 1•b‘Ò‚Â
         yield return new WaitForSecondsRealtime(1f);
 
-        Time.timeScale = 0f;
 
         for (int i = 0; i < tutorialImages.Length; i++)
         {
@@ -61,7 +62,10 @@ public class TutorialManager : MonoBehaviour
 
     void EndTutorial()
     {
-        Time.timeScale = 1f;
+        PlayerPrefs.SetInt("TutorialState", 0);
+        PlayerPrefs.Save();
+
+        gameModeManager.StartGameTransitionAfterTutorial();
         gameObject.SetActive(false);
     }
 }
