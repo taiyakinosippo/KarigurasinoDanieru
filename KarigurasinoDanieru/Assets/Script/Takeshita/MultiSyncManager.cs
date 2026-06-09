@@ -333,6 +333,7 @@ public class MultiSyncManager : MonoBehaviour
         form.AddField("room_id", roomId);
         form.AddField("player_name", playerName);
         form.AddField("difficulty", GameManager.instance.currentLevel.ToString());
+        form.AddField("player_id", playerId);
 
         using (UnityWebRequest req = UnityWebRequest.Post(joinUrl, form))
         {
@@ -433,4 +434,6 @@ public class PlayerState
 {
     public string player_name;
     public int score;
+
+    public string player_id;
 }

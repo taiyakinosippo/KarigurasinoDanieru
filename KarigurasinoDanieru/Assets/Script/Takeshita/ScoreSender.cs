@@ -16,12 +16,12 @@ public class ScoreSender : MonoBehaviour
     private float stableTimer = 0f;
 
     private bool alreadyFinished = false;
-    bool enemyFound = false;
-
+ 
     [DllImport("__Internal")]
     private static extern void sendMultiScore(string roomId, string playerName, int score, string difficulty);
 
     private string fetchUrl;
+    private string playerId;
     public int enemyScore = 0;
     public int myScore;
 
@@ -32,14 +32,21 @@ public class ScoreSender : MonoBehaviour
     void Start()
     {
         fetchUrl = ServerConfig.BaseUrl + "mp_fetch.php";
-
         alreadyFinished = false;
 
+        // ✅ これ追加（重要）
+        var multi = FindObjectOfType<MultiSyncManager>();
+        if (multi != null)
+        {
+            playerId = multi.playerId;
+        }
+
         var match = FindObjectOfType<MatchState>();
-
-        if (match != null) { match.OnMyNameSet += OnNameReady; }
+        if (match != null)
+        {
+            match.OnMyNameSet += OnNameReady;
+        }
     }
-
 
     void Update()
     {
@@ -103,6 +110,7 @@ public class ScoreSender : MonoBehaviour
 
     IEnumerator FetchEnemyScoreCoroutine()
     {
+        bool enemyFound = false;
         string roomId = MainModeManager.CurrentRoomId;
 
         var match = FindObjectOfType<MatchState>();
@@ -116,9 +124,10 @@ public class ScoreSender : MonoBehaviour
         }
 
         string url =
-            $"{fetchUrl}?room_id={roomId}" +
-            $"&difficulty={GameManager.instance.currentLevel}" +
-            $"&player_name={playerName}";
+     $"{fetchUrl}?room_id={roomId}" +
+     $"&difficulty={GameManager.instance.currentLevel}" +
+     $"&player_name={playerName}" +
+     $"&player_id={playerId}";
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
@@ -136,7 +145,7 @@ public class ScoreSender : MonoBehaviour
 
             foreach (var ps in states)
             {
-                if (ps.player_name == playerName) continue;
+                if (ps.player_id == playerId) continue;
 
                 enemyFound = true;
 

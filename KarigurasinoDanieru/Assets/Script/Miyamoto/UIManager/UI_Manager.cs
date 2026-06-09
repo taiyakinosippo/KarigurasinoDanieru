@@ -80,6 +80,7 @@ public class UI_Manager : MonoBehaviour
 
         scoreSender = FindObjectOfType<ScoreSender>();
 
+        scoreSender.OnEnemyScoreChanged -= ShowEnemyScore;
         scoreSender.OnEnemyScoreChanged += ShowEnemyScore;
     }
 
@@ -89,6 +90,13 @@ public class UI_Manager : MonoBehaviour
 
         if (multiScoreText == null || multiScoreText.Equals(null))
             return;
+
+        if (targetEnemyScore <= 0)
+        {
+            displayEnemyScore = 0;
+            multiScoreText.text = "0.00m";
+            return;
+        }
 
         CheckStart(displayMyScore, targetEnemyScore);
 
@@ -257,14 +265,11 @@ public class UI_Manager : MonoBehaviour
 
     private void ShowEnemyScore(float score)
     {
-        if (score <= 0) return;
+        targetEnemyScore = score;  
 
-        targetEnemyScore = score;
-
-        Debug.Log($"targetEnemyScore{targetEnemyScore}");
-      
+        Debug.Log($"targetEnemyScore: {targetEnemyScore}");
     }
-  
+
 
     // ========================================
     // 終了時のテキストの更新
@@ -343,6 +348,26 @@ public class UI_Manager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         UIManagerGetComponents();
+        ResetUIState();
+    }
+
+    private void ResetUIState()
+    {
+        displayMyScore = 0f;
+        displayEnemyScore = 0f;
+        targetEnemyScore = 0f;
+
+        isStartText = false;
+        isMyFinished = false;
+        isEnemyFinished = false;
+
+        IsScoreReady = false;
+
+        if (soloScoreText != null)
+            soloScoreText.text = "0.00m";
+
+        if (multiScoreText != null)
+            multiScoreText.text = "0.00m";
     }
 
     public void UIManagerGetComponents()
