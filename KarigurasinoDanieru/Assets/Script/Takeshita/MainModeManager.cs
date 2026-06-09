@@ -18,6 +18,7 @@ public class MainModeManager : MonoBehaviour
     [SerializeField] private string nextSceneName;
     [SerializeField] private string playerNameInput;
     [SerializeField] private Fade fade;
+    [SerializeField] private UI_Text uiText;
 
     [Header("Managers")]
     [SerializeField] private RankingInputManager rankingInputManager;
@@ -90,6 +91,8 @@ public class MainModeManager : MonoBehaviour
 
         GM.GameLevelSelect(GameLevel.Normal);
         PrintCurrentGameState();
+
+        if (uiText != null) uiText.View();
     }
 
     public void OnClickNormal()
@@ -99,6 +102,8 @@ public class MainModeManager : MonoBehaviour
 
         GM.GameLevelSelect(GameLevel.Normal);
         PrintCurrentGameState();
+
+        if (uiText != null) uiText.View();
     }
 
     public void OnClickHard()
@@ -108,6 +113,8 @@ public class MainModeManager : MonoBehaviour
 
         GM.GameLevelSelect(GameLevel.Hard);
         PrintCurrentGameState();
+
+        if (uiText != null) uiText.View();
     }
 
     void UpdateRoomIdUI()

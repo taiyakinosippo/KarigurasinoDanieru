@@ -10,7 +10,6 @@ public class UI_GameLevel_View : MonoBehaviour,IPointerClickHandler, IPointerDow
     [SerializeField] private GameLevel gameLevel;// ゲームレベルの指定
     [SerializeField] private UIAction action;
     [SerializeField] private Animator animator;
-    [SerializeField] private UI_Text text;
 
     void Start()
     {
@@ -30,7 +29,7 @@ public class UI_GameLevel_View : MonoBehaviour,IPointerClickHandler, IPointerDow
     public void OnPointerClick(PointerEventData eventData)
     {
         GameManager.instance.GameLevelSelect(gameLevel);
-        text.View();
+
         AudioSourceManager.instance.PlaySE(SEType.SelectbuttonSE);
         switch (action)
         {
