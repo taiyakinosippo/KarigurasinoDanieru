@@ -259,6 +259,5 @@ public class ScoreSender : MonoBehaviour
 
         SendScore(name, finalScore, "normal");
 
-   
     }
 }
