@@ -10,5 +10,10 @@ public class UI_Text : MonoBehaviour
     {
         gameMode_text.text = "ゲームモード : " + GameManager.instance.currentMode;
         gameLevel_text.text = "ゲーム難易度 : " + GameManager.instance.currentLevel;
+
+        if (PlayerPrefs.GetInt("TutorialState") == 1)
+        {
+            gameLevel_text.text = "ゲーム難易度 :チュートリアル";
+        }
     }
 }
