@@ -13,14 +13,22 @@ public class MatchState : MonoBehaviour
 
     public Action<string> OnMyNameSet;
 
+
+    public static MatchState Instance;
+
     void Awake()
     {
-        if (FindObjectsOfType<MatchState>().Length > 1)
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
         {
             Destroy(gameObject);
-            return;
         }
     }
+
 
     public void SetMyPlayer(string name)
     {
