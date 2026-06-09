@@ -108,16 +108,22 @@ public class ScoreManager : MonoBehaviour
         totalScore = SoloResultScore();
         soloScoreController.StartPresentation(totalScore);
         BGM_Manager.Instance.PlayRocketBGM();
-        soloBackGroundMover.StartMoving(soloScoreController.CurrentSettings.scrollSpeed, soloScoreController.CurrentSettings.decelerationRate);
-        soloFireController.PlayFire();
+        if(totalScore > 0)
+        {
+            soloBackGroundMover.StartMoving(soloScoreController.CurrentSettings.scrollSpeed, soloScoreController.CurrentSettings.decelerationRate);
+            soloFireController.PlayFire();
+        }      
     }
 
     public void StartMultiFinalScorePresentation()
     {
         multiTotalScore = MultiResultScore();
         multiScoreController.StartPresentation(multiTotalScore);
-        multiBackGroundMover.StartMoving(multiScoreController.CurrentSettings.scrollSpeed, multiScoreController.CurrentSettings.decelerationRate);
-        multiFireController.PlayFire();
+        if (totalScore > 0)
+        {
+            multiBackGroundMover.StartMoving(multiScoreController.CurrentSettings.scrollSpeed, multiScoreController.CurrentSettings.decelerationRate);
+            multiFireController.PlayFire();
+        }
     }
 
 }
