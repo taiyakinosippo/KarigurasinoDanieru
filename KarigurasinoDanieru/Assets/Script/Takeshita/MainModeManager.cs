@@ -41,6 +41,9 @@ public class MainModeManager : MonoBehaviour
 
         goButton.SetActive(true);
         matchingText.gameObject.SetActive(false);
+
+        playerNameField.characterLimit = 10;
+
     }
 
     private void Awake()
@@ -50,6 +53,7 @@ public class MainModeManager : MonoBehaviour
         if (playerNameField != null)
         {
             playerNameField.onValueChanged.AddListener(OnNameChanged);
+
             playerNameField.onValueChanged.AddListener(_ => UpdateGoButtonState());
         }
     }
@@ -184,19 +188,41 @@ public class MainModeManager : MonoBehaviour
 
     private string FilterPlayerName(string input)
     {
-        // 英数字のみ許可
-        return System.Text.RegularExpressions.Regex.Replace(input, @"[^a-zA-Z0-9]", "");
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        foreach (char c in input)
+        {
+            // ✅ 空白・改行は除外
+            if (char.IsWhiteSpace(c)) continue;
+
+            // ✅ 全角英数字は除外
+            if (
+                (c >= 'Ａ' && c <= 'Ｚ') ||
+                (c >= 'ａ' && c <= 'ｚ') ||
+                (c >= '０' && c <= '９')
+            )
+            {
+                continue;
+            }
+
+            sb.Append(c);
+        }
+
+        return sb.ToString();
     }
 
     private void OnNameChanged(string input)
     {
         string filtered = FilterPlayerName(input);
 
-        if (input != filtered)
+        //filtered = filtered.ToUpper();
+
+        if (playerNameField.text != filtered)
         {
-            playerNameField.text = filtered;
+            playerNameField.SetTextWithoutNotify(filtered);
         }
     }
+
 
     public void OnGoButtonPressed()
     {
