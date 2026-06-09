@@ -14,7 +14,8 @@ public class ResultManager : MonoBehaviour
         public float maxScore;
     }
 
-    [SerializeField] private ScoreController scoreController;
+    [SerializeField] private ScoreController soloScoreController;     //ソロ用
+    [SerializeField] private ScoreController multiScoreController; 　 //マルチ用
     [SerializeField] private BackGroundMover backgroundMover;
     [SerializeField] private ScoreManager scoreManager;
 
@@ -58,19 +59,30 @@ public class ResultManager : MonoBehaviour
         }
 
         // イベント登録
-        if (scoreController != null)
+        if(!isMulti)
         {
-            scoreController.OnFinished += OnScorePresentationFinished;
-            scoreController.OnEndSpeedEnd += OnBackgroundScrollFinished;
+            soloScoreController.OnFinished += OnScorePresentationFinished;
+            soloScoreController.OnEndSpeedEnd += OnBackgroundScrollFinished;
+        }
+        else
+        {
+            multiScoreController.OnFinished += OnScorePresentationFinished;
+            multiScoreController.OnEndSpeedEnd += OnBackgroundScrollFinished;
         }
     }
 
     private void OnDestroy()
     {
-        if (scoreController != null)
+        if (soloScoreController != null)
         {
-            scoreController.OnFinished -= OnScorePresentationFinished;
-            scoreController.OnEndSpeedEnd -= OnBackgroundScrollFinished;
+            soloScoreController.OnFinished -= OnScorePresentationFinished;
+            soloScoreController.OnEndSpeedEnd -= OnBackgroundScrollFinished;
+        }
+
+        if(multiScoreController != null)
+        {
+            multiScoreController.OnFinished -= OnScorePresentationFinished;
+            multiScoreController.OnEndSpeedEnd -= OnBackgroundScrollFinished;
         }
     }
 

@@ -13,6 +13,18 @@ public class SceneChanger : MonoBehaviour
             return;
         }
 
+        var sender = FindObjectOfType<ScoreSender>();
+        if (sender != null)
+        {
+            sender.ResetMultiState();
+        }
+
+        var multi = FindObjectOfType<MultiSyncManager>();
+        if (multi != null)
+        {
+            multi.StopMultiSync();
+        }
+
         // 「シーン遷移中（フェードアウトが必要）」という状態(1)をセーブする
         PlayerPrefs.SetInt("TransitionState", 1);
         PlayerPrefs.Save(); // 確実に保存

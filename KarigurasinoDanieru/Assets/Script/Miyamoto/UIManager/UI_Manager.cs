@@ -283,7 +283,7 @@ public class UI_Manager : MonoBehaviour
             Debug.Log("自分のスコア０");
             return;
         }
-
+ 
         multiScoreText.text = ScoreManager.instance
             .MultiResultScore()
             .ToString("N2") + "m";
