@@ -12,7 +12,6 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]private ScoreController multiScoreController;
     [SerializeField] private ScoreDebug scoreDebug;
     [SerializeField] private ScoreSender scoreSender;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private VFX_FireController soloFireController;
     [SerializeField] private VFX_FireController multiFireController;
 
