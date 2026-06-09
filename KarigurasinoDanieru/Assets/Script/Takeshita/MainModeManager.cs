@@ -50,12 +50,16 @@ public class MainModeManager : MonoBehaviour
     {
         roomIdInputField.onValueChanged.AddListener(_ => UpdateGoButtonState());
 
+
         if (playerNameField != null)
         {
-            playerNameField.onValueChanged.AddListener(OnNameChanged);
+            playerNameField.characterLimit = 10;
+            playerNameField.contentType = TMP_InputField.ContentType.Standard;
+            playerNameField.lineType = TMP_InputField.LineType.SingleLine;
 
-            playerNameField.onValueChanged.AddListener(_ => UpdateGoButtonState());
+            playerNameField.onEndEdit.AddListener(OnNameChanged);
         }
+
     }
 
     // =====================
