@@ -186,6 +186,8 @@ public class ScoreSender : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
     sendMultiScore(roomId, name, finalScore, GameManager.instance.currentLevel.ToString());
 #endif
+
+        alreadyFinished = false;
     }
 
     /// <summary>
