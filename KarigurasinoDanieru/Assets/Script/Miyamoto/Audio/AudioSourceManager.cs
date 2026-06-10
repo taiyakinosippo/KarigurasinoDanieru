@@ -50,4 +50,13 @@ public class AudioSourceManager : MonoBehaviour
         }
     }
 
+    public void PlaySEStopCurrent(SEType seType)
+    {
+        if (seDictionary.TryGetValue(seType, out AudioClip clip))
+        {
+            _audioSource.Stop();
+            _audioSource.PlayOneShot(clip);
+        }
+    }
+
 }

@@ -23,6 +23,19 @@ public class Rocket_Mover : MonoBehaviour
     [SerializeField] private bool isMultiRocket = false;　　　　　 //マルチ用のスクリプトかどうか
     [SerializeField] RectTransform soloimageRect;                  //100000メートル以上の時のソロ用の背景画像
     [SerializeField] RectTransform malutyimageRect;                 //100000メートル以上の時のマルチ用の背景画像
+    [Header("Sky (1000～10000m) 演出")]
+    [SerializeField] private RectTransform soloWindImage;           //ソロ用の風イラスト
+    [SerializeField] private RectTransform multiWindImage;          //マルチ用の風イラスト
+    [SerializeField] private float skyRotationSpeed = 360f;         //Sky時のロケット回転速度(度/秒)
+    [SerializeField] private float windMoveSpeed = 10f;             //風の移動速度
+    [SerializeField] private bool playWindSE = true;                //風のSEを再生するか
+    [SerializeField] private SEType windSE = SEType.windSE;         //風のSE
+    [Header("Miss (整備不良) 爆発エフェクト")]
+    [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private float explosionDelay = 1.0f; // 落下完了後に爆発するまでの遅延秒数
+    [SerializeField] private bool destroyRocketOnExplosion = true;
+    [SerializeField] private bool playExplosionSE = true;
+    [SerializeField] private SEType explosionSE = SEType.explosionSE;
    
     public void MissRocketMove()
     {
@@ -75,18 +88,70 @@ public class Rocket_Mover : MonoBehaviour
 
             yield return null;
         }
+        // 落下完了後、指定時間経過で爆発エフェクトを生成
+        if (explosionDelay > 0f)
+        {
+            yield return new WaitForSeconds(explosionDelay);
+        }
+
+        if (playExplosionSE && AudioSourceManager.instance != null)
+        {
+            AudioSourceManager.instance.PlaySE(explosionSE);
+        }
+
+        if (explosionPrefab != null)
+        {
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        }
+
+        if (destroyRocketOnExplosion)
+        {
+            Destroy(gameObject);
+        }
     }
 
     //1000～10000メートルまでの時のロケットの動き
     private IEnumerator SkyRocketMoveCoroutine()
     {
-        Vector2 target = new Vector2(transform.position.x + skyMove, transform.position.y);
-        while ((Vector2)transform.position != target)
+        // 風のSEを再生
+        if (playWindSE && AudioSourceManager.instance != null)
         {
+            AudioSourceManager.instance.PlaySE(windSE);
+        }
+        
+        // 風イメージを選択（ソロ/マルチ)
+        RectTransform windImage = isMultiRocket ? multiWindImage : soloWindImage;
+        
+        // 初期位置を記録
+        Vector2 rocketStartPos = transform.position;
+        Vector2 windStartPos = windImage != null ? windImage.anchoredPosition : Vector2.zero;
+        
+        // 目標位置（画面右外に出るまで）
+        float screenWidth = 1920f; // 一般的な値、必要に応じて調整
+        Vector2 rocketTarget = new Vector2(rocketStartPos.x + skyMove + screenWidth, rocketStartPos.y);
+        Vector2 windTarget = new Vector2(windStartPos.x + skyMove + screenWidth, windStartPos.y);
+        
+        // ロケットと風が移動中
+        while (transform.position.x < rocketTarget.x)
+        {
+            // ロケットを右に移動
             transform.position = Vector3.MoveTowards(
                     transform.position,
-                    target,
+                    rocketTarget,
                     skyMoveSpeed * Time.deltaTime);
+            
+            // ロケットを回転
+            transform.Rotate(0, 0, skyRotationSpeed * Time.deltaTime);
+            
+            // 風イメージを移動
+            if (windImage != null)
+            {
+                windImage.anchoredPosition = Vector2.MoveTowards(
+                    windImage.anchoredPosition,
+                    windTarget,
+                    windMoveSpeed * Time.deltaTime);
+            }
+            
             yield return null;
         }
     }
