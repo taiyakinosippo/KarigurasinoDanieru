@@ -79,7 +79,7 @@ public class ScoreController : MonoBehaviour
       
         if (GameManager.instance.currentMode == GameMode.Multi)
         {
-            UI_Manager.instance.StartSoloScoreEvent();
+            UI_Manager.instance.StartMultiScoreEvent();
         }
       
 

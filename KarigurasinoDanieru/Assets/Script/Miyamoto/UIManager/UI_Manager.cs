@@ -85,18 +85,18 @@ public class UI_Manager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.currentMode != GameMode.Multi) return;
+        //if (GameManager.instance.currentMode != GameMode.Multi) return;
 
-        if (multiScoreText == null || multiScoreText.Equals(null))
-            return;
+        //if (multiScoreText == null || multiScoreText.Equals(null))
+        //    return;
 
-        CheckStart(displayMyScore, targetEnemyScore);
+        //CheckStart(displayMyScore, targetEnemyScore);
 
-        if (!isStartText) return;
+        //if (!isStartText) return;
 
-        displayEnemyScore = Mathf.Lerp(displayEnemyScore, targetEnemyScore, Time.deltaTime * 1f);
+        //displayEnemyScore = Mathf.Lerp(displayEnemyScore, targetEnemyScore, Time.deltaTime * 1f);
 
-        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        //multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
     }
 
     private void OnEnable()
@@ -138,7 +138,7 @@ public class UI_Manager : MonoBehaviour
             if (!CheckStart(score, targetEnemyScore)) return;
 
             //自分のスコア更新
-            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+            displayMyScore = score;
 
             if (soloScoreText != null)
             {
@@ -150,7 +150,7 @@ public class UI_Manager : MonoBehaviour
         else
         {
             //ソロ処理
-            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+            displayMyScore = score;
             soloScoreText.text = displayMyScore.ToString("N2") + "m";
             Debug.Log($"score={score}");
         }
@@ -162,24 +162,15 @@ public class UI_Manager : MonoBehaviour
     // ========================================
     private void UpdateMultiScoreText(float score)
     {
-        //if (GameManager.instance.currentMode != GameMode.Multi) return;
-        //if (scoreSender == null) return;
-        //if (!isStartText) return;
-        
-        //Debug.Log($"aaa:{targetEnemyScore},{score}");
+        if (GameManager.instance.currentMode != GameMode.Multi) return;
+        if (scoreSender == null) return;
+        //同時スタートチェック
+        if (!CheckStart(score, targetEnemyScore)) return;
 
-        //// ✅ 目標に向かって手動で増やす
-        //if (displayEnemyScore < targetEnemyScore)
-        //{
-        //    displayEnemyScore += enemyIncreaseSpeed * Time.deltaTime;
-
-        //    if (displayEnemyScore > targetEnemyScore)
-        //    {
-        //        displayEnemyScore = targetEnemyScore;
-        //    }
-        //}
-
-        //multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        targetEnemyScore = score;
+    
+        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        Debug.Log($"aaa:{targetEnemyScore},{score}");
     }
 
     // ========================================
