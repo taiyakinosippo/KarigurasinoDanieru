@@ -28,6 +28,7 @@ public class ScoreController : MonoBehaviour
     private float currentScore;
     private float addScore;
     private bool isPlaying;
+    [SerializeField] private bool isMultiScoreController = false;  //ソロ用か、マルチ用かの判定
     private IFlightState currentState;
 
     // ========================================
@@ -64,24 +65,29 @@ public class ScoreController : MonoBehaviour
         }
         if (TargetScore <= 0)
         {
-            UI_Manager.instance.StartSoloScoreEvent();
-
-            if (GameManager.instance.currentMode == GameMode.Multi)
+            if (!isMultiScoreController)
             {
                 UI_Manager.instance.StartSoloScoreEvent();
+            }
+            if (GameManager.instance.currentMode == GameMode.Multi && isMultiScoreController)
+            {
+                UI_Manager.instance.StartMultiScoreEvent();
             }
             ChangeState(new FinishState());
             return;
         }
         isPlaying = true;
 
-        UI_Manager.instance.StartSoloScoreEvent();
-      
-        if (GameManager.instance.currentMode == GameMode.Multi)
+        if (!isMultiScoreController)
         {
             UI_Manager.instance.StartSoloScoreEvent();
         }
-      
+
+        else if (GameManager.instance.currentMode == GameMode.Multi && isMultiScoreController)
+        {
+            UI_Manager.instance.StartMultiScoreEvent();
+        }
+
 
         ChangeState(new StartSpeedState());
     }
@@ -115,14 +121,16 @@ public class ScoreController : MonoBehaviour
         //    Debug.Log("イベントが登録されていません");
         //}
 
-        if (GameManager.instance.currentMode == GameMode.Multi)
+        if (!isMultiScoreController)
         {
             OnScoreChanged?.Invoke(currentScore);
         }
-        else
+
+        else if (GameManager.instance.currentMode == GameMode.Multi && isMultiScoreController)
         {
-            OnScoreChanged?.Invoke(currentScore);
+            OnMultiScoreChanged?.Invoke(currentScore);
         }
+   
     }
 
     public void SetScoreSpeed(float speed)

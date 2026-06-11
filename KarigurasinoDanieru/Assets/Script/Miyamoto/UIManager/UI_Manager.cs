@@ -80,31 +80,23 @@ public class UI_Manager : MonoBehaviour
 
         scoreSender = FindObjectOfType<ScoreSender>();
 
-        scoreSender.OnEnemyScoreChanged -= ShowEnemyScore;
         scoreSender.OnEnemyScoreChanged += ShowEnemyScore;
     }
 
     private void Update()
     {
-        if (GameManager.instance.currentMode != GameMode.Multi) return;
+        //if (GameManager.instance.currentMode != GameMode.Multi) return;
 
-        if (multiScoreText == null || multiScoreText.Equals(null))
-            return;
+        //if (multiScoreText == null || multiScoreText.Equals(null))
+        //    return;
 
-        if (targetEnemyScore <= 0)
-        {
-            displayEnemyScore = 0;
-            multiScoreText.text = "0.00m";
-            return;
-        }
+        //CheckStart(displayMyScore, targetEnemyScore);
 
-        CheckStart(displayMyScore, targetEnemyScore);
+        //if (!isStartText) return;
 
-        if (!isStartText) return;
+        //displayEnemyScore = Mathf.Lerp(displayEnemyScore, targetEnemyScore, Time.deltaTime * 1f);
 
-        displayEnemyScore = Mathf.Lerp(displayEnemyScore, targetEnemyScore, Time.deltaTime * 1f);
-
-        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        //multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
     }
 
     private void OnEnable()
@@ -127,7 +119,7 @@ public class UI_Manager : MonoBehaviour
     // マルチの場合のスコアの更新
     public void StartMultiScoreEvent()
     {
-        multiScoreController.OnScoreChanged += UpdateMultiScoreText;
+        multiScoreController.OnMultiScoreChanged += UpdateMultiScoreText;
         multiScoreController.OnFinished += FinishMultiText;
     }
 
@@ -146,7 +138,7 @@ public class UI_Manager : MonoBehaviour
             if (!CheckStart(score, targetEnemyScore)) return;
 
             //自分のスコア更新
-            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+            displayMyScore = score;
 
             if (soloScoreText != null)
             {
@@ -158,7 +150,7 @@ public class UI_Manager : MonoBehaviour
         else
         {
             //ソロ処理
-            displayMyScore = Mathf.Lerp(displayMyScore, score, Time.deltaTime * 5f);
+            displayMyScore = score;
             soloScoreText.text = displayMyScore.ToString("N2") + "m";
             Debug.Log($"score={score}");
         }
@@ -170,24 +162,15 @@ public class UI_Manager : MonoBehaviour
     // ========================================
     private void UpdateMultiScoreText(float score)
     {
-        //if (GameManager.instance.currentMode != GameMode.Multi) return;
-        //if (scoreSender == null) return;
-        //if (!isStartText) return;
-        
-        //Debug.Log($"aaa:{targetEnemyScore},{score}");
+        if (GameManager.instance.currentMode != GameMode.Multi) return;
+        if (scoreSender == null) return;
+        //同時スタートチェック
+        if (!CheckStart(score, targetEnemyScore)) return;
 
-        //// ✅ 目標に向かって手動で増やす
-        //if (displayEnemyScore < targetEnemyScore)
-        //{
-        //    displayEnemyScore += enemyIncreaseSpeed * Time.deltaTime;
-
-        //    if (displayEnemyScore > targetEnemyScore)
-        //    {
-        //        displayEnemyScore = targetEnemyScore;
-        //    }
-        //}
-
-        //multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        targetEnemyScore = score;
+    
+        multiScoreText.text = targetEnemyScore.ToString("N2") + "m";
+        Debug.Log($"aaa:{targetEnemyScore},{score}");
     }
 
     // ========================================
@@ -265,11 +248,14 @@ public class UI_Manager : MonoBehaviour
 
     private void ShowEnemyScore(float score)
     {
-        targetEnemyScore = score;  
+        if (score <= 0) return;
 
-        Debug.Log($"targetEnemyScore: {targetEnemyScore}");
+        targetEnemyScore = score;
+
+        Debug.Log($"targetEnemyScore{targetEnemyScore}");
+      
     }
-
+  
 
     // ========================================
     // 終了時のテキストの更新
@@ -292,6 +278,7 @@ public class UI_Manager : MonoBehaviour
         float finalScore = ScoreManager.instance.MultiResultScore();
         multiText = finalScore.ToString("N2") + "m";
         multiScoreText.text = multiText;
+        Debug.Log("マルチテキスト表示");
         OnMultiScoreFinished?.Invoke();
     }
 
@@ -348,26 +335,6 @@ public class UI_Manager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         UIManagerGetComponents();
-        ResetUIState();
-    }
-
-    private void ResetUIState()
-    {
-        displayMyScore = 0f;
-        displayEnemyScore = 0f;
-        targetEnemyScore = 0f;
-
-        isStartText = false;
-        isMyFinished = false;
-        isEnemyFinished = false;
-
-        IsScoreReady = false;
-
-        if (soloScoreText != null)
-            soloScoreText.text = "0.00m";
-
-        if (multiScoreText != null)
-            multiScoreText.text = "0.00m";
     }
 
     public void UIManagerGetComponents()

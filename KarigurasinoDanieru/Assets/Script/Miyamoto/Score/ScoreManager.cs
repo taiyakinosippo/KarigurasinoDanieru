@@ -15,7 +15,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private VFX_FireController soloFireController;
     [SerializeField] private VFX_FireController multiFireController;
 
-    private float totalScore = 0;
+    private float soloTotalScore = 0;
     private float multiTotalScore = 0;
     private float balanceBarScore = 0;
     private int timingBarScore = 0;
@@ -75,9 +75,9 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("mashButtonScore:" + mashButtonScore);
         Debug.Log("timingBarScore:" + timingBarScore);
         Debug.Log("balanceBarScore" + balanceBarScore);
-        totalScore = (mashButtonScore * timingBarScore * balanceBarScore / 1000);
-        Debug.Log("score:" + totalScore);
-        return totalScore;
+        soloTotalScore = (mashButtonScore * timingBarScore * balanceBarScore / 1000);
+        Debug.Log("score:" + soloTotalScore);
+        return soloTotalScore;
     }
     /// <summary>
     /// 相手のスコアを取得する関数
@@ -99,16 +99,16 @@ public class ScoreManager : MonoBehaviour
 
     public float MultiResultScore()
     {
-        Debug.Log("敵スコア受信:" + totalScore);
+        Debug.Log("敵スコア受信:" + multiTotalScore);
         return multiTotalScore;
     }
 
     public void StartSoloFinalScorePresentation()
     {
-        totalScore = SoloResultScore();
-        soloScoreController.StartPresentation(totalScore);
+        soloTotalScore = SoloResultScore();
+        soloScoreController.StartPresentation(soloTotalScore);
         BGM_Manager.Instance.PlayRocketBGM();
-        if(totalScore > 0)
+        if(soloTotalScore > 0)
         {
             soloBackGroundMover.StartMoving(soloScoreController.CurrentSettings.scrollSpeed, soloScoreController.CurrentSettings.decelerationRate);
             soloFireController.PlayFire();
@@ -119,7 +119,7 @@ public class ScoreManager : MonoBehaviour
     {
         multiTotalScore = MultiResultScore();
         multiScoreController.StartPresentation(multiTotalScore);
-        if (totalScore > 0)
+        if (multiTotalScore > 0)
         {
             multiBackGroundMover.StartMoving(multiScoreController.CurrentSettings.scrollSpeed, multiScoreController.CurrentSettings.decelerationRate);
             multiFireController.PlayFire();
