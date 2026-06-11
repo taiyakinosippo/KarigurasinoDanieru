@@ -287,6 +287,7 @@ public class UI_Manager : MonoBehaviour
         float finalScore = ScoreManager.instance.MultiResultScore();
         multiText = finalScore.ToString("N2") + "m";
         multiScoreText.text = multiText;
+        Debug.Log("マルチテキスト表示");
         OnMultiScoreFinished?.Invoke();
     }
 
