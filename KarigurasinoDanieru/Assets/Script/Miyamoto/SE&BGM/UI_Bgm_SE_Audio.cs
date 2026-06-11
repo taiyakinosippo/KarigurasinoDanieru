@@ -98,7 +98,7 @@ public class UI_Bgm_SE_Audio : MonoBehaviour
             return;
 
         _lastSEPlayTime = Time.time;
-        AudioSourceManager.instance.PlaySE(_seSampleType);
+        AudioSourceManager.instance.PlaySEStopCurrent(_seSampleType);
     }
 
     public void ToggleBgmMuteImageState()

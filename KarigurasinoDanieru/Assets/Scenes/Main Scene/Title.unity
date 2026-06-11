@@ -221,7 +221,7 @@ MonoBehaviour:
   mashButton: {fileID: 0}
   currentMode: 0
   currentLevel: 0
-  presentationDelay: 2.5
+  presentationDelay: 3.2
 --- !u!4 &395884066
 Transform:
   m_ObjectHideFlags: 0
@@ -632,6 +632,12 @@ MonoBehaviour:
   seList:
   - seType: 7
     audioClip: {fileID: 8300000, guid: b815c57428bd8b24d93ba2a47f8405c4, type: 3}
+  - seType: 8
+    audioClip: {fileID: 8300000, guid: 40b916ddf84ebae42bb985496ca5f069, type: 3}
+  - seType: 10
+    audioClip: {fileID: 8300000, guid: 0b8b81fa5711aa24280e372b6ee01975, type: 3}
+  - seType: 9
+    audioClip: {fileID: 8300000, guid: ba51ef266bf968c498d038ed75f4faad, type: 3}
 --- !u!1 &1663138951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,6 +1239,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1663138958}
+    - target: {fileID: 2288726482473896552, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_fontSize
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288726482473896552, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 28
+      objectReference: {fileID: 0}
     - target: {fileID: 2632492244205709066, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: audioSource
       value: 
@@ -1269,6 +1283,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2120212806}
+    - target: {fileID: 6416184848957717797, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: _seSampleType
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6635569779265186970, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1277,6 +1295,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1663138958}
+    - target: {fileID: 8128832956390081632, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_fontSize
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 8128832956390081632, guid: 8e1a9052914209347806e6370d058b81, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 28
+      objectReference: {fileID: 0}
     - target: {fileID: 8238221052830902669, guid: 8e1a9052914209347806e6370d058b81, type: 3}
       propertyPath: audioSource
       value: 
