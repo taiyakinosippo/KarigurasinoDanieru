@@ -119,7 +119,7 @@ public class UI_Manager : MonoBehaviour
     // マルチの場合のスコアの更新
     public void StartMultiScoreEvent()
     {
-        multiScoreController.OnScoreChanged += UpdateMultiScoreText;
+        multiScoreController.OnMultiScoreChanged += UpdateMultiScoreText;
         multiScoreController.OnFinished += FinishMultiText;
     }
 
@@ -169,7 +169,7 @@ public class UI_Manager : MonoBehaviour
 
         targetEnemyScore = score;
     
-        multiScoreText.text = displayEnemyScore.ToString("N2") + "m";
+        multiScoreText.text = targetEnemyScore.ToString("N2") + "m";
         Debug.Log($"aaa:{targetEnemyScore},{score}");
     }
 

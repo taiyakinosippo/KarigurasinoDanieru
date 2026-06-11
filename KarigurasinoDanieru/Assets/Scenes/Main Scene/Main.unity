@@ -674,6 +674,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3571653345383904980, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: isMultiScoreController
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3694417795198887731, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: m_Camera
       value: 
@@ -858,6 +862,10 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 514209874}
+    - target: {fileID: 8984319816332538975, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
+      propertyPath: isMultiScoreController
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9120347365751101997, guid: 9df2582167d248c43bef9d48c4b7d69b, type: 3}
       propertyPath: scoreController
       value: 
