@@ -30,6 +30,9 @@ public enum SEType
     greatSE,
     perfectSE,
     countdownSE,
+    explosionSE,
+    windSE,
+    sampleSE,
 }
 //背景のステージを定義する列挙型
 public enum StageGroup
