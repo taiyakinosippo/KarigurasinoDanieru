@@ -68,13 +68,13 @@ public class ScoreController : MonoBehaviour
             if (!isMultiScoreController)
             {
                 UI_Manager.instance.StartSoloScoreEvent();
+                ChangeState(new FinishState());
+                return;
             }
-            if (GameManager.instance.currentMode == GameMode.Multi && isMultiScoreController)
+            else if (GameManager.instance.currentMode == GameMode.Multi && isMultiScoreController)
             {
                 UI_Manager.instance.StartMultiScoreEvent();
             }
-            ChangeState(new FinishState());
-            return;
         }
         isPlaying = true;
 
