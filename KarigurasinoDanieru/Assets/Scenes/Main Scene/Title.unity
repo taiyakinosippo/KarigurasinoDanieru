@@ -221,7 +221,7 @@ MonoBehaviour:
   mashButton: {fileID: 0}
   currentMode: 0
   currentLevel: 0
-  presentationDelay: 2.5
+  presentationDelay: 3.2
 --- !u!4 &395884066
 Transform:
   m_ObjectHideFlags: 0
